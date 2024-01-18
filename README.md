@@ -329,21 +329,199 @@ $2.000 por cada año de antigüedad
 
 # Ejercicio 7 ToDoItem
 
+Se desea definir un sistema de seguimiento de tareas similar a Jira
+
+En este sistema hay tareas en las cuales se puede definir el nombre y una serie de comentarios. Las tareas atraviesan diferentes etapas a lo largo de su ciclo de vida y ellas son: 
+
+- pending
+- in-progress
+- paused
+- finished
+
+Cada tarea debe estar modelada mediante la claseToDoItem con el siguiente protocolo.
+
+```java
+public class ToDoItem {
+    /**
+    * Instancia un ToDoItem nuevo en estado pending con <name> como nombre.
+    */
+    public ToDoItem(String name)
+    /**
+    * Pasa el ToDoItem a in-progress, siempre y cuando su estado actual sea
+    * pending. Si se encuentra en otro estado, no hace nada.
+    */
+    public void start()
+    /**
+    * Pasa el ToDoItem a paused si su estado es in-progress, o a in-progress si su
+    * estado es paused. Caso contrario (pending o finished) genera un error
+    * informando la causa específica del mismo.
+    */
+    public void togglePause()
+    /**
+    * Pasa el ToDoItem a finished, siempre y cuando su estado actual sea
+    * in-progress o paused. Si se encuentra en otro estado, no hace nada.
+    */
+    public void finish()
+    /**
+    * Retorna el tiempo que transcurrió desde que se inició el ToDoItem (start)
+    * hasta que se finalizó. En caso de que no esté finalizado, el tiempo que
+    * haya transcurrido hasta el momento actual. Si el ToDoItem no se inició,
+    * genera un error informando la causa específica del mismo.
+    */
+    public Duration workedTime()
+    /**
+    * Agrega un comentario al ToDoItem siempre y cuando no haya finalizado. Caso
+    * contrario no hace nada."
+    */
+    public void addComment(String comment)
+}
+```
+
+> **Nota** para generar o levantar un error debe utilizar la expresión
+
+```java
+throw new RuntimeException("Este es mi mensaje de error");
+```
+
+El mensaje de error específico que se espera en este ejercicio debe ser descriptivo del caso. Por ejemplo, para el método togglePause() , el mensaje de error debe indicar que el ToDoItem no se encuentra en in-progress o paused:
+
+```java
+throw new RuntimeException("El objeto ToDoItem no se encuentra en pause o in-progress");
+```
+
+### Tareas
+
+- **1)** Modele una solución orientada a objetos para el problema planteado utilizando un diagrama de clases UML. Si utilizó algún patrón de diseño indique cuáles son los participantes en su modelo de acuerdo a Gamma et al.
+- **2)** Implemente su solución en Java. Para comprobar cómo funciona recomendamos usar test cases.
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 8 Excursiones
+
+Sea una aplicación que ofrece excursiones como por ejemplo “dos días en kayak bajando el Paraná”. Una excursión posee nombre, fecha de inicio, fecha de fin, punto de encuentro, costo, cupo mínimo y cupo máximo.
+
+La aplicación ofrece las excursiones pero éstas sólo se realizan si alcanzan el cupo mínimo de inscriptos. Un usuario se inscribe a una excursión y si aún no se alcanzó el cupo mínimo, la inscripción se considera provisoria. Luego, cuando se alcanza el cupo mínimo, la inscripción se considera definitiva y podrá llevarse a cabo.
+
+Finalmente, cuando se alcanza el cupo máximo, la excursión solo registrará nuevos inscriptos en su lista de espera.
+
+De los usuarios inscriptos, la aplicación registra su nombre, apellido e email.
+
+Por otro lado, en todo momento la excursión ofrece información de la misma, la cual consiste en una serie de datos que varían en función de la situación.
+
+
+- Si la excursión no alcanza el cupo mínimo, la información es la siguiente: nombre, costo, fechas, punto de encuentro, cantidad de usuarios faltantes para alcanzar el cupo mínimo.
+- Si la excursión alcanzó el cupo mínimo pero aún no el máximo, la información es la siguiente: nombre, costo, fechas, punto de encuentro, los mails de los usuarios inscriptos y cantidad de usuarios faltantes para alcanzar el cupo máximo.
+- Si la excursión alcanzó el cupo máximo, la información solamente incluye nombre, costo, fechas y punto de encuentro.
+
+En una primera versión, al no contar con una interfaz de usuario y a los efectos de debugging, este comportamiento puede implementarlo en un método que retorne un String con la información solicitada.
+
+### Tareas:
+- **1)** Realice un diseño UML. Si utiliza algún patrón indique cuál(es) y justifique su uso.
+- **2)** Implemente lo necesario para instanciar una excursión y para instanciar un usuario.
+- **3)** Implemente los siguientes mensajes de la clase Excursion:
+    - (i) public void inscribir (Usuario unUsuario)
+    - (ii) public String obtenerInformacion().
+- **4)** Escriba un test para inscribir a un usuario en la excursión “Dos días en kayak bajando el Paraná”, con cupo mínimo de 1 persona y cupo máximo 2, con dos personas ya inscriptas. Implemente todos los mensajes que considere necesarios.
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 9 Encriptador
 
+En un sistema de mensajes instantáneos (como Hangouts) se envían mensajes de una máquina a otra a través de una red. Para asegurar que la información que pasa por la red no es espiada, el sistema utiliza una conexión segura. Este tipo de conexión encripta la información antes de enviarla y la desencripta al recibirla. La siguiente figura ilustra un posible diseño para este enunciado
+
+![image (2)](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/173094b5-e56a-417a-bae5-b388d0134ba3)
+
+El encriptador utiliza el algoritmo RSA. Sin embargo, se desea agregar otros algoritmos
+(diferentes algoritmos ofrecen distintos niveles de seguridad, overhead en la transmisión, etc.).
+
+### Tareas
+
+ - **1)** Modifique el diseño para que el objeto Encriptador pueda encriptar mensajes usando los algoritmos Blowfish y RC4, además del ya soportado RSA.
+ - **2)** Documente mediante un diagrama de clases UML indicando los roles de cada clase.
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 10 Administrador de proyectos
 
+Consideremos una empresa que brinda servicios y los gestiona a través de proyectos. Los proyectos tienen una fecha de inicio y de fin, un objetivo, un número de integrantes (quienes cobran un monto fijo por día) y un margen de ganancia. Durante el armado del proyecto, el mismo debe pasar por un proceso de aprobación que involucra las etapas: En construcción ->
+
+En evaluación -> Confirmada. Se desea implementar la siguiente funcionalidad:
+
+![image (3)](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/8811a5fa-9739-4444-846f-893e9bbb47f0)
+![image (6)](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/4dccd3d8-426d-4b90-bf3b-0a57c21e6701)
+
+### Tareas:
+1- Modele una solución y provea el diagrama de clases UML para el problema planteado. Si utiliza algún patrón, indique cuál.
+2- Implemente en Java.
+3- Implemente un test para aprobar un proyecto con las siguientes características: (i) se encuentra en evaluación, (ii) se llama “Vacaciones de invierno”, (iii) tiene como objetivo “salir con amigos”, y (iv) lo integran 3 personas.
+
+> Nota: para generar o levantar un error debe utilizar la expresión
+
+
+```java
+throw new RuntimeException("Este es mi mensaje de error");
+```
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 11 Dispositivo móvil y conexiones
+
+Sea el software de un dispositivo móvil que utiliza una conexión WiFi para transmitir datos. La figura muestra parte de su diseño:
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/113b66e3-1a3e-443e-be49-c5e260b4f010)
+
+El dispositivo utiliza, para asegurar la integridad de los datos emitidos, el mecanismo de cálculo de redundancia cíclica que le provee la clase CRC16_Calculator que recibe el mensaje crcFor(data: String) con los datos a enviar y devuelve un valor numérico. Luego el dispositivo envía a la conexión el mensaje sendData con ambos parámetros (los datos y el valor numérico calculado).
+
+Se desea hacer dos cambios en el software. En primer lugar, se quiere que el dispositivo tenga capacidad de ser configurado para utilizar conexiones 4G. Para este cambio se debe utilizar la clase 4GConnection.
+
+Además se desea poder configurar el dispositivo para que utilice en distintos momentos un cálculo de CRC de 16 o de 32 bits. Es decir que en algún momento el dispositivo seguirá utilizando CRC16_Calculator y en otros podrá ser configurado para utilizar la clase CRC32_Calculator. Se desea permitir que en el futuro se puedan utilizar otros algoritmos de CRC.
+
+Cuando se cambia de conexión, el dispositivo muestra en pantalla el símbolo correspondiente
+(que se obtiene con el getter pict() para el caso de WiFiConn y symb() de 4GConnection) y
+se utiliza el objeto Ringer para emitir un ring().
+
+Tanto las clases existentes como las nuevas a utilizar pueden ser ubicadas en las jerarquías que corresponda (modificar la clase de la que extienden o la interfaz que implementan) y se les pueden agregar mensajes, pero no se pueden modificar los mensajes que ya existen porque otras partes del sistema podrían dejar de funcionar.
+
+Dado que esto es una simulación, y no dispone de hardware ni emulador para esto, la signatura de los mensajes se ha simplificado para que se retorne un String descriptivo de los eventos que suceden en el dispositivo y permitir de esta forma simplificar la escritura de los tests.
+
+Modele los cambios necesarios para poder agregar al protocolo de la clase Dispositivo los mensajes para
+- cambiar la conexión, ya sea la 4GConnection o la WifiConn. En este método se espera que se pase a utilizar la conexión recibida, muestre en el display su símbolo y genere el sonido.
+- poder configurar el calculador de CRC, que puede ser el CRC16_Calculator, el CRC32_Calculator, o pueden ser nuevos a futuro.
+
+### Tareas
+
+- **1)** Realice un diagrama UML de clases para su solución al problema planteado. Indique claramente el o los patrones de diseño que utiliza en el modelo y el rol que cada clase cumple en cada uno.
+- **2)** Implemente en Java todo lo necesario para asegurar el envío de datos por cualquiera de las conexiones y el cálculo adecuado del índice de redundancia cíclica.
+- **3)** Implemente test cases para los siguientes métodos de la clase Dispositivo
+    - (i) send
+    - (ii) conectarCon
+    - (iii) configurarCRC
+
+En cuanto a CRC16_Calculator, puede utilizar la siguiente implementación
+
+```java
+public long crcFor(String datos) {
+    int crc = 0xFFFF;
+    for (int j = 0; j < datos.getBytes().length; j++) {
+        crc = ((crc >>> 8) | (crc << 8)) & 0xffff;
+        crc ^= (datos.getBytes()[j] & 0xff);
+        crc ^= ((crc & 0xff) >> 4);
+        crc ^= (crc << 12) & 0xffff;
+        crc ^= ((crc & 0xFF) << 5) & 0xffff;
+    }
+    crc &= 0xffff;
+    return crc;
+}
+```
+
+> Nota: para implementar CRC32_Calculator utilice la clase java.util.zip.CRC32 de la siguiente manera:
+
+```java
+CRC32 crc = new CRC32();
+String datos = "un mensaje";
+crc.update(datos.getBytes());
+long result = crc.getValue();
+```
+
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
