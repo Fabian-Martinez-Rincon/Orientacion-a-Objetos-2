@@ -527,48 +527,503 @@ long result = crc.getValue();
 
 # Ejercicio 12 Decodificador de películas
 
+Sea una empresa de cable on demand que entrega decodificadores a sus clientes para que miren las películas que ofrece. El decodificador muestra la grilla de películas y también sugiere películas.
+
+Usted debe implementar la aplicación para que el decodificador sugiera películas. El decodificador conoce la grilla de películas (lista completa que ofrece la empresa), como así también las películas que reproduce. De cada película se conoce título, año de estreno, películas similares y puntaje. La similaridad establece una relación recíproca entre dos películas, por lo que si A es similar a B entonces también B es similar a A.
+
+Cada decodificador puede ser configurado para que sugiera 3 películas (que no haya reproducido) por alguno de los siguientes criterios: 
+- **(i) novedad**: las películas más recientes
+- **(ii) similaridad**: las películas similares a alguna película que reprodujo, ordenadas de más a menos reciente.
+- **(iii) puntaje**: las películas de mayor puntaje, para igual puntaje considera las más recientes.
+
+Tenga en cuenta que la configuración del criterio de sugerencia del decodificador no es fija, sino que el usuario la debe poder cambiar en cualquier momento. El sistema debe soportar agregar nuevos tipos de sugerencias aparte de las tres mencionadas.
+
+Sea un decodificador que reprodujo Thor y Rocky, y posee la siguiente lista de películas
+
+- Thor, 7.9, 2007 (Similar a Capitan America, Iron Man)
+- Capitan America, 7.8, 2016 (Similar a Thor, Iron Man)
+- Iron man, 7.9, 2010 (Similar a Thor, Capitan America)
+- Dunkirk, 7.9, 2017
+- Rocky, 8.1, 1976 (Similar a Rambo)
+- Rambo, 7.8, 1979 (Similar a Rocky)
+
+Las películas que debería sugerir son:
+
+- **(i)** Dunkirk, Capitan America, Iron man
+- **(ii)** Capitán América, Iron man, Rambo
+- **(iii)** Dunkirk, Iron man, Capitan America
+
+> **Nota**: si existen más de 3 películas con el mismo criterio, retorna 3 de ellas sin importar cuales. Por ejemplo, si las 6 películas son del 2018, el criterio (i) retorna 3 cualquiera.
+
+### Tareas:
+- **1)** Realice el diseño de una correcta solución orientada a objetos con un diagrama UML de clases.
+- **2)** Si utiliza patrones de diseño indique cuáles y también indique los participantes de esos patrones en su solución según el libro de Gamma et al.
+- **3)** Escriba un test case que incluya estos pasos, con los ejemplos mencionados anteriormente:
+    - configure al decodificador para que sugiera por similaridad (ii)
+    - solicite al mismo decodificador las sugerencias
+    - configure al mismo decodificador para que sugiera por puntaje (iii)
+    - solicite al mismo decodificador las sugerencias
+- **4)** Programe su solución en Java. Debe implementarse respetando todas las buenas prácticas de diseño y programación de POO.
+
+
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 13 Acceso a la base de datos
+
+Queremos acceder a una base de datos que contiene información sobre cómics. Este acceso está dado por el comportamiento de la clase DatabaseRealAccess con el siguiente protocolo y modelado como muestra la siguiente figura.
+
+![image (1)](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/ec96378c-9038-4445-b622-02d13c28df5a)
+
+
+```java
+public interface DatabaseAccess {
+    /**
+    * Realiza la inserción de nueva información en la base de datos y
+    * retorna el id que recibe la nueva inserción
+    *
+    * @param rowData
+    * @return
+    */
+    public int insertNewRow(List<String> rowData);
+
+    /**
+    * Retorna una colección de acuerdo al texto que posee
+    "queryString"
+    *
+    * @param queryString
+    * @return
+    */
+    public Collection<String> getSearchResults(String queryString);
+}
+```
+
+En este caso, ustedes recibirán una implementación prototípica de la clase
+**DatabaseRealAccess** (ver [material extra](https://drive.google.com/file/d/1pR6rCjLZ2EpPvHcHhP195gy5mpghhHdE/view)) que simula el uso de una base datos de la siguiente forma (mire el código y los tests para entender cómo está implementada).
+
+```java
+// Instancia una base de datos que posee dos filas
+database = new DatabaseRealAccess();
+// Retorna el siguiente arreglo: ['Spiderman' 'Marvel'].
+database.getSearchResults("select * from comics where id=1");
+// Retorna 3, que es el id que se le asigna
+database.insertNewRow(Arrays.asList("Patoruzú", "La flor"));
+// Retorna el siguiente arreglo: ['Patoruzú', 'La flor'], ya que lo insertó antes
+database.getSearchResults("select * from comics where id=3");
+```
+
+### Tareas
+
+En esta oportunidad, usted debe proveer una solución utilizando un patrón que le permita brindar protección al acceso a la base de datos de forma que lo puedan realizar solamente usuarios que se hayan autenticado previamente. Su tarea es diseñar y programar en Java lo que sea necesario para ofrecer la funcionalidad antes descrita. Se espera que entregue los siguientes productos.
+
+- **1)** Diagrama de clases UML.
+- **2)** Implementación en Java de la funcionalidad requerida.
+- **3)** Implementación de los tests (JUnit) que considere necesarios.
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 14 File Manager
 
+En un **File Manager** se muestran los archivos. De los archivos se conoce:
+- Nombre
+- Extensión
+- Tamaño
+- Fecha de creación
+- Fecha de modificación
+- Permisos
+
+Implemente la clase **FileOO2**, con las correspondientes variables de instancia y accessors.
+
+En el File Manager el usuario debe poder elegir cómo se muestra un archivo (instancia de la clase FileOO2), es decir, cuáles de los aspectos mencionados anteriormente se muestran, y en qué orden. Esto quiere decir que un usuario podría querer ver los archivos de muchas maneras.
+
+Algunas de ellas son:
+
+- nombre - extensión
+- nombre - extensión - fecha de creación
+- permisos - nombre - extensión - tamaño
+
+Para esto, el objeto o los objetos que representen a los archivos en el FileManager debe(n) entender el mensaje `prettyPrint().`
+
+Es decir, un objeto cliente (digamos el FileManager) le enviará al objeto que Ud. determine, el mensaje `prettyPrint()`. **De acuerdo a cómo el usuario lo haya configurado se deberá retornar un String con los aspectos seleccionados por el usuario en el orden especificado por éste**. Considere que un mismo archivo podría verse de formas diferentes desde distintos puntos del sistema, y que el usuario podría cambiar la configuración del sistema (qué y en qué orden quiere ver) en runtime.
+
+### Tareas
+
+- **1)** Discuta los requerimientos y diseñe una solución. Si aplica un patrón de diseño, indique cuál es y justifique su aplicabilidad.
+- **2)** Implemente en Java.
+- **3)** Instancie un objeto para cada uno de los ejemplos citados anteriormente y verifique escribiendo tests de unidad.
+
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 15 Estación meteorológica
+
+Sea una estación meteorológica hogareña que permite conocer información de varios aspectos del clima. Esta estación está implementada con la clase HomeWeatherStation que interactúa con varios sensores para conocer fenómenos físicos. La misma implementa los siguientes métodos:
+
+```java
+//retorna la temperatura en grados Fahrenheit
+public double getTemperaturaFahrenheit()
+//retorna la presión atmosférica en hPa
+public double getPresion()
+//retorna la radiación solar
+public double getRadiacionSolar()
+//retorna una lista con todas las temperaturas sensadas hasta el momento, en grados Fahrenheit
+public List<Double> getTemperaturasFahrenheit()
+```
+
+Esta clase se encuentra implementada por terceros y **no se puede modificar**.
+
+Nos piden construir una aplicación que además de lo anteriormente descripto pueda obtener:
+
+- La temperatura en grados Celsius `(ºC = (ºF-32) ÷ 1.8).`
+- El promedio de las temperaturas históricas en grados Fahrenheit.
+
+Además, la aplicación debe permitir al usuario configurar qué datos mostrar y en qué orden. Esto significa que podría querer ver la información de muchas maneras, por ejemplo:
+
+- **Ejemplo 1** “Presión atmosférica: 1008”
+- **Ejemplo 2** “Presión atmosférica: 1008 Radiación solar: 500”
+- **Ejemplo 3** “Radiación solar: 500 Temperatura C: 28 Promedio de temperaturas C: 25”
+
+Para ello, usted debe proveer en algún punto de su solución, la implementación del mensaje public String displayData() que devuelva los datos elegidos en el orden configurado (dado que la app aun no cuenta con interface de usuario).
+
+Haga uso de la clase HomeWeatherStation sin modificarla.
+
+### Tareas
+
+- **1)** Modele una solución para el problema planteado. Si utiliza algún patrón, indique cuál
+- **2)** Implemente en Java
+- **3)** Implemente un test para validar la configuración del ejemplo 2, asumiendo que en el momento de la ejecución del mismo, los sensores arrojan los valores del ejemplo
+
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 16 Productos Financieros
 
+Un banco ofrece los siguientes productos financieros a sus clientes:
+
+- Compra de Dolares
+- Compra de Pesos
+- Plazo Fijo
+- Plazo Fijo Auto-Renovable
+
+A menudo el banco crea nuevos productos financieros que son combinaciones de estos productos
+
+![image (2)](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/8e6a17f7-4030-489c-921d-565ea1063d24)
+
+Por ejemplo, el banco ofrece un nuevo producto que combina los siguientes productos: 
+- 1) Compra de dólares
+- 2) Plazo fijo (en dólares a 30 días y 50% interés) 
+- 3) Compra de pesos 
+- 4) Plazo fijo renovable (en pesos a 60 días y 80% de interés). 
+
+Cuando se invoca el mensaje ganancia(), se indica un monto inicial, para que calcule y retorne la ganancia
+
+
+### Tareas:
+
+- `a)` Proponga una solución para que los desarrolladores no tengan que instanciar el Composite de Productos financieros explícitamente cada vez que sea necesario crear uno nuevo.
+    - `i)` ¿Qué ventaja y que desventaja tiene su solución?
+- `b)` La gerencia financiera ha decidido enviar la especificación de los nuevos productos en formato JSON. ¿Cómo afecta esto a la solución presentada hasta el momento?
+
+
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 17 Infraestructura en la Nube
+
+Una empresa ofrece servicios de cómputo en la Nube para micro procesos. Los micro procesos son procesos que corren por un plazo muy corto y producen una salida conocida, por ejemplo comprimir un directorio o correr un algoritmo sobre una serie de archivos JPEG.
+
+Los micro procesos son instanciados bajo demanda (cada vez que se necesita) en diferentes (grandes) proveedores de infraestructura en la nube: Amazon, Microsoft y Google . Cada proveedor de infraestructura en la nube tiene una manera diferente y única de proveer el servicio, como por ejemplo: RPC, SOAP, REST.
+
+Los micro procesos son definidos por un archivo JSON con la descripción del hardware: 
+
+Procesador, GPU, Memoria RAM, FileSystem y un directorio que contiene el código fuente y los scripts de compilación. La empresa provee a sus abonados una interfaz WebDAV donde guardar la información antes descripta y una REST API para lanzar la ejecución. Cada vez que se lanza la ejecución de un micro proceso la empresa crea una nueva instancia.
+
+Actualmente el método que implementa el REST API para lanzar un micro proceso tiene toda la lógica para manejar los distintos proveedores de infraestructura. La empresa planea ampliar la lista de proveedores para incorporar nuevos como ARSAT, DATCO, BlueOcean entre otros.
+
+Más allá de los detalles técnicos de la instanciación de los micro procesos, ¿qué patrón facilitaría la necesidad de expansión de la empresa?
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 18 SubteWay
 
+Sugerencia: no resuelva este ejercicio en ayunas.
+
+Una cadena de comidas rápidas especializada en sándwiches necesita resolver el cálculo de precios de éstos. El cálculo es simple: el precio de un sándwich equivale a la suma del precio de cada uno de sus componentes; el problema es la dificultad para representar y crear cada uno de los sándwiches distintos.
+
+Existen cuatro sandwiches distintos, pero podrían aparecer nuevos en el futuro
+
+- **Clásico**: consta de pan brioche (100 pesos), aderezo a base de mayonesa (20 pesos), principal de carne de ternera(300 pesos) y adicional de tomate (80 pesos).
+- **Vegetariano**: consta de pan con semillas (120 pesos), sin aderezo, principal de provoleta grillada (200 pesos) y adicional de berenjenas al escabeche (100 pesos).
+- **Vegano**: consta de pan integral (100 pesos), aderezo de salsa criolla (20 pesos), principal de milanesa de girgolas (500 pesos), sin adicional.
+- **Sin TACC**: consta de pan de chipá (150 pesos), aderezo de salsa tártara (18 pesos), principal de carne de pollo (250 pesos) y adicional de verduras grilladas (200 pesos).
+
+
+### Tareas:
+
+Proponga un diseño e implementación para la creación y cálculo de precios de estas
+alternativas de sándwiches. 
+
+Si en su solución aplicó algún(os) patrón(es) de diseño, indique cuál(es) y sus roles
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 19 Personajes de juegos de rol
+
+Una empresa de videojuegos ofrece personajes para sus juegos de rol. Cada personaje tiene un nombre y viene equipado con armaduras, armas, y habilidades únicas que les permiten desempeñarse mejor.
+
+Las armaduras pueden ser de cuero, de hierro y de acero. Las armas pueden ser espadas, arcos y bastón de mago. Las habilidades pueden ser de combate cuerpo a cuerpo, de combate a distancia, de curación y de magia.
+
+Actualmente ofrece 3 personajes: guerreros, arqueros y magos.
+
+Los magos son expertos en el uso de la magia. Están equipados con una armadura de cuero para permitir la máxima movilidad. Su arma es un bastón mágico, y su habilidad es la magia y el combate a distancia. Los guerreros son los expertos en combate cuerpo a cuerpo, por lo
+tanto requieren una armadura de acero y una espada. Finalmente, los arqueros son
+especialistas tiros de flechas. Como deben moverse rápidamente, tienen una armadura de
+cuero y están equipados con arcos.
+
+En el juego, los personajes tienen la posibilidad de enfrentarse entre sí. Durante un
+enfrentamiento, el resultado dependerá del arma que utilice el atacante y de la armadura que lleve el defensor. A continuación, se muestra una tabla con el daño que cada arma causa. Ese valor afecta el puntaje del jugador atacado.
+
+|           | ArmaduraDeCuero | ArmaduraDeHierro | ArmaduraDeAcero |
+|-----------|-----------------|------------------|-----------------|
+| Espada    | 8               | 5                | 3               |
+| Arco      | 5               | 3                | 2               |
+| Baston    | 2               | 1                | 1               |
+
+Al inicio del juego, cada personaje comienza con 100 puntos de vida, los cuales se reducirán a medida que se enfrenten a otros jugadores. Un personaje podrá participar de un combate siempre que tenga vida
+
+
+### Tareas:
+
+- **1)** Diseñe una solución orientada a objetos que permita la creación de personajes y el enfrentamiento entre ellos. Tenga en cuenta que en un futuro, la empresa planea ofrecer nuevos personajes. Provea el diagrama de clases UML y si utiliza algún patrón de diseño, indique cuál.
+- **2)** Implemente en Java el comportamiento descripto
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 19.b Mas Personajes
 
+Extienda el ejercicio anterior para permitir que la empresa pueda ofrecer un nuevo personaje llamado “Thoor”, que requieren armadura de hierro y un martillo, con habilidades de lanzar rayos y combate a distancia.
+
+
+> Nota: puede completar la tabla con los valores que desee.
+
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 20 Aerolínea Regional
+
+Una aerolínea regional (UFly) tiene vuelos diarios entre La Plata, Balcarce y Pergamino.
+
+| Vuelo | Frecuencia | Salida        | Arriba         | Costo Base |
+|-------|------------|---------------|----------------|------------|
+| UF101 | Diario     | La Plata 07:00 am | Balcarce 08:00 am | $12000      |
+| UF102 | Diario     | Balcarce 09:00 am | Pergamino 10:30 am | $15000      |
+| UF201 | Diario     | La Plata 02:00 pm | Pergamino 03:15 pm | $14000      |
+| UF202 | Diario     | Pergamino 05:00 pm | Balcarce 06:30 pm | $15000      |
+| UF203 | Diario     | Balcarce 08:00 pm | La Plata 09:00 pm | $12000      |
+
+
+La aerolínea opera una flota de 2 aviones Pilatus PC-12. Uno de ellos en configuración estándar (9 pasajeros) y el otro en configuración ejecutiva (6 pasajeros), ambos modelos tienen una capacidad de carga de 1.500 kg. La asignación de la aeronave a la ruta a volar está dada por políticas de operación de la flota que están fuera del problema.
+
+
+Cada pasaje está compuesto por tramos que pueden requerir la realización de varios vuelos o conexiones, con el fin de llegar al destino final. Por ejemplo, si alguien desea viajar de La Plata a Pergamino, puede tomar un vuelo de La Plata a Balcarce y, posteriormente, otro vuelo de Balcarce a Pergamino. Cada uno de estos vuelos se consideraría un tramo del pasaje
+completo
+
+El valor de los pasajes se calcula de la siguiente manera:
+
+**CostoBase** * **RateDiario** * **RateRoundtrip** * **RateMultiHop**
+
+El RateRoundtrip se aplica a los pasajes que comienzan y terminan en la misma ciudad y es igual a 0.95. El RateMultiHop se aplica a los pasajes que incluyan al menos tres destinos diferentes y es igual a 0.93. El RateDiario varía según el día de la semana.
+
+| RateRoundtrip | Pasajes que comienzan y terminan en la misma ciudad |
+|---------------|--------------------------------------------------|
+| Si            | 0.95  |
+| No            | 1     |
+
+| RateMultiHop | Pasaje incluye al menos tres destinos diferentes |	
+|--------------|--------------------------------------------------------|
+| Si           | 0.93  |
+| No           | 1     |
+
+| RateDiario | Día de la semana |
+|------------|------------------|
+| 1          | Lunes            |
+| 1.01       | Martes           |
+| 0.99       | Miércoles        |
+| 0.95       | Jueves           |
+| 1          | Viernes          |
+| 1.01       | Sábado           |
+| 1.01       | Domingo          |
+
+- **a)** La empresa requiere un modelo que permita implementar la venta de pasajes (emitir, modificar y cancelar). De cada pasajero se conoce Nombre y DNI. De cada pasaje se conoce el pasajero, el/los vuelos y el/los asientos. Además de permitir emitir, modificar y cancelar pasajes, la empresa necesita conocer la siguiente información:
+    - Promedios de ocupación de cada vuelo dado un periodo de tiempo,
+    - Horas voladas por cada avión en un periodo de tiempo
+    - Horas voladas por cada avión en total
+    - Monto total de los descuentos por RoundTrip y por MultiHop
+    - Eficiencia de Tarifas = Sumatoria de todo lo facturado/Sumatoria de CostosBasicos de pasajes vendidos
+- **b)** La empresa desea evaluar agregar servicios de transporte de paquetes. En este
+servicio los clientes dejan y retiran sus paquetes en alguno de los aeropuertos que sirve
+la empresa. Los paquetes tienen como máximo una dimensión de 50cmx50cmx60cm y
+un peso de 7Kg. La fórmula para calcular el valor del envío.
+
+**CostoBase * RateDiario * RateMultiHop**
+
+El CostoBase del servicio es $3000 por kilo. RateDario y RateMultiHop son los mismos ya presentados.
+
+- **c)** La empresa desea evaluar cómo el modelo que responde al punto a) se vería afectado si los Costos Básicos por vuelo cambiarán a lo largo del tiempo. Si fuera necesario, se solicita modificar el modelo para responder a este nuevo requerimiento.
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 21 Genealogía salvaje
 
+Retomamos el ejercicio de genealogía salvaje de Objetos 1, ahora utilizando los conceptos vistos en Objetos 2.
+
+Se trata de una reserva de vida salvaje (como la estación de cría ECAS, en el camino Centenario), donde los cuidadores están interesados en llevar un registro detallado de los animales que cuidan y sus familias. Para ello nos han pedido ayuda.
+
+El siguiente es un diagrama de clases inicial (incompleto) y nos da una idea de los mensajes que un mamífero entiende.
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/bf4a176e-b1cd-44ef-85ea-6412f70dfb19)
+
+### Tareas:
+
+- **1)** Complete el diagrama de clases para reflejar los atributos y relaciones requeridos.
+- **2)** Implemente completamente en Java. Si utiliza algún patrón de diseño, indique cuál.
+
+
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 22 Monitoreo de proceso industrial
 
+Una empresa está desarrollando un sistema de monitoreo de un proceso industrial, el cual involucra un tanque mezclador. El proceso industrial se define como una secuencia de pasos.
+
+El siguiente diagrama muestra dos de esos pasos. Los pasos implementan los métodos:
+
+- execute(:MixingTank) recibe como parámetro un MixingTank y ejecuta comandos
+sobre el mismo
+- isDone() retorna un booleano que describe si el paso fue realizado con éxito
+
+![image (3)](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/19694606-70d2-4c5a-a655-6f2015bd66df)
+
+
+<table>
+    <tr>
+        <th>LightMix.basicExecute(tank)</th>
+        <th>Purge.basicExecute(tank)
+</th>
+</tr>
+<tr>
+<td>
+
+```java
+return (tank.heatPower(20%) &&
+tank.mixerPower(5%))
+```
+</td>
+<td>
+
+```java
+return (tank.heatPower(0%)&&
+tank.mixerPower(0%)&&
+tank.purge())
+```
+</td>
+</tr>
+</table>
+
+
+El tanque mezclador posee un motor que mueve paletas internas y un calentador eléctrico. El fabricante del tanque provee una librería que permite conectar el tanque a una computadora de control. La librería implementa el driver que permite la comunicación entre el tanque y la computadora a través del protocolo I2C y provee una clase que ofrece una interfaz de alto nivel con las operaciones básicas del dispositivo (tanque).
+
+![image (4)](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/b0089380-9717-41eb-a39c-c951386bc0f7)
+
+
+No se dispone de una implementación concreta de MixingTank pero su comportamiento esperado es el siguiente:
+
+- **heatPower**: configura el nivel potencia de la fuente de calor del tanque de 0 a 100
+- **mixerPower**: configura el nivel de potencia de la mezcladora del tanque de 0 a 100
+- **purge**: comanda al tanque para que se desagote
+- **upTo**: retorna el volumen ocupado del tanque de 0 a 100
+- **temperature**: retorna la temperatura del contenido del tanque
+
 ---
+
+#### Parte 1
+
+Implemente las clases ProcessStep, LightMix y Purge, completando el pseudocódigo provisto.
+
+
+#### Parte 2
+
+Implemente Test de Unidad para ambas clases cubriendo casos de éxito y falla
+- **a)** Explique qué tipo de TestDouble es necesario implementar para cubrir esta versión de test cases.
+
+
+#### Parte 3
+
+Se conocen especificaciones del tanque y se han redefinido las definiciones de LightMix y Purge. Actualice la implementación de clases y de los test cases cubriendo casos de éxito y falla.
+- **a)** Explique qué tipo de TestDouble es necesario implementar para cubrir esta
+versión de test cases
+
+<table>
+<tr>
+<td>MixingTank</td>
+<td>
+
+CompletePurge time: 4 sec
+
+Heat transfer
+
+- At 100% = 5 ºC/sec
+- At 75% = 4 ºC/sec
+- At 50% = 2 ºC/sec
+- At 25% = 1 ºC/sec
+- At 0% = 0 ºC/sec
+</td>
+</tr>
+
+</table>
+
+
+<table>
+<tr>
+<th>LightMix.basicExecute(tank) </th>
+<th>Purge.basicExecute(tank)</th>
+</tr>
+<tr>
+<td>
+
+```java
+temp = tank.temperature()
+tank.heatPower(100%)
+delay(2sec)
+if(tank.temperature()-temp == 10 ){
+    tank.mixerPower(5%)
+    return true
+}
+else{
+    return false
+}
+```
+</td>
+<td>
+
+```java
+if (tank.upTo() = 0){
+    return false
+}
+else{
+    tank.heatPower(0%)
+    tank.mixerPower(0%)
+    tank.purge()
+    delay(4sec)
+    If (tank.upTo() != 0){
+        return false
+    }
+}
+return true
+```
+
+</td>
+</tr>
+</table>
+
+
