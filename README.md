@@ -214,13 +214,116 @@ https://docs.oracle.com/javase/8/docs/api/java/util/AbstractList.html#equals-jav
 
 # Ejercicio 4.b Más Topografías
 
+Extienda el ejercicio anterior para soportar (además de Agua y Tierra) el terreno Pantano. Un pantano tiene una proporción de agua de 0.7 y una proporción de tierra de 0.3. No olvide hacer las modificaciones necesarias para responder adecuadamente la comparación por igualdad.
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 5 FileSystem
 
+Un file system contiene un conjunto de directorios y archivos organizados jerárquicamente mediante una relación de inclusión. De cada archivo se conoce el nombre, fecha de creación y tamaño en bytes. De un directorio se conoce el nombre, fecha de creación y contenido (el tamaño es siempre 32kb). Modele el file system y provea la siguiente funcionalidad:
+
+```java
+public class Archivo {
+    /**
+    * Crea un nuevo archivo con nombre <nombre>, de <tamano> tamano
+    * y en la fecha <fecha>.
+    */
+    public Archivo (String nombre, LocalDate fecha, int tamano) 
+}
+public class Directorio {
+    /**
+    * Crea un nuevo Directorio con nombre <nombre> y en la fecha <fecha>.
+    */
+    public Directorio(String nombre, LocalDate fecha)
+    /**
+    * Retorna el espacio total ocupado, incluyendo su contenido.
+    */
+    public int tamanoTotalOcupado()
+    /**
+    * Retorna el archivo con mayor cantidad de bytes en cualquier nivel del
+    * filesystem contenido por directorio receptor
+    */
+    public Archivo archivoMasGrande()
+    /**
+    * Retorna el archivo con fecha de creación más reciente en cualquier nivel
+    * del filesystem contenido por directorio receptor.
+    */
+    public Archivo archivoMasNuevo()
+}
+```
+
+### Tareas
+
+- **1)** Diseñe y represente un modelo UML de clases de su aplicación, identifique el patrón de diseño empleado (utilice estereotipos UML para indicar los roles de cada una de las clases en ese patrón).
+- **2)** Diseñe, implemente y ejecute test cases para verificar el funcionamiento de su aplicación. En el archivo [DirectorioTest.java del material adicional](https://drive.google.com/file/d/1NH51KfoI_fEtYfT9ZM99CCwDHj2wJ5FL/view) se provee la clase DirectorioTest que contiene tests para los métodos arriba descritos y la definición del método setUp. Utilice el código provisto como guía de su solución y extienda lo que sea necesario.
+- **3)** Implemente completamente en Java.
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 # Ejercicio 6 Cálculo de sueldos
+
+Sea una empresa que paga sueldos a sus empleados, los cuales están organizados en tres tipos: Temporarios, Pasantes y Planta. El sueldo se compone de 3 elementos: sueldo básico, adicionales y descuentos.
+
+<table>
+<tr>
+<th></th>
+<th>Temporario</th>
+<th>Pasante</th>
+<th>Planta</th>
+</tr>
+<tr>
+<td>básico</td>
+<td>
+
+\$ 20.000 + cantidad de horas que trabajo * $ 300.
+
+</td>
+<td>$20.000</td>
+<td>$50.000</td>
+</tr>
+<tr>
+<td>adicional</td>
+<td>
+
+\$5.000 si está casado
+$2.000 por cada hijo
+</td>
+<td>$2.000 por examen que rindió</td>
+<td>
+
+\$5.000 si está casado
+\$2.000 por cada hijo
+$2.000 por cada año de antigüedad
+
+</td>
+</tr>
+<tr>
+<td>descuento</td>
+<td>
+
+13% del sueldo básico
+5% del sueldo adiciona
+</td>
+<td>
+
+13% del sueldo básico
+5% del sueldo adicional
+
+</td>
+<td>
+
+13% del sueldo básico
+5% del sueldo adicional
+
+</td>
+</tr>
+</table>
+
+### Tareas
+
+- **1)** Diseñe la jerarquía de Empleados de forma tal que cualquier empleado puede responder al mensaje #sueldo.
+- **2)** Desarrolle los test cases necesarios para probar todos los casos posibles.
+- **3)** Implemente en Java.
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
