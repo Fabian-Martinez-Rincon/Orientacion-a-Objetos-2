@@ -1,9 +1,14 @@
 package ar.edu.info.unlp.ejercicioDemo;
 
-public class Tierra implements Topografia{
+public class Tierra extends Topografia{
 
 	@Override
-	public double porcentaje() {
+	public double porcentajeAgua() {
 		return 0;
+	}
+
+	@Override
+	public boolean igualAgual(Topografia t) {
+		return false;
 	}
 }
