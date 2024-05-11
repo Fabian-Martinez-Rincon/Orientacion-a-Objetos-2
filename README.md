@@ -53,6 +53,21 @@ public abstract class Media {
 	public abstract String play();
 }
 ```
+```java
+public class Audio extends Media {
+	public String play() {
+	    return "musica.mp3";
+	}
+}
+```
+
+```java
+public class VideoFile extends Media {
+	public String play() {
+		return "Video.mp4";
+	}
+}
+```
 </td></tr></table>
 
 <table>
@@ -87,22 +102,10 @@ public class VideoStream {
 <table><tr><td>Audio</td><td>Video File</td></tr>
 <tr><td>
 
-```java
-public class Audio extends Media {
-	public String play() {
-	    return "musica.mp3";
-	}
-}
-```
+
 </td><td>
 
-```java
-public class VideoFile extends Media {
-	public String play() {
-		return "Video.mp4";
-	}
-}
-```
+
 </td></tr>
 </table>
 
