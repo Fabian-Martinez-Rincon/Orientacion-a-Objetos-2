@@ -8,5 +8,17 @@
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=34&duration=1700&pause=800&color=28CDF7&center=true&width=863&lines=☕ Orientación a Objetos 2"/>
  </div>
 
-[Cuadernillo](https://docs.google.com/document/d/1c_AeKm0SXxLaahlvuN-_vftr1kF9A14OEqqVGl2ACMU/edit)
+- [Adapter](#adapter-estructural)
+
+## Adapter (Estructural)
+
+Permite a interfaces incompatibles trabajar juntas. Su principal uso es hacer que el código existente funcione con otra interfaz, sin alterar el código original.
+
+![Adapter](/archivos/adapter.webp)
+
+- ``Cliente``
+- ``Target``
+- ``Adapter``
+- ``Adaptee``
+
 
