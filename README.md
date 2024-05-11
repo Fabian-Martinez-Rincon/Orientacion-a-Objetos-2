@@ -70,7 +70,7 @@ public class VideoFile extends Media {
 <tr><td>
 
 ```java
-public class VideoStreamAdapter extends Media {
+public class Adapter extends Media {
 	private VideoStream adaptee;
 	public String play() {
 		return adaptee.reproduce();
