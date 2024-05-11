@@ -25,9 +25,9 @@ Permite a interfaces incompatibles trabajar juntas. Su principal uso es hacer qu
     - `Ejemplo` Un adaptador de datos que implementa `loadData()` donde, en lugar de requerir datos en formato JSON, convierte datos en formato XML a JSON y luego invoca el método `specificRequest()` del `Adaptee` para procesar los datos.
 - ``Adaptee`` es la clase que tiene las funcionalidades que necesitamos, pero su interfaz no es compatible con lo que el `Client` espera. Esta clase no sabe nada sobre `Target` y trabaja de manera independiente.
 
-### Ejemplo Practico
+#### Ejemplo Practico
 
-<table><tr><td>Client</td><td>Target</td></tr><tr><td>
+<details><summary>Client</summary>
 
 ```java
 public class MediaPlayer {
@@ -46,38 +46,30 @@ public class MediaPlayer {
 	}
 }
 ```
-</td><td>
+</details>
+
+<details><summary>Target</summary>
 
 ```java
 public abstract class Media {
 	public abstract String play();
 }
-public class Audio extends Media {
-	public String play() {
-	    return "musica.mp3";
-	}
-}
-public class VideoFile extends Media {
-	public String play() {
-		return "Video.mp4";
-	}
-}
 ```
-</td></tr></table>
+</details>
 
-<table>
-<tr><td>Adapter</td><td>Adaptee</td></tr>
-<tr><td>
+<details><summary>Adapter</summary>
 
 ```java
-public class Adapter extends Media {
+public class VideoStreamAdapter extends Media {
 	private VideoStream adaptee;
 	public String play() {
 		return adaptee.reproduce();
 	}
 }
 ```
-</td><td>
+</details>
+
+<details><summary>Adaptee</summary>
 
 ```java
 public class VideoStream {
@@ -86,21 +78,25 @@ public class VideoStream {
 	}
 }
 ```
+</details>
 
-</td></tr>
-</table>
+<details><summary>Hijos de Media</summary>
 
-
-
-### Hijos de Media
-
-<table><tr><td>Audio</td><td>Video File</td></tr>
-<tr><td>
-
-
-</td><td>
+```java
+public class Audio extends Media {
+	public String play() {
+	    return "musica.mp3";
+	}
+}
+```
 
 
-</td></tr>
-</table>
+```java
+public class VideoFile extends Media {
+	public String play() {
+		return "Video.mp4";
+	}
+}
+```
 
+</details>
