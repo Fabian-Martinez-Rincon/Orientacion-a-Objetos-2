@@ -26,3 +26,79 @@ Permite a interfaces incompatibles trabajar juntas. Su principal uso es hacer qu
 - ``Adaptee`` es la clase que tiene las funcionalidades que necesitamos, pero su interfaz no es compatible con lo que el `Client` espera. Esta clase no sabe nada sobre `Target` y trabaja de manera independiente.
 
 ### Ejemplo Practico
+
+<table><tr><td>Client</td><td>Target</td></tr>
+
+<tr><td>
+
+```java
+public class MediaPlayer {
+	private Media media;
+	public MediaPlayer(Media media) {
+		this.media = media;
+	}	
+	public String playMedia() {
+		return media.play();
+	}
+	public Media getMedia() {
+		return media;
+	}
+	public void setMedia(Media media) {
+		this.media = media;
+	}
+}
+```
+</td><td>
+
+```java
+public abstract class Media {
+	public abstract String play();
+}
+```
+</td></tr>
+
+</table>
+
+
+### Hijos de Media
+
+<table><tr><td>Audio</td><td>Video File</td><td>Adapter</td></tr>
+<tr><td>
+
+```java
+public class Audio extends Media {
+	public String play() {
+	    return "musica.mp3";
+	}
+}
+```
+</td><td>
+
+```java
+public class VideoFile extends Media {
+	public String play() {
+		return "Video.mp4";
+	}
+}
+```
+</td><td>
+
+```java
+public class VideoStream {
+	public String reproduce() {
+		return "Directo.stream";
+	}
+}
+```
+</td></tr>
+</table>
+
+### Adaptee
+```java
+public class VideoStreamAdapter extends Media {
+	private VideoStream adaptee;
+	public String play() {
+		return adaptee.reproduce();
+	}
+}
+```
