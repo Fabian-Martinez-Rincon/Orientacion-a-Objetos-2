@@ -8,6 +8,13 @@
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=34&duration=1700&pause=800&color=28CDF7&center=true&width=863&lines=☕ Orientación a Objetos 2"/>
  </div>
 
+Antes de empezar vamos a ver que tipos de patrones tenemos, durante la materia solo vemos 3 tipos:
+- `Patrones Creacionales` Estos patrones están relacionados con los mecanismos de creación de objetos, buscando adaptar el proceso de creación a diferentes situaciones. Los patrones creacionales ocultan los detalles de creación de objetos y ayudan a hacer el sistema independiente de cómo sus objetos son creados, compuestos y representados.
+- `Patrones Estructurales` Estos patrones se ocupan de cómo las clases y objetos son compuestos para formar estructuras más grandes. Los patrones estructurales ayudan a asegurar que si cambia una parte del sistema, el sistema completo no necesita cambiar. También son útiles para compartir funcionalidades de una manera que ofrece ventajas significativas.
+- `Patrones de Comportamiento` Estos patrones están relacionados con algoritmos y la asignación de responsabilidades entre objetos. Lo que describen es cómo interactúan y distribuyen la responsabilidad entre las clases y objetos. 
+
+---
+
 - [Adapter](#adapter-estructural)
 - [Template Method]()
 
@@ -25,7 +32,7 @@ Permite a interfaces incompatibles trabajar juntas. Su principal uso es hacer qu
     - `Ejemplo` Un adaptador de datos que implementa `loadData()` donde, en lugar de requerir datos en formato JSON, convierte datos en formato XML a JSON y luego invoca el método `specificRequest()` del `Adaptee` para procesar los datos.
 - ``Adaptee`` es la clase que tiene las funcionalidades que necesitamos, pero su interfaz no es compatible con lo que el `Client` espera. Esta clase no sabe nada sobre `Target` y trabaja de manera independiente.
 
-#### Ejemplo Practico
+### Ejemplo Practico
 
 <details><summary>Client</summary>
 
@@ -141,5 +148,9 @@ public class MediaPlayerTest {
 ```
 </details>
 
-### Testing
+## Template (Comportamiento)
+
+Define la estructura de un algoritmo en una operación, delegando algunos pasos a las subclases. Permite que las subclases redefinan ciertos pasos de un algoritmo sin cambiar su estructura general.
+
+![](/archivos/template.webp)
 
