@@ -27,9 +27,7 @@ Permite a interfaces incompatibles trabajar juntas. Su principal uso es hacer qu
 
 ### Ejemplo Practico
 
-<table><tr><td>Client</td><td>Target</td></tr>
-
-<tr><td>
+<table><tr><td>Client</td><td>Target</td></tr><tr><td>
 
 ```java
 public class MediaPlayer {
@@ -55,14 +53,38 @@ public abstract class Media {
 	public abstract String play();
 }
 ```
-</td></tr>
+</td></tr></table>
 
+<table>
+<tr><td>Adapter</td><td>Adaptee</td></tr>
+<tr><td>
+
+```java
+public class VideoStreamAdapter extends Media {
+	private VideoStream adaptee;
+	public String play() {
+		return adaptee.reproduce();
+	}
+}
+```
+</td><td>
+
+```java
+public class VideoStream {
+	public String reproduce() {
+		return "Directo.stream";
+	}
+}
+```
+
+</td></tr>
 </table>
+
 
 
 ### Hijos de Media
 
-<table><tr><td>Audio</td><td>Video File</td><td>Adapter</td></tr>
+<table><tr><td>Audio</td><td>Video File</td></tr>
 <tr><td>
 
 ```java
@@ -81,24 +103,6 @@ public class VideoFile extends Media {
 	}
 }
 ```
-</td><td>
-
-```java
-public class VideoStream {
-	public String reproduce() {
-		return "Directo.stream";
-	}
-}
-```
 </td></tr>
 </table>
 
-### Adaptee
-```java
-public class VideoStreamAdapter extends Media {
-	private VideoStream adaptee;
-	public String play() {
-		return adaptee.reproduce();
-	}
-}
-```
