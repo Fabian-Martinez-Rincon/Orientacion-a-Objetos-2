@@ -51,8 +51,8 @@ public class MediaPlayer {
 <details><summary>Target</summary>
 
 ```java
-public abstract class Media {
-	public abstract String play();
+public interface Media {
+	public String play();
 }
 ```
 </details>
@@ -60,8 +60,12 @@ public abstract class Media {
 <details><summary>Adapter</summary>
 
 ```java
-public class VideoStreamAdapter extends Media {
+public class VideoStreamAdapter implements Media {
 	private VideoStream adaptee;
+	
+	public VideoStreamAdapter(VideoStream adaptee) {
+		this.adaptee = adaptee;
+	}
 	public String play() {
 		return adaptee.reproduce();
 	}
@@ -83,7 +87,7 @@ public class VideoStream {
 <details><summary>Hijos de Media</summary>
 
 ```java
-public class Audio extends Media {
+public class Audio implements Media {
 	public String play() {
 	    return "musica.mp3";
 	}
@@ -92,7 +96,7 @@ public class Audio extends Media {
 
 
 ```java
-public class VideoFile extends Media {
+public class VideoFile implements Media {
 	public String play() {
 		return "Video.mp4";
 	}
@@ -100,3 +104,42 @@ public class VideoFile extends Media {
 ```
 
 </details>
+
+<details><summary>MediaPlayerTest</summary>
+
+```java
+public class MediaPlayerTest {
+	Audio audio;
+	VideoFile video;
+	VideoStream stream;
+	VideoStreamAdapter adapter;
+	MediaPlayer client;
+	
+	@BeforeEach
+	void setUp() throws Exception{
+		audio = new Audio();
+		video = new VideoFile();
+		stream = new VideoStream();
+		adapter = new VideoStreamAdapter(stream);
+	}
+	@Test
+	public void testClientDirecto() {
+		client = new MediaPlayer(adapter);
+		assertEquals("Directo.stream",client.playMedia());
+	}
+	@Test
+	public void testClientAudio() {
+		client = new MediaPlayer(audio);
+		assertEquals("musica.mp3",client.playMedia());
+	}
+	@Test
+	public void testClientVideo() {
+		client = new MediaPlayer(video);
+		assertEquals("Video.mp4",client.playMedia());
+	}
+}
+```
+</details>
+
+### Testing
+
