@@ -52,16 +52,11 @@ public class MediaPlayer {
 public abstract class Media {
 	public abstract String play();
 }
-```
-```java
 public class Audio extends Media {
 	public String play() {
 	    return "musica.mp3";
 	}
 }
-```
-
-```java
 public class VideoFile extends Media {
 	public String play() {
 		return "Video.mp4";
