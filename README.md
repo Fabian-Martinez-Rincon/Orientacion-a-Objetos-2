@@ -618,3 +618,12 @@ public class DecodificadorTest {
 Se utiliza para permitir a un objeto alterar su comportamiento cuando su estado interno cambia. El objeto parecerá cambiar su clase.
 
 ![](/archivos/state.webp)
+
+- `Context` Accede a la interfaz de State para realizar su comportamiento, que cambia dinámicamente según el estado actual.
+	- `request()` Este método debería delegar la operación a la instancia actual de State
+	- `Ejemplo` Imagina una aplicación de procesamiento de pedidos donde el `Context` es un `Pedido`. El `Pedido` puede tener varios estados como `Pendiente`, `Pagado`, `Enviado`, y `Entregado`. Cada uno de estos estados alterará cómo se procesan ciertas operaciones (por ejemplo, no se puede enviar un pedido antes de que esté pagado).
+- `State` es una interfaz o una clase abstracta que define un método `handle()` que todas las clases concretas de estado implementarán.
+	- `Ejemplo` En el sistema de pedidos, `State` tendría un método `handle()` que podría ser llamado algo así como `procesarSiguientePaso()`. Este método determinaría qué hacer a continuación con el pedido (por ejemplo, procesar el pago, enviar el pedido, etc.).
+- `ConcreteStateA`, `ConcreteStateB` Cada clase representa un estado específico del `Context` y proporciona su propia implementación del método `handle()`.
+	- `ConcreteStateA` (PedidoPagado): Este estado podría manejar la lógica de preparar el pedido para el envío. La implementación de `handle()` en este estado podría cambiar el estado del pedido a `Enviado` si todo está listo para el envío.
+	- `ConcreteStateB` (PedidoEnviado): Este estado manejaría las acciones posteriores al envío, como notificar al cliente o cambiar el estado a `Entregado`. La implementación de `handle()` aquí podría involucrar la verificación del progreso del envío y la actualización del estado del pedido.
