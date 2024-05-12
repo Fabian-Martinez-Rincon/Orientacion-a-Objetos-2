@@ -276,3 +276,9 @@ public class MediaPlayerTest {
 }
 ```
 </details>
+
+## Composite (Estructural)
+
+Este patrón es utilizado principalmente para organizar objetos en estructuras de árbol que representan jerarquías parte-todo. Permite a los clientes tratar objetos individuales y composiciones de objetos de manera uniforme.
+
+![](/archivos/composite.webp)
