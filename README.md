@@ -16,7 +16,7 @@ Antes de empezar vamos a ver que tipos de patrones tenemos, durante la materia s
 ---
 
 - [Adapter](#adapter-estructural)
-- [Template Method]()
+- [Template Method](#template-comportamiento)
 
 ## Adapter (Estructural)
 
@@ -154,3 +154,125 @@ Define la estructura de un algoritmo en una operación, delegando algunos pasos 
 
 ![](/archivos/template.webp)
 
+Este patron no tiene mucho secreto, en el primer objeto se define el esqueleto del algoritmo y en los objetos hijos se implementan los pasos.
+
+### Ejemplo Practico
+
+<details><summary>AbstractClass</summary>
+
+```java
+public abstract class Empleado {
+	private int cantidadHijos;
+	private boolean casado;
+	
+	public Empleado(int cantidadHijos, boolean casado) {
+		this.cantidadHijos = cantidadHijos;
+		this.casado = casado;
+	}
+	public double sueldo() {
+		return this.sueldoBasico() + this.sueldoAdicional() - this.descuento();
+	}
+	public double descuento(){
+		return this.sueldoBasico() * 0.13 + this.sueldoAdicional() * 0.5;
+	}
+	public int getCantidadHijos() {
+		return this.cantidadHijos;
+	}
+	public boolean isCasado() {
+		return this.casado;
+	}
+
+	public abstract double sueldoBasico();
+	public abstract double sueldoAdicional();
+}
+```
+</details>
+<details><summary>ConcreteClass1</summary>
+
+```java
+public class Pasante extends Empleado {
+	private int cantidadExamen;
+
+	public Pasante(int cantidadHijos, boolean casado, int cantidadExamen) {
+		super(cantidadHijos, casado);
+		this.cantidadExamen = cantidadExamen;
+	}
+
+	public double sueldoBasico() {
+		return 20000;
+	}
+
+	public double sueldoAdicional() {
+		return this.cantidadExamen * 2000;
+	}
+}
+```
+</details>
+<details><summary>ConcreteClass2</summary>
+
+```java
+public class Planta extends Empleado{
+	private int aniosAntiguedad;
+
+	public Planta(int cantidadHijos, boolean casado, int aniosAntiguedad) {
+		super(cantidadHijos, casado);
+		this.aniosAntiguedad = aniosAntiguedad;
+	}
+
+	public double sueldoBasico() {
+		return 50000;
+	}
+
+	public double sueldoAdicional() {
+		double sum = this.getCantidadHijos() * 2000 + this.aniosAntiguedad * 2000;
+		return this.isCasado()? sum + 5000 : sum;
+	}
+}
+```
+</details>
+<details><summary>ConcreteClass3</summary>
+
+```java
+public class Temporario extends Empleado{
+	private int cantidadHoras;
+
+	public Temporario(int cantidadHijos, boolean casado, int cantidadHoras) {
+		super(cantidadHijos, casado);
+		this.cantidadHoras = cantidadHoras;
+	}
+
+	public double sueldoBasico() {
+		return 20000 + this.cantidadHoras * 300 ;
+	}
+
+	public double sueldoAdicional() {
+		double sum = this.getCantidadHijos() * 2000;
+		return this.isCasado()? sum + 5000 : sum;
+	}
+}
+```
+</details>
+
+<details><summary>Test</summary>
+
+```java
+public class MediaPlayerTest {
+	Empleado pasante;
+	Empleado planta;
+	Empleado temporario;
+	
+	@BeforeEach
+	void setUp() throws Exception{
+		pasante = new Pasante(10, false, 10);
+		planta = new Planta(10, true, 10);
+		temporario = new Temporario(10, false, 10);
+	}
+	@Test
+	public void testSueldos() {
+		assertEquals(27400.0,pasante.sueldo());
+		assertEquals(66000.0,planta.sueldo());
+		assertEquals(30010.0,temporario.sueldo());
+	}
+}
+```
+</details>
