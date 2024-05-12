@@ -19,6 +19,7 @@ Antes de empezar vamos a ver que tipos de patrones tenemos, durante la materia s
 - [Template Method](#template-comportamiento)
 - [Composite](#composite-estructural)
 - [Strategy](#strategy-comportamiento)
+- [State](#state-comportamiento)
 
 ## Adapter (Estructural)
 
@@ -613,5 +614,7 @@ public class DecodificadorTest {
 </details>
 
 ## State (Comportamiento)
+
+Se utiliza para permitir a un objeto alterar su comportamiento cuando su estado interno cambia. El objeto parecerá cambiar su clase.
 
 ![](/archivos/state.webp)
