@@ -295,3 +295,34 @@ Este patrón es utilizado principalmente para organizar objetos en estructuras d
 	- `Add(Component)`, `Remove(Component)`, `GetChild(int)`: Estos métodos están implementados para manipular y acceder a los subcomponentes.
 
 ### Ejemplo Practico
+
+<details><summary>Client</summary>
+
+```java
+
+```
+</details>
+<details><summary>Component</summary>
+
+```java
+
+```
+</details>
+<details><summary>Leaf</summary>
+
+```java
+
+```
+</details>
+<details><summary>Composite</summary>
+
+```java
+
+```
+</details>
+<details><summary>ClientTest</summary>
+
+```java
+
+```
+</details>
