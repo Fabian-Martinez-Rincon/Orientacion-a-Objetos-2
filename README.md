@@ -18,6 +18,7 @@ Antes de empezar vamos a ver que tipos de patrones tenemos, durante la materia s
 - [Adapter](#adapter-estructural)
 - [Template Method](#template-comportamiento)
 - [Composite](#composite-estructural)
+- [Strategy](#strategy-comportamiento)
 
 ## Adapter (Estructural)
 
@@ -431,8 +432,180 @@ Define una familia de algoritmos, encapsula cada uno de ellos y los hace interca
 
 ### Ejemplo Practico
 
-<details><summary>Leaf</summary>
+<details><summary>Context</summary>
 
 ```java
+public class Decodificador {
+	private List<Pelicula> grilla;
+	private List<Pelicula> reproducidas;
+	private Sugerencia criterioSugerencia;
+	
+	public Decodificador() {
+		this.grilla = new ArrayList<>();
+		this.reproducidas = new ArrayList<>();
+		this.criterioSugerencia = new SugerenciaNovedad();
+	}
+	public void agregarAGrilla(Pelicula pelicula) { this.grilla.add(pelicula); }
+	public void agregarReproducida(Pelicula pelicula) { this.reproducidas.add(pelicula);}
+	public void setCriterioSugerencia(Sugerencia sugerencia) { this.criterioSugerencia = sugerencia; }
+	public List<Pelicula> obtenerSugerencias() {
+		return this.criterioSugerencia.obtenerSugerencias(this);
+	}
+	public List<Pelicula> getGrilla() { return this.grilla; }
+	public List<Pelicula> getReproducidas() { return this.reproducidas; }
+}
+```
+
+### Pelicula
+```java
+public class Pelicula {
+	private String titulo;
+	private Year anioEstreno;
+	private double puntaje;
+	private List<Pelicula> peliculasSimilares;
+	
+	public Pelicula(String titulo, double puntaje, Year anioEstreno) {
+		this.titulo = titulo;
+		this.anioEstreno = anioEstreno;
+		this.puntaje = puntaje;
+		this.peliculasSimilares = new ArrayList<>();
+	}
+	public String getTitulo() { return titulo;}
+	public Year getAnioEstreno() { return anioEstreno;}
+	public double getPuntaje() { return puntaje;}
+
+	public void establecerSimilitud(Pelicula pelicula) {
+		if (!this.peliculasSimilares.contains(pelicula)) {
+			this.peliculasSimilares.add(pelicula);
+			pelicula.establecerSimilitud(this);
+		}
+	}
+	public List<Pelicula> getPeliculasSimilares(){ return this.peliculasSimilares;}
+}
+```
+
+</details>
+<details><summary>Strategy</summary>
+
+```java
+public abstract class Sugerencia {
+	public List<Pelicula> obtenerSugerencias(Decodificador decodificador){
+		return this.sugerirPeliculas(decodificador).stream()
+				.filter(pelicula -> !decodificador.getReproducidas().contains(pelicula))
+				.limit(3).collect(Collectors.toList());
+	}	
+	public abstract List<Pelicula> sugerirPeliculas(Decodificador decodificador);
+}
 ```
 </details>
+<details><summary>ConcreteStrategyA</summary>
+
+```java
+public class SugerenciaNovedad extends Sugerencia {
+
+	public List<Pelicula> sugerirPeliculas(Decodificador decodificador) {
+		return decodificador.getGrilla().stream()
+				.sorted((p2,p1) -> p1.getAnioEstreno().compareTo(p2.getAnioEstreno()))
+				.collect(Collectors.toList());
+	}
+}
+```
+</details>
+<details><summary>ConcreteStrategyB</summary>
+
+```java
+public class SugerenciaPuntaje extends Sugerencia {
+	public List<Pelicula> sugerirPeliculas(Decodificador decodificador) {
+		return decodificador.getGrilla().stream()
+				.sorted((p1,p2) -> Double.compare(p2.getPuntaje(), p1.getPuntaje()))
+				.collect(Collectors.toList());
+	}
+}
+```
+</details>
+<details><summary>ConcreteStrategyC</summary>
+
+```java
+public class SugerenciaSimilaridad extends Sugerencia {
+	public List<Pelicula> sugerirPeliculas(Decodificador decodificador) {
+		return decodificador.getReproducidas().stream()
+				.map(pelicula -> pelicula.getPeliculasSimilares()).flatMap(lista -> lista.stream())
+				.distinct()
+				.collect(Collectors.toList());
+	} 
+}
+```
+</details>
+
+<details><summary>DecodificadorTest</summary>
+
+```java
+public class DecodificadorTest {
+	Decodificador decodificador;
+	Pelicula rocky1, rocky2, rocky3, rocky4, rocky5, terminator1, terminator2, terminator3;
+	Sugerencia novedad, puntaje, similaridad;
+	
+	@BeforeEach
+	void setUp() throws Exception{
+		rocky1 = new Pelicula("Rocky 1", 10, Year.of(2000));
+		rocky2 = new Pelicula("Rocky 2", 9, Year.of(2001));
+		rocky3 = new Pelicula("Rocky 3", 8, Year.of(2002));
+		rocky4 = new Pelicula("Rocky 4", 7, Year.of(2003));
+		rocky5 = new Pelicula("Rocky 5", 6, Year.of(2004));
+		
+		//Se podria establecer la similitud con cada pelicula pero es mucho
+		//Se hace con rocky2 porque busca las mimilares con las reproducidas
+		rocky2.establecerSimilitud(rocky1);
+		rocky2.establecerSimilitud(rocky3);
+		rocky2.establecerSimilitud(rocky4);
+		rocky2.establecerSimilitud(rocky5);
+		
+		terminator1 = new Pelicula("Terminator1", 1, Year.of(2020));
+		terminator2 = new Pelicula("Terminator2", 2, Year.of(2021));
+		terminator3 = new Pelicula("Terminator3", 3, Year.of(2022));
+		
+		decodificador = new Decodificador();
+		decodificador.agregarAGrilla(rocky1);
+		decodificador.agregarAGrilla(rocky2);
+		decodificador.agregarAGrilla(rocky3);
+		decodificador.agregarAGrilla(rocky4);
+		decodificador.agregarAGrilla(rocky5);
+		decodificador.agregarAGrilla(terminator1);
+		decodificador.agregarAGrilla(terminator2);
+		decodificador.agregarAGrilla(terminator3);
+		
+		decodificador.agregarReproducida(rocky2);
+		decodificador.agregarReproducida(rocky4);
+	}
+	@Test
+	public void testSugerenciaNovedad() {
+		List<Pelicula> ultimas3 = new ArrayList<>();
+		ultimas3.add(terminator3);
+		ultimas3.add(terminator2);
+		ultimas3.add(terminator1);
+		assertEquals(ultimas3, decodificador.obtenerSugerencias());
+	}
+	@Test
+	public void testSugerenciaPuntaje() {
+		puntaje = new SugerenciaPuntaje();
+		decodificador.setCriterioSugerencia(puntaje);
+		List<Pelicula> masPuntaje = new ArrayList<>();
+		masPuntaje.add(rocky1);
+		masPuntaje.add(rocky3);
+		masPuntaje.add(rocky5);
+		assertEquals(masPuntaje, decodificador.obtenerSugerencias());
+	}
+	
+	@Test
+	public void testSugerenciaSimilaridad() {
+		similaridad = new SugerenciaSimilaridad();
+		decodificador.setCriterioSugerencia(similaridad);
+		//Son las 3 similares sin reproducir
+		List<Pelicula> similaresRocky = new ArrayList<>();
+		similaresRocky.add(rocky1);
+		similaresRocky.add(rocky3);
+		similaresRocky.add(rocky5);
+		assertEquals(similaresRocky, decodificador.obtenerSugerencias());
+	}
+}
+```
