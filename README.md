@@ -296,28 +296,91 @@ Este patrón es utilizado principalmente para organizar objetos en estructuras d
 
 ### Ejemplo Practico
 
-<details><summary>Client</summary>
-
-```java
-
-```
-</details>
 <details><summary>Component</summary>
 
 ```java
-
+public abstract class FileSystem{
+	private String nombre;
+	private LocalDate fecha;
+	
+	public FileSystem(String nombre, LocalDate fecha) {
+		this.nombre = nombre;
+		this.fecha = fecha;
+	}
+	
+	public String getNombre() {
+		return this.nombre;
+	}
+	
+	public LocalDate getFecha() {
+		return this.fecha;
+	}
+	
+	public abstract int tamanoTotalOcupado();
+    public abstract Archivo archivoMasGrande();
+    public abstract Archivo archivoMasNuevo();
+}
 ```
 </details>
 <details><summary>Leaf</summary>
 
 ```java
+public class Archivo extends FileSystem{
+	private int tamano;
 
+	public Archivo(String nombre, LocalDate fecha, int tamano) {
+		super(nombre, fecha);
+		this.tamano = tamano;
+	}
+	public Archivo archivoMasGrande() {
+		return this;
+	}
+	public Archivo archivoMasNuevo() {
+		return this;
+	}
+	public int tamanoTotalOcupado() {
+		return this.tamano;
+	}
+}
 ```
 </details>
 <details><summary>Composite</summary>
 
 ```java
+public class Directorio extends FileSystem {
+	private List<FileSystem> files;
 
+	public Directorio(String nombre, LocalDate fecha) {
+		super(nombre, fecha);
+		this.files = new ArrayList<>();
+	}
+	
+	public void agregar(FileSystem archivo) {
+		this.files.add(archivo);	
+	}
+	
+	public int tamanoTotalOcupado() {
+		return (
+			this.files.stream()
+			.mapToInt(file -> file.tamanoTotalOcupado())
+			.sum()
+			) + 32;
+	}
+	
+    public Archivo archivoMasGrande() {
+    	return this.files.stream()
+			.map(file -> file.archivoMasGrande())
+			.max((a1,a2) -> Integer.compare(a1.tamanoTotalOcupado(),a2.tamanoTotalOcupado()))
+			.orElse(null);	
+    }
+
+    public Archivo archivoMasNuevo() {
+		return this.files.stream()
+			.map(file -> file.archivoMasNuevo())
+			.max((a1,a2) -> a1.getFecha().compareTo(a2.getFecha()))
+			.orElse(null);
+    }
+}
 ```
 </details>
 <details><summary>ClientTest</summary>
