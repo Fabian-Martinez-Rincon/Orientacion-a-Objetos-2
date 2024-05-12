@@ -1088,4 +1088,138 @@ public class AspectSize extends Aspect {
 
 ## Proxy (Estructural)
 
+Es utilizado para proporcionar un sustituto o marcador de posición para otro objeto. Controla el acceso a este objeto original, permitiendo realizar operaciones antes o después de pasar la llamada al objeto original.
+
 ![](/archivos/proxy.webp)
+
+1. **Subject**:
+   - **Descripción**: Define la interfaz común para `RealSubject` y `Proxy`. Esta interfaz permite que un Proxy sea utilizado en lugar del objeto real.
+   - **Ejemplo**: En un sistema de gestión de documentos, `Subject` podría ser una interfaz `Document` con métodos como `display()`, `edit()` y `save()`.
+2. **RealSubject**:
+   - **Descripción**: El objeto real que el proxy representa. Define el objeto real que contiene la lógica de negocio que debería ser controlada o mejorada por el proxy.
+   - **Ejemplo**: `DocumentImpl` podría ser una implementación concreta de `Document`, gestionando documentos en un sistema de archivos.
+3. **Proxy**:
+   - **Descripción**: Mantiene una referencia al `RealSubject`, controlando el acceso a este y pudiendo realizar tareas adicionales como cargar perezosa, control de acceso, logging, etc.
+   - **Función**: Intercepta todas las llamadas dirigidas al `RealSubject` y puede realizar operaciones antes o después de pasar la llamada al `RealSubject`.
+   - **Ejemplo**: `DocumentProxy` podría ser un proxy que controla el acceso a `DocumentImpl`. Antes de mostrar un documento, el proxy podría verificar si el usuario tiene los permisos necesarios.
+
+### Ejemplo Practico
+
+<details><summary>Subject</summary>
+
+```java
+public interface DatabaseAccess {
+    Collection<String> getSearchResults(String queryString);
+    int insertNewRow(List<String> rowData);
+}
+```
+</details>
+
+<details><summary>RealSubject</summary>
+
+```java
+public class DatabaseRealAccess implements DatabaseAccess {
+    private Map<String, List<String>> data;
+    private int currentId;
+
+    public DatabaseRealAccess() {
+        super();
+        this.data = new HashMap<>();
+        this.currentId = 3;
+        this.data.put("select * from comics where id=1", Arrays.asList("Spiderman", "Marvel"));
+        this.data.put("select * from comics where id=2", Arrays.asList("Batman", "DC comics"));
+    }
+
+    public Collection<String> getSearchResults(String queryString) {
+        return this.data.getOrDefault(queryString, Collections.emptyList());
+    }
+
+    public int insertNewRow(List<String> rowData) {
+        this.data.put("select * from comics where id=" + this.currentId, rowData);
+        this.currentId = this.currentId + 1;
+
+        return this.currentId - 1;
+    }
+}
+```
+</details>
+
+<details><summary>Proxy</summary>
+
+```java
+public class DatabaseProxy implements DatabaseAccess{
+	private DatabaseAccess database;
+	private boolean isLog;
+	
+	public DatabaseProxy (DatabaseAccess database) {
+		this.database = database;
+		this.isLog = false;
+	}
+
+	public void logIn () {
+		this.isLog = true;
+	}
+	
+	public void closeSession() {
+		this.isLog = false;
+	}
+	
+	public Collection<String> getSearchResults(String queryString) {
+		if (!this.isLog) {
+			throw new RuntimeException("access denied"); 
+		}
+		return this.database.getSearchResults(queryString);
+	}
+
+	public int insertNewRow(List<String> rowData) {
+		if (!this.isLog) {
+			throw new RuntimeException("access denied"); 
+		}
+		return this.database.insertNewRow(rowData);
+	}
+}
+```
+</details>
+
+<details><summary>ProxyTest</summary>
+
+```java
+public class ProxyTest {
+	DatabaseAcess base;
+	DatabaseProxy proxy;
+	List<String> pelis_id1 = Arrays.asList("Spiderman", "Marvel");
+	List<String> pelis_id2 = Arrays.asList("Batman", "DC comics");
+	List<String> agregadas = Arrays.asList("Rocky", "Rambo");
+	
+	
+	@BeforeEach
+	void setUp() throws Exception{
+		base = new DatabaseRealAccess();
+		proxy = new DatabaseProxy(base);
+	}
+	
+	@Test
+	public void testSinProxy() {		
+		assertEquals(pelis_id1, base.getSearchResults("select * from comics where id=1"));
+		assertEquals(pelis_id2, base.getSearchResults("select * from comics where id=2"));
+		base.insertNewRow(agregadas);
+		assertEquals(agregadas, base.getSearchResults("select * from comics where id=3"));
+	}
+	
+	@Test
+	public void testConProxy() {
+	    Throwable exception = assertThrows(RuntimeException.class, () -> {
+	        proxy.getSearchResults("select * from comics where id=1");
+	    });
+	    
+	    assertEquals("access denied", exception.getMessage());
+	    
+	    proxy.logIn();
+	    assertEquals(pelis_id1, base.getSearchResults("select * from comics where id=1"));
+		assertEquals(pelis_id2, base.getSearchResults("select * from comics where id=2"));
+		base.insertNewRow(agregadas);
+		assertEquals(agregadas, base.getSearchResults("select * from comics where id=3"));
+	}
+}
+```
+</details>
