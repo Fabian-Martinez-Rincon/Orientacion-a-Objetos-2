@@ -679,13 +679,33 @@ public class Excursion {
 		this.cupoMaximo = cupoMaximo;
 	}
 	
-	public List<Usuario> getInscriptos() { return inscriptos;}
-	public List<Usuario> getEnEspera() { return enEspera;}
-	public Estado getEstado() { return estado;}
-	public void setEstado(Estado estado) { this.estado = estado;}
-	public int getCupoMinimo() { return cupoMinimo;}
-	public int getCupoMaximo() { return cupoMaximo;}
-	public void inscribir (Usuario unUsuario) { this.estado.inscribir(unUsuario);}
+	public List<Usuario> getInscriptos() {
+		return inscriptos;
+	}
+
+	public List<Usuario> getEnEspera() { 
+		return enEspera;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+	
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public int getCupoMinimo() {
+		return cupoMinimo;
+	}
+
+	public int getCupoMaximo() {
+		return cupoMaximo;
+	}
+
+	public void inscribir (Usuario unUsuario) {
+		this.estado.inscribir(unUsuario);
+	}
 	
 	public boolean alcanzoMinimo() {
 		return this.getInscriptos().size() >= this.cupoMinimo;
