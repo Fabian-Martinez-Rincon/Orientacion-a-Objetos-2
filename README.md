@@ -302,23 +302,23 @@ Este patrón es utilizado principalmente para organizar objetos en estructuras d
 public abstract class FileSystem{
 	private String nombre;
 	private LocalDate fecha;
-	
+
 	public FileSystem(String nombre, LocalDate fecha) {
 		this.nombre = nombre;
 		this.fecha = fecha;
 	}
-	
+
 	public String getNombre() {
 		return this.nombre;
 	}
-	
+
 	public LocalDate getFecha() {
 		return this.fecha;
 	}
-	
+
 	public abstract int tamanoTotalOcupado();
-    public abstract Archivo archivoMasGrande();
-    public abstract Archivo archivoMasNuevo();
+	public abstract Archivo archivoMasGrande();
+	public abstract Archivo archivoMasNuevo();
 }
 ```
 </details>
@@ -354,11 +354,11 @@ public class Directorio extends FileSystem {
 		super(nombre, fecha);
 		this.files = new ArrayList<>();
 	}
-	
+
 	public void agregar(FileSystem archivo) {
 		this.files.add(archivo);	
 	}
-	
+
 	public int tamanoTotalOcupado() {
 		return (
 			this.files.stream()
@@ -366,26 +366,54 @@ public class Directorio extends FileSystem {
 			.sum()
 			) + 32;
 	}
-	
-    public Archivo archivoMasGrande() {
-    	return this.files.stream()
+
+	public Archivo archivoMasGrande() {
+		return this.files.stream()
 			.map(file -> file.archivoMasGrande())
 			.max((a1,a2) -> Integer.compare(a1.tamanoTotalOcupado(),a2.tamanoTotalOcupado()))
-			.orElse(null);	
-    }
+			.orElse(null);
+	}
 
-    public Archivo archivoMasNuevo() {
+	public Archivo archivoMasNuevo() {
 		return this.files.stream()
 			.map(file -> file.archivoMasNuevo())
 			.max((a1,a2) -> a1.getFecha().compareTo(a2.getFecha()))
 			.orElse(null);
-    }
+	}
 }
 ```
 </details>
 <details><summary>ClientTest</summary>
 
 ```java
-
+public class MediaPlayerTest {
+	Archivo archivoChico, archivoGrande;
+	Directorio directorio, directorioCompuesto;
+	
+	@BeforeEach
+	void setUp() throws Exception{
+		archivoChico = new Archivo("notas.txt", LocalDate.of(2000, 2, 20), 10);
+		archivoGrande = new Archivo("apuntes.txt", LocalDate.of(2010, 2, 20), 50);
+		
+		directorio = new Directorio("Carpeta1", LocalDate.now());
+		directorio.agregar(archivoChico);
+		directorio.agregar(archivoGrande);
+		
+		directorioCompuesto = new Directorio("CarpetaCompuesta", LocalDate.now());
+		directorioCompuesto.agregar(directorio);
+	}
+	
+	@Test
+	public void testEspacio() {
+		assertEquals((10 + 50 + 32), directorio.tamanoTotalOcupado());
+		assertEquals((10 + 50 + 32 + 32), directorioCompuesto.tamanoTotalOcupado());
+		assertEquals(archivoGrande, directorioCompuesto.archivoMasGrande());
+		assertEquals(archivoGrande, directorioCompuesto.archivoMasNuevo());
+	}
+}
 ```
 </details>
+
+## Strategy
+
+![](/archivos/strategy.PNG)
