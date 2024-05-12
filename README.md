@@ -418,7 +418,7 @@ public class MediaPlayerTest {
 
 Define una familia de algoritmos, encapsula cada uno de ellos y los hace intercambiables. Este patrón permite que el algoritmo varíe independientemente de los clientes que lo utilizan.
 
-![](/archivos/strategy.PNG)
+![](/archivos/Strategy.PNG)
 
 - `Context` Delega trabajo a la estrategia asociada, pero mantiene el control sobre cómo y cuándo se llama a las estrategias. Puede proporcionar datos adicionales necesarios para la ejecución de la estrategia.
 	- `Ejemplo`  Una aplicación de navegación que puede calcular rutas utilizando diferentes algoritmos de estrategia. El contexto sería el planificador de rutas que decide cuándo y cómo calcular la ruta dependiendo de la estrategia seleccionada por el usuario (la más rápida, la más corta, la más económica, etc.).
@@ -431,3 +431,8 @@ Define una familia de algoritmos, encapsula cada uno de ellos y los hace interca
 
 ### Ejemplo Practico
 
+<details><summary>Leaf</summary>
+
+```java
+```
+</details>
