@@ -22,7 +22,6 @@ public class DecodificadorTest {
 		rocky4 = new Pelicula("Rocky 4", 7, Year.of(2003));
 		rocky5 = new Pelicula("Rocky 5", 6, Year.of(2004));
 		
-		
 		//Se podria establecer la similitud con cada pelicula pero es mucho
 		//Se hace con rocky2 porque busca las mimilares con las reproducidas
 		rocky2.establecerSimilitud(rocky1);
@@ -71,6 +70,7 @@ public class DecodificadorTest {
 		
 		similaridad = new SugerenciaSimilaridad();
 		decodificador.setCriterioSugerencia(similaridad);
+		//Son las 3 similares sin reproducir
 		List<Pelicula> similaresRocky = new ArrayList<>();
 		similaresRocky.add(rocky1);
 		similaresRocky.add(rocky3);

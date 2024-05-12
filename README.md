@@ -733,19 +733,27 @@ public class Excursion {
 #### Usuario
 ```java
 public class Usuario {
-	private String nombre;
-	private String apellido;
-	private String mail;
-	
-	public Usuario(String nombre, String apellido, String mail) {
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.mail = mail;
-	}
+    private String nombre;
+    private String apellido;
+    private String mail;
 
-	public String getNombre() {return nombre;}
-	public String getApellido() {return apellido;}
-	public String getMail() {return mail;}
+    public Usuario(String nombre, String apellido, String mail) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.mail = mail;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getMail() {
+        return mail;
+    }
 }
 ```
 
@@ -755,18 +763,14 @@ public class Usuario {
 
 ```java
 public abstract class Estado {
-	private Excursion excursion;
+    protected Excursion excursion;
 
-	public Estado(Excursion excursion) {
-		this.excursion = excursion;
-	}
+    public Estado(Excursion excursion) {
+        this.excursion = excursion;
+    }
 
-	public Excursion getExcursion() {
-		return this.excursion;
-	}
-	
-	public abstract void inscribir (Usuario unUsuario);
-	public abstract String obtenerInformacion();
+    public abstract void inscribir(Usuario unUsuario);
+    public abstract String obtenerInformacion();
 }
 ```
 
@@ -775,6 +779,25 @@ public abstract class Estado {
 <details><summary>ConcreteStateA</summary>
 
 ```java
+public class Provisoria extends Estado {
+    public Provisoria(Excursion excursion) {
+        super(excursion);
+    }
+
+    public void inscribir(Usuario unUsuario) {
+        if (!this.excursion.alcanzoMaximo()) {
+            this.excursion.getInscriptos().add(unUsuario);
+            if (this.excursion.alcanzoMinimo()) {
+                this.excursion.setEstado(new Definitiva(this.excursion));
+            }
+        }
+    }
+
+    public String obtenerInformacion() {
+        return "\nActualmente faltan " + (this.excursion.getCupoMinimo() - this.excursion.getInscriptos().size())
+                + " personas para alcanzar el cupo mínimo.";
+    }
+}
 ```
 
 </details>
@@ -782,6 +805,24 @@ public abstract class Estado {
 <details><summary>ConcreteStateB</summary>
 
 ```java
+public class Definitiva extends Estado {
+    public Definitiva(Excursion excursion) {
+        super(excursion);
+    }
+
+    public void inscribir(Usuario unUsuario) {
+        if (!this.excursion.alcanzoMaximo()) {
+            this.excursion.getInscriptos().add(unUsuario);
+        } else {
+            this.excursion.setEstado(new Completa(this.excursion));
+            this.excursion.inscribir(unUsuario); 
+        }
+    }
+
+    public String obtenerInformacion() {
+        return "\nLa excursión está confirmada y tiene espacio para más inscripciones.";
+    }
+}
 ```
 
 </details>
@@ -789,6 +830,51 @@ public abstract class Estado {
 <details><summary>ConcreteStateC</summary>
 
 ```java
-```
+public class Completa extends Estado {
+    public Completa(Excursion excursion) {
+        super(excursion);
+    }
 
+    public void inscribir(Usuario unUsuario) {
+        this.excursion.getEnEspera().add(unUsuario);
+    }
+
+    public String obtenerInformacion() {
+        return "\nLa excursión está completa. Todos los nuevos inscriptos serán puestos en lista de espera.";
+    }
+}
+```
 </details>
+
+<details><summary>ExcursionTest</summary>
+
+```java
+public class ExcursionTest {
+	Excursion excursion;
+	Usuario usuario;
+	
+	@BeforeEach
+	void setUp() throws Exception{
+		usuario = new Usuario("Fabian", "Martinez", "fabian@gmail.com");
+		excursion = new Excursion("Viaje", 
+				LocalDate.of(2000, 1, 1), 
+				LocalDate.of(2000,2,1), "La Ciudad", 100, 3, 6);
+	}
+	@Test
+	public void testExcursion() {
+		excursion.inscribir(usuario);
+		excursion.inscribir(usuario);
+		excursion.inscribir(usuario);
+		assertEquals(3, excursion.getInscriptos().size());
+		excursion.inscribir(usuario);
+		excursion.inscribir(usuario);
+		excursion.inscribir(usuario);
+		assertEquals(6, excursion.getInscriptos().size());
+		excursion.inscribir(usuario);
+		assertEquals(1, excursion.getEnEspera().size());
+	}
+}
+```
+</details>
+
+> Tengo que consultar porque tengo bajo acoplamiento, pero no se si esta bien
