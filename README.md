@@ -20,6 +20,8 @@ Antes de empezar vamos a ver que tipos de patrones tenemos, durante la materia s
 - [Composite](#composite-estructural)
 - [Strategy](#strategy-comportamiento)
 - [State](#state-comportamiento)
+- [Decorator](#decorator-estructural)
+- [Proxy](#proxy-estructural)
 
 ## Adapter (Estructural)
 
@@ -1083,3 +1085,7 @@ public class AspectSize extends Aspect {
 </details>
 
 > Me rindo, despues pregunto en la clase.
+
+## Proxy (Estructural)
+
+![](/archivos/proxy.webp)
