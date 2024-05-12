@@ -17,6 +17,7 @@ Antes de empezar vamos a ver que tipos de patrones tenemos, durante la materia s
 
 - [Adapter](#adapter-estructural)
 - [Template Method](#template-comportamiento)
+- [Composite](#composite-estructural)
 
 ## Adapter (Estructural)
 
@@ -282,3 +283,15 @@ public class MediaPlayerTest {
 Este patrón es utilizado principalmente para organizar objetos en estructuras de árbol que representan jerarquías parte-todo. Permite a los clientes tratar objetos individuales y composiciones de objetos de manera uniforme.
 
 ![](/archivos/composite.webp)
+
+- `Component` Es la interfaz o clase abstracta que define las operaciones comunes para tanto los objetos simples (Leaf) como los compuestos (Composite). Actúa como la clase base para todos los objetos dentro de la estructura.
+	- `Operation():` Debe ser implementado por todos los objetos concretos, tanto hojas como compuestos.
+	- `Add(Component):` Agrega subcomponentes, utilizado principalmente en los Composite.
+	- `Remove(Component):` Remueve subcomponentes, utilizado principalmente en los Composite.
+	- `GetChild(int):` Obtiene un subcomponente específico, utilizado principalmente en los Composite.
+- `Leaf` Son los bloques de construcción básicos de la estructura, donde se implementan las operaciones más concretas sin delegar a otros objetos.
+- `Composite` Implementa métodos para manejar sus hijos y también implementa la operación que se aplica a cada uno de sus hijos.
+	- `Operation()`: Implementa el método realizando una operación que generalmente implica iterar sobre sus hijos y llamando a su método Operation().
+	- `Add(Component)`, `Remove(Component)`, `GetChild(int)`: Estos métodos están implementados para manipular y acceder a los subcomponentes.
+
+### Ejemplo Practico
