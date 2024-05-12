@@ -414,6 +414,20 @@ public class MediaPlayerTest {
 ```
 </details>
 
-## Strategy
+## Strategy (Comportamiento)
+
+Define una familia de algoritmos, encapsula cada uno de ellos y los hace intercambiables. Este patrón permite que el algoritmo varíe independientemente de los clientes que lo utilizan.
 
 ![](/archivos/strategy.PNG)
+
+- `Context` Delega trabajo a la estrategia asociada, pero mantiene el control sobre cómo y cuándo se llama a las estrategias. Puede proporcionar datos adicionales necesarios para la ejecución de la estrategia.
+	- `Ejemplo`  Una aplicación de navegación que puede calcular rutas utilizando diferentes algoritmos de estrategia. El contexto sería el planificador de rutas que decide cuándo y cómo calcular la ruta dependiendo de la estrategia seleccionada por el usuario (la más rápida, la más corta, la más económica, etc.).
+- `Strategy` Es una interfaz que define un método común para todas las estrategias concretas.
+	- `Ejemplo` En el contexto de una aplicación de navegación, la interfaz `Strategy` podría definir un método `calculateRoute()`, que será implementado de diferente manera por cada estrategia concreta.
+- `ConcreteStrategyA`, `ConcreteStrategyB`, `ConcreteStrategyC` Son implementaciones específicas de la interfaz `Strategy`. Cada una proporciona un comportamiento concreto o un algoritmo específico
+	- `ConctreteStrategyA` Podría ser una estrategia que calcula la ruta más rápida usando autopistas.
+	- `ConctreteStrategyB` Podría calcular la ruta más corta, evitando autopistas
+	- `ConctreteStrategyC` Podría optar por la ruta que consume menos combustible.
+
+### Ejemplo Practico
+
