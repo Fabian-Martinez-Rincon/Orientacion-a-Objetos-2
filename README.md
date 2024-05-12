@@ -609,3 +609,9 @@ public class DecodificadorTest {
 	}
 }
 ```
+
+</details>
+
+## State (Comportamiento)
+
+![](/archivos/state.webp)
