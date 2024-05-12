@@ -885,7 +885,201 @@ Permite añadir nuevas funcionalidades a objetos de manera dinámica, ofreciendo
 
 ![](/archivos/decorator.webp)
 
-- `Component`
-- `ConcreteComponent`	
-- `Decorator`
-- `ConcreteDecoratorA`, `ConcreteDecoratorB`
+- `Component` Interfaz para objetos que pueden tener responsabilidades añadidas dinámicamente.
+	- `Ejemplo` En una aplicación de renderizado de texto, `Component` podría ser una interfaz `Text` con un método `draw()`
+- `ConcreteComponent` Implementa la interfaz `Component`, representando objetos a los que se añadirán responsabilidades.
+	- `Ejemplo` `PlainText` podría ser una clase que implemente `Text`, y su método `draw()` simplemente muestra el texto sin ningún formato.
+- `Decorator` Es una clase abstracta que implementa la interfaz `Component` y mantiene una referencia a un objeto `Component`.
+	- `Ejemplo` `TextDecorator` podría ser una clase abstracta que implementa `Text` y contiene un elemento `Text` que se decorará.
+- `ConcreteDecoratorA`, `ConcreteDecoratorB` Extienden la funcionalidad de Decorator añadiendo estado o comportamiento adicional.
+	- `ConcreteDecoratorA`: `BoldTextDecorator` podría ser una clase que decora un texto agregando negrita. Su método `draw()` llamará `draw()` del `Text` decorado y luego aplicará un estilo de negrita al texto.
+	- `ConcreteDecoratorB`: `ItalicTextDecorator` podría ser una clase que agrega funcionalidad para dibujar texto en cursiva.
+
+### Ejemplo Practico
+
+<details><summary>Component</summary>
+
+```java
+public interface FileAttributes {
+    default String prettyPrint() { return ""; }
+    default String getName() { return ""; }
+    default String getExtension() { return ""; }
+    default String getSize() { return ""; }
+    default String getDateCreated() { return ""; }
+    default String getDateModified() { return ""; }
+    default String getPermissions() { return ""; }
+}
+```
+</details>
+
+<details><summary>ConcreteComponent</summary>
+
+```java
+public class File implements FileAttributes {
+    private String name;
+    private String extension;
+    private double size;
+    private LocalDate dateCreated;
+    private LocalDate dateModified;
+    private String permissions;
+    
+    // Constructor para inicializar el archivo con todos los atributos necesarios
+    public File(String name, String extension, double size, LocalDate dateCreated, LocalDate dateModified, String permissions) {
+        this.name = name;
+        this.extension = extension;
+        this.size = size;
+        this.dateCreated = dateCreated;
+        this.dateModified = dateModified;
+        this.permissions = permissions;
+    }
+    
+    public String prettyPrint() {
+        return "Archivo: " + getName() + " (." + getExtension() + "), Tamaño: " + getSize() + " MB\n" +
+               "Creado el: " + getDateCreated() + "\n" +
+               "Modificado el: " + getDateModified() + "\n" +
+               "Permisos: " + getPermissions();
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public String getSize() {
+        return String.format("%.2f", size);
+    }
+
+    public String getDateCreated() {
+        return dateCreated.toString();
+    }
+
+    public String getDateModified() {
+        return dateModified.toString();
+    }
+
+    public String getPermissions() {
+        return permissions;
+    }
+}
+```
+</details>
+
+<details><summary>Decorator</summary>
+
+```java
+public abstract class Aspect implements FileAttributes {
+    protected FileAttributes component;
+
+    public Aspect(FileAttributes component) {
+        this.component = component;
+    }
+
+    public String prettyPrint() {
+        return component.prettyPrint();
+    }
+}
+
+```
+</details>
+
+<details><summary>ConcreteDecoratorA</summary>
+
+```java
+public class AspectDateCreated extends Aspect {
+    public AspectDateCreated(FileAttributes component) {
+        super(component);
+    }
+    
+    public String prettyPrint() {
+        return super.prettyPrint() + "Creado: " + getDateCreated() + "\n";
+    }
+}
+```
+</details>
+
+<details><summary>ConcreteDecoratorB</summary>
+
+```java
+public class AspectDateModified extends Aspect {
+    public AspectDateModified(FileAttributes component) {
+        super(component);
+    }
+    
+    @Override
+    public String prettyPrint() {
+        return super.prettyPrint() + "Modificado: " + getDateModified() + "\n";
+    }
+}
+```
+</details>
+
+<details><summary>ConcreteDecoratorC</summary>
+
+```java
+public class AspectExtension extends Aspect {
+    public AspectExtension(FileAttributes component) {
+        super(component);
+    }
+
+    @Override
+    public String prettyPrint() {
+        return super.prettyPrint() + "Extensión: ." + getExtension() + "\n";
+    }
+}
+```
+</details>
+
+<details><summary>ConcreteDecoratorD</summary>
+
+```java
+public class AspectName extends Aspect {
+    public AspectName(FileAttributes component) {
+        super(component);
+    }
+
+    @Override
+    public String prettyPrint() {
+        return super.prettyPrint() + "Nombre: " + getName() + "\n";
+    }
+}
+```
+</details>
+
+<details><summary>ConcreteDecoratorE</summary>
+
+```java
+public class AspectPermissions extends Aspect {
+
+    public AspectPermissions(FileAttributes component) {
+        super(component);
+    }
+    
+    @Override
+    public String prettyPrint() {
+        return super.prettyPrint() + "Permisos: " + getPermissions() + "\n";
+    }
+}
+
+```
+</details>
+
+<details><summary>ConcreteDecoratorF</summary>
+
+```java
+public class AspectSize extends Aspect {
+    public AspectSize(FileAttributes component) {
+        super(component);
+    }
+
+    @Override
+    public String prettyPrint() {
+        return super.prettyPrint() + "Tamaño: " + getSize() + " MB\n";
+    }
+}
+```
+</details>
+
+> Me rindo, despues pregunto en la clase.

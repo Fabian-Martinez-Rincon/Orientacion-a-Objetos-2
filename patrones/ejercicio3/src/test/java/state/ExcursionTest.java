@@ -24,22 +24,15 @@ public class ExcursionTest {
 	}
 	@Test
 	public void testExcursion() {
-		System.out.print(excursion.obtenerInformacion());
 		excursion.inscribir(usuario);
 		excursion.inscribir(usuario);
 		excursion.inscribir(usuario);
 		assertEquals(3, excursion.getInscriptos().size());
-		System.out.println();System.out.println();
-		System.out.print(excursion.obtenerInformacion());
-		
 		excursion.inscribir(usuario);
 		excursion.inscribir(usuario);
 		excursion.inscribir(usuario);
 		assertEquals(6, excursion.getInscriptos().size());
-		
 		excursion.inscribir(usuario);
 		assertEquals(1, excursion.getEnEspera().size());
-		System.out.println();System.out.println();
-		System.out.print(excursion.obtenerInformacion());
 	}
 }
