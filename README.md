@@ -627,3 +627,148 @@ Se utiliza para permitir a un objeto alterar su comportamiento cuando su estado 
 - `ConcreteStateA`, `ConcreteStateB` Cada clase representa un estado específico del `Context` y proporciona su propia implementación del método `handle()`.
 	- `ConcreteStateA` (PedidoPagado): Este estado podría manejar la lógica de preparar el pedido para el envío. La implementación de `handle()` en este estado podría cambiar el estado del pedido a `Enviado` si todo está listo para el envío.
 	- `ConcreteStateB` (PedidoEnviado): Este estado manejaría las acciones posteriores al envío, como notificar al cliente o cambiar el estado a `Entregado`. La implementación de `handle()` aquí podría involucrar la verificación del progreso del envío y la actualización del estado del pedido.
+
+<details><summary>Preguntar ¿Cuando el objeto state debe tener una instancia del context</summary>
+
+En el patrón de diseño State, es común que los objetos de estado (`State`) tengan acceso al objeto de contexto (`Context`) para poder realizar cambios en el estado del contexto directamente. Sin embargo, si los objetos `State` tienen una referencia directa al `Context` o no depende del diseño específico y de los requisitos del sistema. Aquí te detallo los dos enfoques posibles:
+
+### 1. State con Referencia a Context
+- **Descripción**: En esta configuración, cada objeto `State` mantiene una referencia al `Context`. Esto les permite no solo manejar su comportamiento específico sino también cambiar el estado del `Context` directamente cuando se cumplan ciertas condiciones.
+- **Ventajas**:
+  - **Control Directo**: Los estados pueden controlar las transiciones a otros estados sin involucrar al `Context`, lo que simplifica el código del `Context`.
+  - **Flexibilidad**: Facilita la implementación de comportamientos complejos que dependen del estado y contexto actuales, como revertir a un estado anterior o saltar a estados no secuenciales.
+- **Ejemplo**: Un objeto `State` en un juego puede verificar si el jugador ha alcanzado ciertos puntos de logro y directamente cambiar el estado del juego para reflejar un nuevo nivel o modo de juego.
+
+### 2. State sin Referencia Directa a Context
+- **Descripción**: En esta configuración, los objetos `State` no mantienen una referencia directa al `Context`. En su lugar, dependen de que el `Context` pase de alguna forma cualquier información necesaria y maneje explícitamente los cambios de estado.
+- **Ventajas**:
+  - **Desacoplamiento**: Mayor desacoplamiento entre el estado y el contexto, lo que puede facilitar la prueba y mantenimiento de cada clase por separado.
+  - **Reusabilidad**: Los objetos `State` pueden ser más fácilmente reutilizables en diferentes contextos si no están fuertemente acoplados a una clase de contexto específica.
+- **Ejemplo**: Un objeto `State` en una aplicación de procesamiento de documentos podría realizar operaciones como guardar o cargar archivos sin necesitar saber en qué estado específico de la UI se encuentra la aplicación.
+
+</details>
+
+### Ejemplo Practico
+
+<details><summary>Context</summary>
+
+```java
+public class Excursion {
+	private String nombre;
+	private Estado estado;
+	private List<Usuario> inscriptos;
+	private List<Usuario> enEspera;
+	private LocalDate fechaInicio;
+	private LocalDate fechaFin;
+	private String puntoEncuentro;
+	private double costo;
+	private int cupoMinimo;
+	private int cupoMaximo;
+	
+	public Excursion(String nombre, LocalDate fechaInicio, LocalDate fechaFin, String puntoEncuentro, double costo,
+			int cupoMinimo, int cupoMaximo) {
+		this.nombre = nombre;
+		this.estado = new Provisoria(this);
+		this.inscriptos = new ArrayList<>();
+		this.enEspera = new ArrayList<>();
+		this.fechaInicio = fechaInicio;
+		this.fechaFin = fechaFin;
+		this.puntoEncuentro = puntoEncuentro;
+		this.costo = costo;
+		this.cupoMinimo = cupoMinimo;
+		this.cupoMaximo = cupoMaximo;
+	}
+	
+	public List<Usuario> getInscriptos() { return inscriptos;}
+	public List<Usuario> getEnEspera() { return enEspera;}
+	public Estado getEstado() { return estado;}
+	public void setEstado(Estado estado) { this.estado = estado;}
+	public int getCupoMinimo() { return cupoMinimo;}
+	public int getCupoMaximo() { return cupoMaximo;}
+	public void inscribir (Usuario unUsuario) { this.estado.inscribir(unUsuario);}
+	
+	public boolean alcanzoMinimo() {
+		return this.getInscriptos().size() >= this.cupoMinimo;
+	}
+	
+	public boolean alcanzoMaximo() {
+		return this.getInscriptos().size() >= this.cupoMaximo;
+	}
+	public String obtenerInformacion() {
+		return "La excursion '" + this.nombre 
+				+ "' tiene un costo de " + this.costo
+				+ " con fecha de inicio " + this.fechaInicio.toString()
+				+ " y fecha de fin " + this.fechaFin.toString()
+				+ ".\nEl punto de encuentro es en '" + this.puntoEncuentro
+				+ "'. " + this.estado.obtenerInformacion();
+	}
+	public String getMailsInscriptos() {
+		return this.inscriptos.stream()
+				.map(inscripto -> inscripto.getMail())
+				.reduce("",(acumulator, element)-> acumulator +"\n" + element);
+	}
+}
+```
+
+#### Usuario
+```java
+public class Usuario {
+	private String nombre;
+	private String apellido;
+	private String mail;
+	
+	public Usuario(String nombre, String apellido, String mail) {
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.mail = mail;
+	}
+
+	public String getNombre() {return nombre;}
+	public String getApellido() {return apellido;}
+	public String getMail() {return mail;}
+}
+```
+
+</details>
+
+<details><summary>State</summary>
+
+```java
+public abstract class Estado {
+	private Excursion excursion;
+
+	public Estado(Excursion excursion) {
+		this.excursion = excursion;
+	}
+
+	public Excursion getExcursion() {
+		return this.excursion;
+	}
+	
+	public abstract void inscribir (Usuario unUsuario);
+	public abstract String obtenerInformacion();
+}
+```
+
+</details>
+
+<details><summary>ConcreteStateA</summary>
+
+```java
+```
+
+</details>
+
+<details><summary>ConcreteStateB</summary>
+
+```java
+```
+
+</details>
+
+<details><summary>ConcreteStateC</summary>
+
+```java
+```
+
+</details>
