@@ -878,3 +878,14 @@ public class ExcursionTest {
 </details>
 
 > Tengo que consultar porque tengo bajo acoplamiento, pero no se si esta bien
+
+## Decorator (Estructural)
+
+Permite añadir nuevas funcionalidades a objetos de manera dinámica, ofreciendo una alternativa flexible a la herencia para extender funcionalidades.
+
+![](/archivos/decorator.webp)
+
+- `Component`
+- `ConcreteComponent`	
+- `Decorator`
+- `ConcreteDecoratorA`, `ConcreteDecoratorB`
