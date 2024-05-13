@@ -1223,3 +1223,7 @@ public class ProxyTest {
 }
 ```
 </details>
+
+## Factory Method (Creacional)
+
+![Factory Method](/archivos/factoryMethod.webp)
