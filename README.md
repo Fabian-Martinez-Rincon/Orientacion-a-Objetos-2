@@ -1226,4 +1226,10 @@ public class ProxyTest {
 
 ## Factory Method (Creacional)
 
-![Factory Method](/archivos/factoryMethod.webp)
+![Factory Method](/archivos/factory-method.webp)
+
+- `Product` Es la interfaz o clase abstracta que define el tipo de objeto que el método fábrica creará.
+	- `Ejemplo` En un software de gestión de documentos, `Document` podría ser la interfaz `Product`, con métodos como `open()`, `save()`, y `close()`
+- `ConcreteProduct` Es una implementación específica de la interfaz `Product`, representando un producto específico creado por la fábrica concreta.
+- `Creator`
+- `ConcreteCreator`
