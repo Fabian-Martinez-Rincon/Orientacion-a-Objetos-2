@@ -22,6 +22,7 @@ Antes de empezar vamos a ver que tipos de patrones tenemos, durante la materia s
 - [State](#state-comportamiento)
 - [Decorator](#decorator-estructural)
 - [Proxy](#proxy-estructural)
+- [Factory Method](#factory-method-creacional)
 
 ## Adapter (Estructural)
 
