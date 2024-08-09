@@ -230,9 +230,74 @@ Su tarea es diseñar y programar en Java lo que sea necesario para ofrecer la fu
 
 ### Ejercicio 2 Piedra Papel o Tijera
 
+Se quiere programar en objetos una versión del juego Piedra Papel o Tijera. En este juego dos jugadores eligen entre tres opciones: piedra, papel o tijera. La piedra aplasta la tijera, la tijera corta el papel, y el papel envuelve la piedra. Los jugadores eligen una opción y se determina un ganador según las reglas: 
+
+Here is the table in text format:
+
+|        | Piedra | Papel | Tijera |
+|--------|--------|-------|--------|
+| Piedra | Empate | Papel | Piedra |
+| Papel  | Papel  | Empate| Tijera |
+| Tijera | Piedra | Tijera| Empate |
+
+#### Tareas:
+
+`Ejercicio 1)` Diseñe e implemente una solución a este problema, de forma tal que dadas dos opciones, determine cuál fue la ganadora, o si hubo empate
+
+`Ejercicio 2)` Se desea extender al juego a una versión más equitativa que integre a lagarto y Spock, con las siguientes reglas:
+
+- Piedra aplasta tijera y aplasta lagarto.
+- Papel cubre piedra y desaprueba Spock.
+- Tijera corta papel y decapita lagarto.
+- Lagarto come papel y envenena Spock.
+- Spock rompe tijera y vaporiza piedra.
+
+¿Qué cambios se necesitan agregar?
+
+Agregue los cambios a la solución anterior.
+
+
 ---
 
 ### Ejercicio 3: Friday the 13th en Java
+
+> Nota: Para realizar este ejercicio, utilice el material adicional que se encuentra en el siguiente [link](https://drive.google.com/file/d/1xCC1uWt8DC_beCwg6vJTb7brcD7_2W7T/view). Allí encontrará un proyecto Maven que contiene el código fuente de las clases Biblioteca, Socio y VoorheesExporter.
+
+La clase Biblioteca implementa la funcionalidad de exportar el listado de sus socios en formato JSON. Para ello define el método **exportarSocios()** de la siguiente forma:
+
+```java
+/**
+ * Retorna la representación JSON de la colección de socios.
+ */
+public String exportarSocios() {
+   return exporter.exportar(socios);
+}
+```
+
+
+La Biblioteca delega la responsabilidad de exportar en una instancia de la clase  VoorheesExporter que dada una colección de socios, retorna un texto con la representación de la misma en formato JSON. Esto lo hace mediante el mensaje de instancia **exportar(List<.Socio>)**. 
+
+De un socio se conoce el nombre, el email y el número de legajo. Por ejemplo, para una biblioteca que posee una colección con los siguientes socios:
+
+<table border="1" cellpadding="10">
+    <tr>
+        <td>
+            <ul>
+                <li>Nombre: Arya Stark</li>
+                <li>e-mail: needle@stark.com</li>
+                <li>legajo: 5234-5</li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li>Nombre: Tyron Lannister</li>
+                <li>e-mail: tyron@thelannisters.com</li>
+                <li>legajo: 2345-2</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
 
 ---
 
