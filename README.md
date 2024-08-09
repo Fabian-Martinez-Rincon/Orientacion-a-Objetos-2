@@ -166,4 +166,180 @@ El framework podría caracterizarse como **caja blanca** debido a que:
 
 </details>
 
-## Cuadernillo
+---
+
+### Cuadernillo
+
+- [Ejercicio 1 Red Social](#ejercicio-1-red-social)
+- [Ejercicio 2 Piedra Papel o Tijera](#ejercicio-2-piedra-papel-o-tijera)
+- [Ejercicio 3: Friday the 13th en Java](#ejercicio-3-friday-the-13th-en-java)
+- [Ejercicio 3.b - Usando la librería JSON.simple](#ejercicio-3b---usando-la-librería-jsonsimple)
+- [Ejercicio 4: Cálculo de sueldos](#ejercicio-4-cálculo-de-sueldos)
+- [Ejercicio 5: Media Player](#ejercicio-5-media-player)
+- [Ejercicio 6: Topografías](#ejercicio-6-topografías)
+- [Ejercicio 6b: Más Topografías](#ejercicio-6b-más-topografías)
+- [Ejercicio 7: FileSystem](#ejercicio-7-filesystem)
+- [Ejercicio 8: ToDoItem](#ejercicio-8-todoitem)
+- [Ejercicio 9: Excursiones](#ejercicio-9-excursiones)
+- [Ejercicio 10: Encriptador](#ejercicio-10-encriptador)
+- [Ejercicio 11: Administrador de proyectos](#ejercicio-11-administrador-de-proyectos)
+- [Ejercicio 12 - Dispositivo móvil y conexiones](#ejercicio-12---dispositivo-móvil-y-conexiones)
+- [Ejercicio 13 - Decodificador de películas](#ejercicio-13---decodificador-de-películas)
+- [Ejercicio 14: Acceso a la base de datos](#ejercicio-14-acceso-a-la-base-de-datos)
+- [Ejercicio 15 - File Manager](#ejercicio-15---file-manager)
+- [Ejercicio 16 - Estación meteorológica](#ejercicio-16---estación-meteorológica)
+- [Ejercicio 17 - Productos Financieros](#ejercicio-17---productos-financieros)
+- [Ejercicio 18 - Sistema de monitoreo](#ejercicio-18---sistema-de-monitoreo)
+- [Ejercicio 19 - Personajes de juegos de rol](#ejercicio-19---personajes-de-juegos-de-rol)
+- [Ejercicio 19b - Mas Personajes](#ejercicio-19b---mas-personajes)
+- [Ejercicio 20 - Filtros de Imágenes](#ejercicio-20---filtros-de-imágenes)
+- [Ejercicio 20b - Secuencia de Filtros](#ejercicio-20b---secuencia-de-filtros)
+- [Ejercicio 20c - Instanciando Secuencia de Filtros](#ejercicio-20c---instanciando-secuencia-de-filtros)
+- [Ejercicio 21 - Genealogía salvaje](#ejercicio-21---genealogía-salvaje)
+- [Ejercicio 22 - SubteWay](#ejercicio-22---subteway)
+- [Ejercicio 23: Aerolínea Regional](#ejercicio-23-aerolínea-regional)
+- [Ejercicio 24 - Monitoreo de proceso industrial](#ejercicio-24---monitoreo-de-proceso-industrial)
+- [Ejercicio 25 - Acceso bajo demanda ](#ejercicio-25---acceso-bajo-demanda)
+
+---
+
+### Ejercicio 1 Red Social
+
+Se quiere programar en objetos una versión simplificada de una red social parecida a Twitter. Este servicio debe permitir a los usuarios registrados postear y leer mensajes de hasta 280 caracteres. Ud. debe modelar e implementar parte del sistema donde nos interesa que quede claro lo siguiente:
+
+- Cada usuario conoce todos los Tweets que hizo.
+- Un tweet puede ser re-tweet de otro, y este tweet debe conocer a su tweet de origen.
+- Twitter debe conocer a todos los usuarios del sistema.
+- Los tweets de un usuario se deben eliminar cuando el usuario es eliminado. No existen tweets no referenciados por un usuario.
+- Los usuarios se identifican por su screenName.
+- No se pueden agregar dos usuarios con el mismo screenName.
+- Los tweets deben tener un texto de 1 carácter como mínimo y 280 caracteres como máximo.
+- Un re-tweet no tiene texto adicional.
+
+#### Tareas
+
+Su tarea es diseñar y programar en Java lo que sea necesario para ofrecer la funcionalidad antes descrita. Se espera que entregue los siguientes productos.
+
+- Diagrama de clases UML.
+- Implementación en Java de la funcionalidad requerida.
+- Implementar los tests (JUnit) que considere necesarios.
+
+> Nota: para crear el proyecto Java, lea el material llamado “Trabajando en OO2 con proyectos Maven”.
+
+---
+
+### Ejercicio 2 Piedra Papel o Tijera
+
+---
+
+### Ejercicio 3: Friday the 13th en Java
+
+---
+
+### Ejercicio 3.b - Usando la librería JSON.simple
+
+---
+
+### Ejercicio 4: Cálculo de sueldos
+
+---
+
+### Ejercicio 5: Media Player
+
+---
+
+### Ejercicio 6: Topografías
+
+---
+
+### Ejercicio 6b: Más Topografías
+
+---
+
+### Ejercicio 7: FileSystem
+
+---
+
+### Ejercicio 8: ToDoItem
+
+---
+
+### Ejercicio 9: Excursiones
+
+---
+
+### Ejercicio 10: Encriptador
+
+---
+
+### Ejercicio 11: Administrador de proyectos
+
+---
+
+### Ejercicio 12 - Dispositivo móvil y conexiones
+
+---
+
+### Ejercicio 13 - Decodificador de películas
+
+---
+
+### Ejercicio 14: Acceso a la base de datos
+
+---
+
+### Ejercicio 15 - File Manager
+
+---
+
+### Ejercicio 16 - Estación meteorológica
+
+---
+
+### Ejercicio 17 - Productos Financieros
+
+---
+
+### Ejercicio 18 - Sistema de monitoreo
+
+---
+
+### Ejercicio 19 - Personajes de juegos de rol
+
+---
+
+### Ejercicio 19b - Mas Personajes
+
+---
+
+### Ejercicio 20 - Filtros de Imágenes
+
+---
+
+### Ejercicio 20b - Secuencia de Filtros
+
+---
+
+### Ejercicio 20c - Instanciando Secuencia de Filtros
+
+---
+
+### Ejercicio 21 - Genealogía salvaje
+
+---
+
+### Ejercicio 22 - SubteWay
+
+---
+
+### Ejercicio 23: Aerolínea Regional
+
+---
+
+### Ejercicio 24 - Monitoreo de proceso industrial
+
+---
+
+### Ejercicio 25 - Acceso bajo demanda
+
+---
