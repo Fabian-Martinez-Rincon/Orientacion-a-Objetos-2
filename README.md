@@ -298,14 +298,109 @@ De un socio se conoce el nombre, el email y el número de legajo. Por ejemplo, p
     </tr>
 </table>
 
+Ud. puede probar la funcionalidad ejecutando el siguiente código:
+
+```java
+Biblioteca biblioteca = new Biblioteca();
+biblioteca.agregarSocio(new Socio("Arya Stark", "needle@stark.com", "5234-5"));
+biblioteca.agregarSocio(new Socio("Tyron Lannister", "tyron@thelannisters.com",  "2345-2"));
+System.out.println(biblioteca.exportarSocios());
+```
+
+Al ejecutar, el mismo imprimirá el siguiente JSON:
+
+```json
+[
+    {
+   	 "nombre": "Arya Stark",
+   	 "email": "needle@stark.com",
+   	 "legajo": "5234-5"
+    },
+    {
+   	 "nombre": "Tyron Lannister",
+   	 "email": "tyron@thelannisters.com",
+   	 "legajo": "2345-2"
+    }
+]
+```
+
+Note los corchetes de apertura y cierre de la colección, las llaves de apertura y cierre para cada socio y la coma separando a los socios.
+
+#### Tareas:
+- Analice la implementación de la clase Biblioteca, Socio y VoorheesExporter que se provee con el material adicional de esta práctica ([Archivo biblioteca.zip](https://drive.google.com/file/d/1xCC1uWt8DC_beCwg6vJTb7brcD7_2W7T/view)).
+- Documente la implementación mediante un diagrama de clases UML. 
+- Programe los Test de Unidad para la implementación propuesta.
+
 
 ---
 
 ### Ejercicio 3.b - Usando la librería JSON.simple
 
+Su nuevo desafío consiste en utilizar la librería JSON.simple para imprimir en formato JSON a los socios de la Biblioteca en lugar de utilizar la clase VoorheesExporter. Pero con la siguiente condición: **nada de esto debe generar un cambio en el código de la clase Biblioteca.**
+
+La librería JSON.simple es liviana y muy utilizada para leer y escribir archivos JSON.  
+
+Entre las clases que contiene se encuentran:
+
+- JSONObject : Usada para representar los datos que se desean exportar de un objeto.  Esta clase provee el método put(Object, Object) para agregar los campos al mismo. Aunque el primer argumento sea de tipo Object, usted debe proveer el nombre del atributo como un string. El segundo argumento contendrá el valor del mismo. Por ejemplo, si point es una instancia de JSONObject, se podrá ejecutar point.put(“x”, 50);
+- JSONArray: Usada para generar listas. Provee el método add(Object) para agregar los elementos a la lista, los cuales, para este caso, deben ser JSONObject.
+
+Ambas clases implementan el mensaje toJSONString() el cual retorna un String con la representación JSON del objeto.
+
+- JSONParser : Usada para recuperar desde un String con formato JSON los elementos que lo componen. 
+
+#### Tareas
+
+`1)` Instale la librería JSON.simple agregando la siguiente dependencia al archivo pom.xml de Maven
+
+```xml
+<dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1.1</version>
+</dependency>
+```
+
+`2)` Utilice esta librería para imprimir, en formato JSON, los socios de la Biblioteca en lugar de utilizar la clase VoorheesExporter, sin que esto genere un cambio en el código de la clase Biblioteca.
+
+- Modele una solución a esta alternativa utilizando un diagrama de clases UML. Si utiliza patrones de diseño indique los roles en las clases utilizando estereotipos.
+- Implemente en Java la solución incluyendo los tests que crea necesarios.
+
+`3)` Investigue sobre la librería Jackson, la cual también permite utilizar el formato JSON para serializar objetos Java.  Extienda la implementación para soportar también esta librería.
+
 ---
 
 ### Ejercicio 4: Cálculo de sueldos
+
+Sea una empresa que paga sueldos a sus empleados, los cuales están organizados en tres tipos: Temporarios, Pasantes y Planta. El sueldo se compone de 3 elementos: sueldo básico, adicionales y descuentos.
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th></th>
+        <th>Temporario</th>
+        <th>Pasante</th>
+        <th>Planta</th>
+    </tr>
+    <tr>
+        <td>básico</td>
+        <td>$ 20.000 + cantidad de horas que trabaje * $ 300.</td>
+        <td>$20.000</td>
+        <td>$50.000</td>
+    </tr>
+    <tr>
+        <td>adicional</td>
+        <td>$5.000 si está casado<br>$2.000 por cada hijo</td>
+        <td>$2.000 por examen que rindió</td>
+        <td>$5.000 si está casado<br>$2.000 por cada hijo<br>$2.000 por cada año de antigüedad</td>
+    </tr>
+    <tr>
+        <td>descuento</td>
+        <td>13% del sueldo básico<br>5% del sueldo adicional</td>
+        <td>13% del sueldo básico<br>5% del sueldo adicional</td>
+        <td>13% del sueldo básico<br>5% del sueldo adicional</td>
+    </tr>
+</table>
+
 
 ---
 
