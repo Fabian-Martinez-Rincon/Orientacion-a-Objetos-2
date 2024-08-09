@@ -8,7 +8,10 @@
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=34&duration=1700&pause=800&color=28CDF7&center=true&width=863&lines=☕ Orientación a Objetos 2"/>
  </div>
 
- - [Finales Frameworks]()
+- [Parciales Frameworks](#parciales-frameworks)
+- [Cuadernillo](#cuadernillo)
+
+## Parciales Frameworks
 
 ![alt text](/Finales/image.png)
 
@@ -26,6 +29,8 @@ Los hook methods en el contexto del documento y el diagrama de clases son `shoul
 El frozen spot en el marco de `RuleEngine` es la estructura y el flujo de control definidos en el método `run()` de la clase `RuleEngine`. Este método gestiona cómo las reglas se revisan y ejecutan, invocando `rule.run()` para cada `Rule` en la lista `this.rules`. La lógica que determina que todas las reglas deben ser evaluadas y ejecutadas en orden y la forma en que esto se orquesta, son aspectos del framework que no están destinados a ser modificados por el usuario, estableciendo así un frozen spot.
 
 </details>
+
+---
 
 ![alt text](/Finales/image-1.png)
 
@@ -47,8 +52,9 @@ Sí, el método `isEmailAllowed` es un hot spot. Un hot spot en un framework es 
 
 </details>
 
-![alt text](/Finales/image-2.png)
+---
 
+![alt text](/Finales/image-2.png)
 
 <details><summary>1. ¿El comportamiento variable del framework (hotspots), está implementado mediante herencia o composición? Justifique su respuesta.</summary>
 
@@ -68,6 +74,8 @@ Los métodos hook en este caso son `save(String key, String data)`, `hasKey(Stri
 El **Frozen Spot** en este framework es la clase `RedundancyEngine` y su interacción con la interfaz `Storage`. En particular, la forma en que `RedundancyEngine` itera sobre cada almacenamiento disponible para guardar y recuperar datos (los bucles en los métodos `save` y `get`) constituye un frozen spot. Estas partes del código están diseñadas para no ser modificadas, ya que dictan cómo se debe interactuar con los objetos `Storage` en cualquier configuración del framework. El flujo de guardar datos en todos los almacenamientos y recuperar el primer dato disponible que corresponde a una clave garantiza la redundancia de datos y no está destinado a ser cambiado por los usuarios del framework.
 
 </details>
+
+---
 
 ![alt text](/Finales/image-3.png)
 
@@ -96,6 +104,8 @@ El frozen spot en este framework está representado por la clase `API`, en parti
 Sí, hay una inversión de control evidente en cómo la clase `API` maneja las solicitudes. En lugar de la clase `API` controlar directamente cómo se verifican los permisos, este control se invierte hacia las implementaciones de la interfaz `Permission` que son pasadas al constructor de `API`. Este patrón es un ejemplo clásico de inversión de control, donde el framework (clase `API`) no realiza directamente las tareas de verificación, sino que llama a métodos definidos en objetos que son proporcionados por el usuario del framework (implementaciones de `Permission`), permitiendo que detalles específicos de la autorización sean definidos externamente y pasados al framework para su uso.
 
 </details>
+
+---
 
 ![alt text](/Finales/image-4.png)
 
@@ -155,3 +165,5 @@ El framework podría caracterizarse como **caja blanca** debido a que:
 - La estructura del framework y los métodos que deben ser implementados o extendidos son visibles y accesibles para el usuario, lo que es típico de los frameworks de caja blanca.
 
 </details>
+
+## Cuadernillo
