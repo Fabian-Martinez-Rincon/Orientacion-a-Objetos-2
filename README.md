@@ -279,7 +279,7 @@ La Biblioteca delega la responsabilidad de exportar en una instancia de la clase
 
 De un socio se conoce el nombre, el email y el número de legajo. Por ejemplo, para una biblioteca que posee una colección con los siguientes socios:
 
-<table border="1" cellpadding="10">
+<table>
     <tr>
         <td>
             <ul>
