@@ -374,7 +374,7 @@ Ambas clases implementan el mensaje toJSONString() el cual retorna un String con
 
 Sea una empresa que paga sueldos a sus empleados, los cuales están organizados en tres tipos: Temporarios, Pasantes y Planta. El sueldo se compone de 3 elementos: sueldo básico, adicionales y descuentos.
 
-<table border="1" cellpadding="10">
+<table>
     <tr>
         <th></th>
         <th>Temporario</th>
@@ -400,6 +400,12 @@ Sea una empresa que paga sueldos a sus empleados, los cuales están organizados 
         <td>13% del sueldo básico<br>5% del sueldo adicional</td>
     </tr>
 </table>
+
+### Tareas
+
+- Diseñe la jerarquía de Empleados de forma tal que cualquier empleado puede responder al mensaje #sueldo. 
+- Desarrolle los test cases necesarios para probar todos los casos posibles.
+- Implemente en Java.
 
 
 ---
