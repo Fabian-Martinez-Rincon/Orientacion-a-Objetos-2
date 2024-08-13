@@ -927,48 +927,244 @@ La empresa planea agregar un nuevo módulo que corresponda a uno de baja resoluc
 
 Las operaciones que implementa la CombinedMatrixSensor son:
 - `acquireSensor(mode:Integer)`. El parámetro “mode” que indica que tipo de medición se realizará. El valor 1 es para temperatura y el valor 2 es para humedad.
-acquireAll(), no tiene parámetros y retorna un HashMap con valores para temperatura (clave “temp”) y humedad (clave “hum”).
-reset(), no tiene parámetros y resetea todos los sensores
-calibrate(timeout:Integer), el parámetro “timeout” indica cuál es el tiempo máximo que el sensor puede demorar en ejecutar una lectura.
+- `acquireAll()`, no tiene parámetros y retorna un HashMap con valores para temperatura (clave “temp”) y humedad (clave “hum”).
+- `reset()`, no tiene parámetros y resetea todos los sensores
+- `calibrate(timeout:Integer)`, el parámetro “timeout” indica cuál es el tiempo máximo que el sensor puede demorar en ejecutar una lectura.
+
+#### Tareas:
+- `1)` ¿Cuál es el principal problema que identifica en el enunciado?
+- `2)` ¿Qué patrón aplicaría para este problema y cuáles son las consecuencias de aplicarlo?
+- `3)` Presente el diseño resultante y especifique el código/pseudocódigo resultante
 
 ---
 
 ### Ejercicio 19 - Personajes de juegos de rol
 
+Una empresa de videojuegos ofrece personajes para sus juegos de rol. Cada personaje tiene un nombre y viene equipado con armaduras, armas, y habilidades únicas que les permiten desempeñarse mejor.
+
+Las armaduras pueden ser de cuero, de hierro y de acero. Las armas pueden ser espadas, arcos y bastón de mago. Las habilidades pueden ser de combate cuerpo a cuerpo, de combate a distancia, de curación y de magia.
+
+Actualmente ofrece 3 personajes: guerreros, arqueros y magos.
+
+Los magos son expertos en el uso de la magia. Están equipados con una armadura de cuero para permitir la máxima movilidad. Su arma es un bastón mágico, y su habilidad es la magia y el combate a distancia. Los guerreros son los expertos en combate cuerpo a cuerpo, por lo tanto requieren una armadura de acero y una espada. Finalmente, los arqueros son especialistas tiros de flechas. Como deben moverse rápidamente, tienen una armadura de cuero y están equipados con arcos.
+
+En el juego, los personajes tienen la posibilidad de enfrentarse entre sí. Durante un enfrentamiento, el resultado dependerá del arma que utilice el atacante y de la armadura que lleve el defensor. A continuación, se muestra una tabla con el daño que cada arma causa. Ese valor afecta el puntaje del jugador atacado.
+
+![image](https://github.com/user-attachments/assets/a19bf7d1-3607-4a34-88d3-db50f765be6a) 
+
+Al inicio del juego, cada personaje comienza con 100 puntos de vida, los cuales se reducirán a medida que se enfrenten a otros jugadores. Un personaje podrá participar de un combate siempre que tenga vida. 
+
+#### Tareas:
+- `1)` Diseñe una solución orientada a objetos que permita la creación de personajes y el enfrentamiento entre ellos. Tenga en cuenta que en un futuro, la empresa planea ofrecer nuevos personajes. Provea el diagrama de clases UML y si utiliza algún patrón de diseño, indique cuál.
+- `2)` Implemente en Java el comportamiento descripto.
+
+
 ---
 
 ### Ejercicio 19b - Mas Personajes
+
+Extienda el ejercicio anterior para permitir que la empresa pueda ofrecer un nuevo personaje llamado “Thoor”, que requieren armadura de hierro y un martillo, con habilidades de lanzar rayos y combate a distancia.
+
+> Nota: puede completar la tabla con los valores que desee.
 
 ---
 
 ### Ejercicio 20 - Filtros de Imágenes
 
+En este [proyecto](https://drive.google.com/file/d/18Nj7dc445A5HaaGirCoIuGSxWEdiL-Wy/view) encontrará la librería ImageFilter que implementa algunos filtros básicos sobre imágenes PNG tales como: Rainbow, Repeater y RGBShiter entre otros.
+
+La librería incluye una herramienta (PNGFilterLauncher) que permite aplicar secuencia de filtros sobre una archivo de entrada y generar un archivo (.png) de salida.
+
+![image](https://github.com/user-attachments/assets/cdfe11e7-353b-411a-80f0-178e2ada6963)
+
+Para probar el código,  se deben configurar los argumentos de ejecución del proyecto. Se debe especificar la ubicación de la imagen de entrada y de salida, así como indicar qué filtros se van a aplicar.
+
+```
+img\input.png img\output.png --rainbow --artifacter
+```
+
+#### Tareas:
+- `1)` Descargue el proyecto y pruebe los diferentes Filtros
+- `2)` Analice el código y documente el proyecto con un Diagrama de Clases
+- `3)` Evalúe cuál de los siguientes patrones mejor describe el diseño de los Filtros: TemplateMethod, Strategy, Decorator. Para realizar la evaluación se sugiere contestar las siguientes preguntas aplicadas a cada uno de los patrones: 
+    - ¿El objetivo del patrón se distingue en el diseño? Elabore en un párrafo.
+    - ¿La estructura del proyecto coincide con la estructura y los participantes del patrón? Elabore en un párrafo.
+    - En el caso que el patrón coincida, puede distinguir un “smell” o algo que se aleja del patrón presentado en el libro?
+- `4)` Se requiere crear el filtro Monochrome. El pseudo código para crear una imagen  monocrome es el siguiente:
+
+![image](https://github.com/user-attachments/assets/9353b000-28d0-41ea-b47f-733109f8c494)
+
 ---
 
 ### Ejercicio 20b - Secuencia de Filtros
+
+Basado en el proyecto ImageFilter presentado en el ejercicio 17, se desarrolló una nueva versión que permite componer secuencia de filtros. Por ejemplo, es posible crear una secuencia con los siguientes filtros: rgb-shifter > repeater > monochrome. Las secuencias se implementan utilizando las clases en el paquete “Pipes”
+
+#### Tareas:
+
+- Descargue este proyecto y pruebe los diferentes Filtros
+- Analice el código y documente el proyecto con un Diagrama de Clases
+- Evalúe cuál de los siguientes patrones mejor describe el diseño de los Pipes: TemplateMethod, Strategy, Decorator. Para realizar la evaluación se sugiere contestar las siguientes preguntas aplicadas a cada uno de los patrones: 
+    - `a)` ¿El objetivo del patrón se distingue en el diseño? Elabore en un párrafo.
+    - `b)` ¿La estructura del proyecto coincide con la estructura y los participantes del patrón? Elabore en un párrafo.
+    - `c` En el caso que el patrón coincida, puede distinguir un “smell” o algo que se aleja del patrón presentado en el libro?
 
 ---
 
 ### Ejercicio 20c - Instanciando Secuencia de Filtros
 
+Se desea crear una nueva versión del proyecto ImageFilter con secuencias para implementar reglas de combinación de filtros. Se ha detectado que la incorporación del filtro Monochrome implica combinaciones que no tienen sentido o que no genera resultados aceptables. Para entender estos casos pruebe las siguientes secuencias:
+
+- rainbow>monochrome vs monochrome>rainbow. 
+- monochrome>artifacter vs artifacter>monochrome
+- rgb-shifter>monochrome vs monochrome>rgb-shifter
+
+Se desea implementar dos tipos de filtros, aquellos que trabajan sobre el rango multicromáticos (Multichrome) y los monocromáticos (Monochrome). Considerando las siguientes reglas:
+
+- Secuencias multicromáticas no incluyen el filtro Monochrome
+- Secuencias monocromáticas no incluyen el filtro Rainbow
+- Secuencias monocromáticas aplican el filtro Monochrome como último paso de la secuencia
+
+#### Tareas:
+
+- `1)` Se debe diseñar una solución que oculte las reglas antes descriptas de tal manera que el código que use la librería simplemente delegue la creación de secuencias (consistentes) a los objetos resultantes de su diseño. Considere que en el futuro nuevos filtros o nuevas reglas pueden ser necesarias. 
+- `2)` Implemente su diseño de tal manera que pueda ser utilizado con la herramienta ejecutable del proyecto (PNGFilterLauncher)
+    - `a)` ¿Identifica algún patrón de diseño que sea esencial en su diseño?
+    - `b)` ¿Cuál es el objetivo del patrón?
+    - `c)` ¿Cuál es la estructura y cuáles son los participantes?
+Analice la implementación y describa si existen detalles de implementación sean code smells o que no corresponden con el patrón
+
+
 ---
 
 ### Ejercicio 21 - Genealogía salvaje
+
+Retomamos el ejercicio de [genealogía salvaje de Objetos 1](https://docs.google.com/document/d/18sY8HSiQFE3Uvil5IJCQnBCiK1b-iexqr1qB_Rr93_Q/edit?tab=t.0#heading=h.kv6tdyccm4kd), ahora utilizando los conceptos vistos en Objetos 2. 
+
+Se trata de una reserva de vida salvaje (como la estación de cría ECAS, en el camino Centenario), donde los cuidadores están interesados en llevar un registro detallado de los animales que cuidan y sus familias. Para ello nos han pedido ayuda. 
+
+El siguiente es un diagrama de clases inicial (incompleto) y nos da una idea de los mensajes que un mamífero entiende.
+
+![image](https://github.com/user-attachments/assets/9c4de9ac-c10a-4fac-9053-209fd36a9eb7)
+
+#### Tareas: 
+- Complete el diagrama de clases para reflejar los atributos y relaciones requeridos.
+- Implemente completamente en Java. Si utiliza algún patrón de diseño, indique cuál.
 
 ---
 
 ### Ejercicio 22 - SubteWay
 
+> Sugerencia: no resuelva este ejercicio en ayunas.
+
+Una cadena de comidas rápidas especializada en sándwiches necesita resolver el cálculo de precios de éstos. El cálculo es simple: el precio de un sándwich equivale a la suma del precio de cada uno de sus componentes; el problema es la dificultad para representar y crear cada uno de los sándwiches distintos.
+
+Existen cuatro sandwiches distintos, pero podrían aparecer nuevos en el futuro.
+
+**Clásico**: consta de pan brioche (100 pesos), aderezo a base de mayonesa (20 pesos), principal de carne de ternera(300 pesos) y adicional de tomate (80 pesos).
+
+**Vegetariano:** consta de pan con semillas (120 pesos), sin aderezo, principal de provoleta grillada (200 pesos) y adicional de berenjenas al escabeche (100 pesos).
+
+**Vegano:** consta de pan integral (100 pesos), aderezo de salsa criolla (20 pesos), principal de milanesa de girgolas (500 pesos), sin adicional.
+
+**Sin TACC:** consta de pan de chipá (150 pesos), aderezo de salsa tártara (18 pesos), principal de carne de pollo (250 pesos) y adicional de verduras grilladas (200 pesos).
+
+#### Tareas:
+Proponga un diseño e implementación para la creación y cálculo de precios de estas alternativas de sándwiches.
+
+Si en su solución aplicó algún(os) patrón(es) de diseño, indique cuál(es) y sus roles.
+
+
 ---
 
 ### Ejercicio 23: Aerolínea Regional
+
+Una aerolínea regional (UFly) tiene vuelos diarios entre La Plata, Balcarce y Pergamino. 
+
+![image](https://github.com/user-attachments/assets/3e5f7a44-d138-464a-8110-ceb06e2a91d6)
+
+La aerolínea opera una flota de 2 aviones Pilatus PC-12. Uno de ellos en configuración estándar  (9 pasajeros) y el otro en configuración ejecutiva (6 pasajeros), ambos modelos tienen una capacidad de carga de 1.500 kg. La asignación de la aeronave a la ruta a volar está dada por políticas de operación de la flota que están fuera del problema. 
+
+Cada pasaje está compuesto por tramos que pueden requerir la realización de varios vuelos o conexiones, con el fin de llegar al destino final. Por ejemplo, si alguien desea viajar de La Plata a Pergamino, puede tomar un vuelo de La Plata a Balcarce y, posteriormente, otro vuelo de Balcarce a Pergamino. Cada uno de estos vuelos se consideraría un tramo del pasaje completo.
+
+El valor de los pasajes se calcula de la siguiente manera:
+**CostoBase** * **RateDiario** * **RateRoundtrip** * **RateMultiHop**
+El RateRoundtrip se aplica a los pasajes que comienzan y terminan en la misma ciudad y es igual a 0.95. El RateMultiHop se aplica a los pasajes que incluyan al menos tres destinos diferentes y es igual a 0.93. El RateDiario varía según el día de la semana.
+
+![image](https://github.com/user-attachments/assets/5f801b6f-7985-417e-9cea-eb0cb317c2b5)
+![image](https://github.com/user-attachments/assets/5f2c470d-6688-4f15-8493-264cde4359bf)
+![image](https://github.com/user-attachments/assets/788e9519-0f47-4017-98fa-2e63e48b501d)
+
+`a) ` La empresa requiere un modelo que permita implementar la venta de pasajes (emitir, modificar y cancelar). De cada pasajero se conoce Nombre y DNI. De cada pasaje se conoce el pasajero, el/los vuelos y el/los asientos. Además de permitir emitir, modificar y cancelar pasajes, la empresa necesita conocer la siguiente información: 
+- Promedios de ocupación de cada vuelo dado un periodo de tiempo, 
+- Horas voladas por cada avión en un periodo de tiempo
+- Horas voladas por cada avión en total
+- Monto total de los descuentos por RoundTrip y por MultiHop
+- Eficiencia de Tarifas = Sumatoria de todo lo facturado/Sumatoria de CostosBasicos de pasajes vendidos
+
+`b)` La empresa desea evaluar agregar servicios de transporte de paquetes.  En este servicio los clientes dejan y retiran sus paquetes en alguno de los aeropuertos que sirve la empresa. Los paquetes tienen como máximo una dimensión de 50cmx50cmx60cm y un peso de 7Kg. La fórmula para calcular el valor del envío.
+
+CostoBase * RateDiario * RateMultiHop
+
+El CostoBase del servicio es $3000 por kilo. RateDario y RateMultiHop son los mismos ya presentados.
+
+`b)` La empresa desea evaluar cómo el modelo que responde al punto a) se vería afectado si los Costos Básicos por vuelo cambiarán a lo largo del tiempo. Si fuera necesario, se solicita modificar el modelo para responder a este nuevo requerimiento.
 
 ---
 
 ### Ejercicio 24 - Monitoreo de proceso industrial
 
----
+Una empresa está desarrollando un sistema de monitoreo de un proceso industrial, el cual involucra un tanque mezclador. El proceso industrial se define como una secuencia de pasos. El siguiente diagrama muestra dos de esos pasos. Los pasos implementan los métodos: 
+
+- **execute(:MixingTank)** recibe como parámetro un MixingTank y ejecuta comandos sobre el mismo
+- **isDone()** retorna un booleano que describe si el paso fue realizado con éxito   
+
+![image](https://github.com/user-attachments/assets/9d2bc6b6-889c-43c4-93aa-0cebb3fe8a42)
+
+El tanque mezclador posee un motor que mueve paletas internas y un calentador eléctrico. El fabricante del tanque provee una librería que permite conectar el tanque a una computadora de control. La librería implementa el driver que permite la comunicación entre el tanque y la computadora a través del protocolo I2C y provee una clase que ofrece una interfaz de alto nivel con las operaciones básicas del dispositivo (tanque). 
+
+![image](https://github.com/user-attachments/assets/528a3f2b-7e9f-4337-bf46-0b407155e8ae)
+
+No se dispone de una implementación concreta de MixingTank pero su comportamiento esperado es el siguiente:
+
+- **heatPower**: configura el nivel potencia de la fuente de calor del tanque de 0 a 100
+- **mixerPower**: configura el nivel de potencia de la mezcladora del tanque de 0 a 100
+- **purge**: comanda al tanque para que se desagote
+- **upTo**: retorna el volumen ocupado del tanque de 0 a 100
+temperature: retorna la temperatura del contenido del tanque
+
+Tareas
+
+- `1)` Implemente las clases ProcessStep, LightMix y Purge, completando el pseudocódigo provisto.
+- `2)` Implemente Test de Unidad para ambas clases cubriendo casos de éxito y falla
+    - `a)` Explique qué tipo de TestDouble es necesario implementar para cubrir esta versión de test cases.
+- `3)` Se conocen especificaciones del tanque y se han redefinido las definiciones de LightMix y Purge. Actualice la implementación de clases y de los test cases cubriendo casos de éxito y falla.
+    - `a)` Explique qué tipo de TestDouble es necesario implementar para cubrir esta versión de test cases.
+
+![image](https://github.com/user-attachments/assets/f3644f7a-3f4d-46b8-9061-bf795e3d3dc8)
 
 ### Ejercicio 25 - Acceso bajo demanda
+
+
+Un ORM (Object Relational Mapper) es una herramienta que facilita el almacenamiento de objetos en una base de datos relacional. Dado un objeto cualquiera, y aplicando una serie de configuraciones, esta herramienta permite guardar y recuperar objetos desde un repositorio (base de datos, archivos, etc.).
+
+Imagine que está implementando una solución para poder persistir el modelo que se muestra a continuación:
+
+![image](https://github.com/user-attachments/assets/33ee37e0-c0f8-49d8-9fce-97b4bae33bc0)
+
+Contamos con las clases UserRepository y PostRepository que son las que permiten almacenar y recuperar tanto usuarios como posts de un repositorio.
+
+![image](https://github.com/user-attachments/assets/e6197633-1978-48cb-8767-8ac7b61ce7f5)
+
+> Nota: Es importante tener en cuenta que las clases User y Post son clases del modelo de negocio, por lo tanto no deberían interactuar directamente con repositorios de datos. 
+
+#### Tareas:
+- `1)` Analice la implementación entregada en el [material adicional](https://drive.google.com/file/d/18WiPtTiqDxji1bM9P3ist4eq58cRzThx/view). Tenga en cuenta que la lista de posts de un usuario puede llegar a ser muy extensa, por lo cual se necesita demorar la generación de esta lista hasta que sea requerida (a través de la invocación al método getPosts()). ¿Se pudo completar este requerimiento en la implementación actual?
+- `2)` Realizar las modificaciones necesarias en el método findUserByUsername() de la clase UserRepository teniendo en cuenta los requerimientos mencionados en el punto anterior. Implemente todo lo que considere necesario para satisfacerlo. Si utiliza patrones de diseño indique los roles en las clases utilizando estereotipos.
+- `3)` Realice los test necesarios relacionados a la funcionalidad de recuperar un usuario demorando la generación de la lista de Posts. ¿Qué patrón de test usaría?
+
+> Nota: Para obtener la lista de posts de un usuario, ya cuenta con la clase llamada PostRepository con un método findPostsByUserName().
+
+
 
 ---
