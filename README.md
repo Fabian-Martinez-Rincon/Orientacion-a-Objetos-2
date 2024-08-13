@@ -596,25 +596,98 @@ Sea una aplicación que ofrece excursiones como por ejemplo “dos días en kaya
 La aplicación ofrece las excursiones pero éstas sólo se realizan si alcanzan el cupo mínimo de inscriptos. Un usuario se inscribe a una excursión y si aún no se alcanzó el cupo mínimo, la inscripción se considera provisoria. Luego, cuando se alcanza el cupo mínimo, la inscripción se considera definitiva y podrá llevarse a cabo. Finalmente, cuando se alcanza el cupo máximo, la excursión solo registrará nuevos inscriptos en su lista de espera. 
 De los usuarios inscriptos, la aplicación registra su nombre, apellido e email.
 
-Por otro lado, en todo momento la excursión ofrece información de la misma, la cual consiste en una serie de datos que varían en función de la situación. 
-Si la excursión no alcanza el cupo mínimo, la información es la siguiente: nombre, costo, fechas, punto de encuentro, cantidad de usuarios faltantes para alcanzar el cupo mínimo.
-Si la excursión alcanzó el cupo mínimo pero aún no el máximo, la información es la siguiente: nombre, costo, fechas, punto de encuentro, los mails de los usuarios inscriptos y cantidad de usuarios faltantes para alcanzar el cupo máximo.
-Si la excursión alcanzó el cupo máximo, la información solamente incluye nombre, costo, fechas y punto de encuentro.
+Por otro lado, en todo momento la excursión ofrece información de la misma, la cual consiste en una serie de datos que varían en función de la situación.
+- Si la excursión no alcanza el cupo mínimo, la información es la siguiente: nombre, costo, fechas, punto de encuentro, cantidad de usuarios faltantes para alcanzar el cupo mínimo.
+- Si la excursión alcanzó el cupo mínimo pero aún no el máximo, la información es la siguiente: nombre, costo, fechas, punto de encuentro, los mails de los usuarios inscriptos y cantidad de usuarios faltantes para alcanzar el cupo máximo.
+- Si la excursión alcanzó el cupo máximo, la información solamente incluye nombre, costo, fechas y punto de encuentro.
 
 En una primera versión, al no contar con una interfaz de usuario y a los efectos de debugging, este comportamiento puede implementarlo en un método que retorne un String con la información solicitada.
+
+#### Tareas
+
+- `1)` Realice un diseño UML. Si utiliza algún patrón indique cuál(es) y justifique su uso.
+- `2)` Implemente lo necesario para instanciar una excursión y para instanciar un usuario.
+- `3)` Implemente los siguientes mensajes de la clase Excursion:  
+    - (i) public void inscribir (Usuario unUsuario) 
+    - (ii) public String obtenerInformacion().
+- `4)` Escriba un test para inscribir a un usuario en la excursión “Dos días en kayak bajando el Paraná”, con cupo mínimo de 1 persona y cupo máximo 2, con dos personas ya inscriptas. Implemente todos los mensajes que considere necesarios.
 
 
 ---
 
 ### Ejercicio 10: Encriptador
 
+En un sistema de mensajes instantáneos (como WhatsApp) se envían mensajes de una máquina a otra a través de una red. Para asegurar que la información que pasa por la red no es espiada, el sistema utiliza una conexión segura. Este tipo de conexión encripta la información antes de enviarla y la desencripta al recibirla. La siguiente figura ilustra un posible diseño para este enunciado.
+
+![image](https://github.com/user-attachments/assets/5541736a-5572-4811-96d9-17a3e6a6d0d4)
+
+El encriptador utiliza el algoritmo RSA. Sin embargo, se desea agregar otros algoritmos (diferentes algoritmos ofrecen distintos niveles de seguridad, overhead en la transmisión, etc.).
+
+#### Tareas:
+
+- Modifique el diseño para que el objeto Encriptador pueda encriptar mensajes usando los algoritmos Blowfish y RC4, además del ya soportado RSA.
+- Documente mediante un diagrama de clases UML indicando los roles de cada clase.
+
+
 ---
 
 ### Ejercicio 11: Administrador de proyectos
 
+Consideremos una empresa que brinda servicios y los gestiona a través de proyectos. Los proyectos tienen una fecha de inicio y de fin, un objetivo, un número de integrantes (quienes cobran un monto fijo por día) y un margen de ganancia. Durante el armado del proyecto, el mismo debe pasar por un proceso de aprobación que involucra las etapas: En construcción -> En evaluación  -> Confirmada. Se desea implementar la siguiente funcionalidad: 
+
+![image](https://github.com/user-attachments/assets/b121b84c-2d32-48f7-bc51-89bfe66fe2b5)
+
+#### Tareas:
+- `1)` Modele una solución y provea el diagrama de clases UML para el problema planteado. Si utiliza algún patrón, indique cuál.
+- `2)` Implemente en Java.
+- `3)` Implemente un test para aprobar un proyecto con las siguientes características: 
+    - (i) se encuentra en evaluación, 
+    - (ii) se llama “Vacaciones de invierno”, 
+    - (iii) tiene como objetivo “salir con amigos”, y 
+    - (iv) lo integran 3 personas.
+
+> Nota: para generar o levantar un error debe utilizar la expresión 
+
+```java
+throw new RuntimeException("Este es mi mensaje de error");
+```
+
 ---
 
 ### Ejercicio 12 - Dispositivo móvil y conexiones
+
+Sea el software de un dispositivo móvil que utiliza una conexión WiFi para transmitir datos. La figura muestra parte de su diseño:
+
+![image](https://github.com/user-attachments/assets/69a051be-5641-49c7-9f43-b9453274f773)
+
+El dispositivo utiliza, para asegurar la integridad de los datos emitidos, el mecanismo de cálculo de redundancia cíclica que le provee la clase CRC16_Calculator que recibe el mensaje crcFor(data: String) con los datos a enviar y devuelve un valor numérico. Luego el dispositivo envía a la conexión el mensaje sendData con ambos parámetros (los datos y el valor numérico calculado).
+
+Se desea hacer dos cambios en el software. En primer lugar, se quiere que el dispositivo tenga capacidad de ser configurado para utilizar conexiones 4G. Para este cambio se debe utilizar la clase 4GConnection.
+
+Además se desea poder configurar el dispositivo para que utilice en distintos momentos un cálculo de CRC de 16 o de 32 bits. Es decir que en algún momento el dispositivo seguirá utilizando CRC16_Calculator y en otros podrá ser configurado para utilizar la clase CRC32_Calculator. Se desea permitir que en el futuro se puedan utilizar otros algoritmos de CRC. 
+
+Cuando se cambia de conexión, el dispositivo muestra en pantalla el símbolo correspondiente (que se obtiene con el getter pict() para el caso de WiFiConn y symb() de 4GConnection) y se utiliza el objeto Ringer para emitir un ring().  
+
+Tanto las clases existentes como las nuevas a utilizar pueden ser ubicadas en las jerarquías que corresponda (modificar la clase de la que extienden o la interfaz que implementan)  y se les pueden agregar mensajes, pero no se pueden modificar los mensajes que ya existen porque otras partes del sistema podrían dejar de funcionar. 
+
+Dado que esto es una simulación, y no dispone de hardware ni emulador para esto, la signatura de los mensajes se ha simplificado para que se retorne un String descriptivo de los eventos que suceden en el dispositivo y permitir de esta forma simplificar la escritura de los tests.
+
+Modele los cambios necesarios para poder agregar al protocolo de la clase Dispositivo los mensajes para 
+- cambiar la conexión, ya sea la 4GConnection o la WifiConn. En este método se espera que se pase a utilizar la conexión recibida, muestre en el display su símbolo y genere el sonido. 
+- poder configurar el calculador de CRC, que puede ser el CRC16_Calculator, el CRC32_Calculator, o pueden ser nuevos a futuro.
+
+#### Tareas
+
+- Realice un diagrama UML de clases para su solución al problema planteado. Indique claramente el o los patrones de diseño que utiliza en el modelo y el rol que cada clase cumple en cada uno.
+- Implemente en Java todo lo necesario para asegurar el envío de datos por cualquiera de las conexiones y el cálculo adecuado del índice de redundancia cíclica.
+- Implemente test cases para los siguientes métodos de la clase Dispositivo:
+    - send
+    - conectarCon
+    - configurarCRC 
+
+En cuanto a CRC16_Calculator, puede utilizar la siguiente implementación:
+
+![image](https://github.com/user-attachments/assets/9ea3ea4c-f181-45be-95f7-c14679610f90)
 
 ---
 
