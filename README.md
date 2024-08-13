@@ -689,29 +689,247 @@ En cuanto a CRC16_Calculator, puede utilizar la siguiente implementación:
 
 ![image](https://github.com/user-attachments/assets/9ea3ea4c-f181-45be-95f7-c14679610f90)
 
+Nota: para implementar CRC32_Calculator utilice la clase java.util.zip.CRC32 de la siguiente manera:
+
+![image](https://github.com/user-attachments/assets/b3bfa8a7-f703-4f23-80fa-82e0033711e0)
+
 ---
 
 ### Ejercicio 13 - Decodificador de películas
+
+Sea una empresa de cable on demand que entrega decodificadores a sus clientes para que miren las películas que ofrece. El decodificador muestra la grilla de películas y también sugiere películas. 
+
+Usted debe implementar la aplicación para que el decodificador sugiera películas. El decodificador conoce la grilla de películas (lista completa que ofrece la empresa), como así también las películas que reproduce. De cada película se conoce título, año de estreno, películas similares y puntaje. La similaridad establece una relación recíproca entre dos películas, por lo que si A es similar a B entonces también B es similar a A. 
+
+Cada decodificador puede ser configurado para que sugiera 3 películas (que no haya reproducido) por alguno de los siguientes criterios:
+
+- (i) novedad: las películas más recientes. 
+- (ii) similaridad: las películas similares a alguna película que reprodujo, ordenadas de más a menos reciente.
+- (iii) puntaje: las películas de mayor puntaje, para igual puntaje considera las más recientes.
+
+Tenga en cuenta que la configuración del criterio de sugerencia del decodificador no es fija, sino que el usuario la debe poder cambiar en cualquier momento. El sistema debe soportar agregar nuevos tipos de sugerencias aparte de las tres mencionadas.
+
+Sea un decodificador que reprodujo Thor y Rocky, y posee la siguiente lista de películas:
+
+```
+Thor, 7.9, 2007 (Similar a Capitan America, Iron Man)
+Capitan America, 7.8, 2016 (Similar a Thor, Iron Man)
+Iron man, 7.9, 2010 (Similar a Thor, Capitan America)
+Dunkirk, 7.9, 2017
+Rocky, 8.1, 1976 (Similar a Rambo)
+Rambo, 7.8, 1979 (Similar a Rocky)
+```
+
+Las películas que debería sugerir son:
+
+```
+(i) Dunkirk, Capitan America,  Iron man
+(ii) Capitán América,  Iron man, Rambo
+(iii) Dunkirk, Iron man, Capitan America
+```
+
+> Nota: si existen más de 3 películas con el mismo criterio, retorna 3 de ellas sin importar cuales. Por ejemplo, si las 6 películas son del 2018,  el criterio (i) retorna 3 cualquiera. 
+
+#### Tareas:
+- Realice el diseño de una correcta solución orientada a objetos con un diagrama UML de clases.
+- Si utiliza patrones de diseño indique cuáles y también indique los participantes de esos patrones en su solución según el libro de Gamma et al.
+- Escriba un test case que incluya estos pasos, con los ejemplos mencionados anteriormente:
+    - configure al decodificador para que sugiera por similaridad (ii)
+    - solicite al mismo decodificador las sugerencias
+    - configure al mismo decodificador para que sugiera por puntaje (iii)
+    - solicite al mismo decodificador las sugerencias
+- Programe su solución en Java. Debe implementarse respetando todas las buenas prácticas de diseño y programación de POO.
 
 ---
 
 ### Ejercicio 14: Acceso a la base de datos
 
+Queremos acceder a una base de datos que contiene información sobre cómics. Este acceso está dado por el comportamiento de la clase DatabaseRealAccess con el siguiente protocolo y modelado como muestra la siguiente figura.
+
+![image](https://github.com/user-attachments/assets/76d0f7c7-29e2-4926-ab78-9e8b8981ed24)
+
+```java
+public interface DatabaseAccess {
+   /**
+    * Realiza la inserción de nueva información en la base de datos y 
+    * retorna el id que recibe la nueva inserción
+    *
+    * @param rowData
+    * @return
+    */
+   public int insertNewRow(List<String> rowData);
+   /**
+    * Retorna una colección de acuerdo al texto que posee "queryString"
+    *
+    * @param queryString
+    * @return
+    */
+   public Collection<String> getSearchResults(String queryString);
+}
+```
+
+En este caso, ustedes recibirán una implementación prototípica de la clase DatabaseRealAccess (ver [material extra](https://drive.google.com/file/d/1pR6rCjLZ2EpPvHcHhP195gy5mpghhHdE/view)) que simula el uso de una base datos de la siguiente forma (mire el código y los tests para entender cómo está implementada).
+
+
+```java
+// Instancia una base de datos que posee dos filas
+database = new DatabaseRealAccess();
+
+// Retorna el siguiente arreglo: ['Spiderman' 'Marvel'].
+database.getSearchResults("select * from comics where id=1");
+
+// Retorna 3, que es el id que se le asigna
+database.insertNewRow(Arrays.asList("Patoruzú", "La flor"));
+
+// Retorna el siguiente arreglo: ['Patoruzú', 'La flor'], ya que lo insertó antes
+database.getSearchResults("select * from comics where id=3");
+```
+
+#### Tareas
+
+En esta oportunidad, usted debe proveer una solución utilizando un patrón que le permita brindar protección al acceso a la base de datos de forma que lo puedan realizar solamente usuarios que se hayan autenticado previamente. Su tarea es diseñar y programar en Java lo que sea necesario para ofrecer la funcionalidad antes descrita. Se espera que entregue los siguientes productos.
+
+- Diagrama de clases UML.
+- Implementación en Java de la funcionalidad requerida.
+- Implementación de los tests (JUnit) que considere necesarios.
+
 ---
 
 ### Ejercicio 15 - File Manager
+
+En un File Manager se muestran los archivos. De los archivos se conoce:
+
+- Nombre
+- Extensión 
+- Tamaño
+- Fecha de creación
+- Fecha de modificación
+- Permisos
+
+Implemente la clase FileOO2, con las correspondientes variables de instancia y accessors.
+
+En el File Manager el usuario debe poder elegir cómo se muestra un archivo (instancia de la clase FileOO2), es decir, cuáles de los aspectos mencionados anteriormente se muestran,  y en qué orden.  Esto quiere decir que un usuario podría querer ver los archivos de muchas maneras. Algunas de ellas son:
+
+- nombre - extensión
+- nombre - extensión - fecha de creación
+- permisos - nombre - extensión - tamaño
+
+Para esto, el objeto o los objetos que representen a los archivos en el FileManager debe(n) entender el mensaje prettyPrint().
+
+Es decir, un objeto cliente (digamos el FileManager) le enviará al objeto que Ud. determine, el mensaje prettyPrint(). **De acuerdo a cómo el usuario lo haya configurado se deberá retornar un String con los aspectos seleccionados por el usuario en el orden especificado por éste**. Considere que un mismo archivo podría verse de formas diferentes desde distintos puntos del sistema, y que el usuario podría cambiar la configuración del sistema (qué y en qué orden quiere ver) en runtime.
+
+#### Tareas:
+- Discuta los requerimientos y diseñe una solución. Si aplica un patrón de diseño, indique cuál es y justifique su aplicabilidad.
+- Implemente en Java.
+- Instancie un objeto para cada uno de los ejemplos citados anteriormente y verifique escribiendo tests de unidad.
 
 ---
 
 ### Ejercicio 16 - Estación meteorológica
 
+Sea una estación meteorológica hogareña que permite conocer información de varios aspectos del clima. Esta estación está implementada con la clase HomeWeatherStation que interactúa con varios sensores para conocer fenómenos físicos. La misma implementa los siguientes métodos:
+
+```java
+//retorna la temperatura en grados Fahrenheit. 
+public double getTemperatura()
+
+//retorna la presión atmosférica en hPa
+public double getPresion()
+
+//retorna la radiación solar
+public double getRadiacionSolar()
+
+//retorna una lista con todas las temperaturas sensadas hasta el momento, en grados Fahrenheit
+public List<Double> getTemperaturas()
+
+//retorna  un reporte de todos los datos: temperatura, presión, y radiación solar.
+public String displayData(){
+    return "Temperatura F: " + this.getTemperatura() +
+        "Presión atmosf: " + this.getPresion() +
+        "Radiación solar: " + this.getRadiacionSolar();
+}
+```
+
+Esta clase se encuentra implementada por terceros y no se puede modificar. Pero sabemos que implementa la interfaz WeatherData que define los mismos mensajes. 
+
+Si bien el código de la clase HomeWeatherStation no se puede modificar, se requiere poder integrar diferentes configuraciones que combinen algunas de las siguientes funcionalidades:
+
+- La temperatura en grados Celsius (ºC = (ºF-32) ÷ 1.8). 
+- El promedio de las temperaturas históricas.
+- Las temperaturas mínima y máxima histórica.
+
+Esto implica que la aplicación debe ser capaz de adaptarse a diferentes necesidades de visualización. Por ejemplo:
+
+```
+Ej 1:  “Temperatura F: 86; Presión atmosf.: 1008; Radiación solar: 200;”
+Ej 2:  “Temperatura C: 30; Presión atmosf: 1008; Radiación solar: 200;”
+Ej 3:  “Temperatura C: 30; Presión atmosf: 1008; Radiación solar: 200; Promedio: 30;”
+Ej 4:  “Temperatura F: 86; Presión atmosf: 1008; Radiación solar: 200; Promedio: 86;”
+Ej 5: “Temperatura C: 30; Presión atmosf: 1008; Radiación solar: 200; Promedio: 30; Mínimo: 27 Máximo: 32;”
+Ej 6:  “Temperatura C: 30; Presión atmosf: 1008; Radiación solar: 200; Mínimo: 27 Máximo: 32;”
+Ej 7: “Temperatura C: 30; Presión atmosf: 1008; Radiación solar: 200; Mínimo: 27 Máximo: 32; Promedio: 30;”
+```
+
+En cada uno de los ejemplos, la aplicación puede mostrar diferentes configuraciones de los datos, según lo que el usuario haya seleccionado previamente. Por ejemplo, la inclusión del promedio de temperatura (ya sea en grados Celsius o Fahrenheit) dependerá de la configuración de temperatura previamente establecida por el usuario.
+Usted debe proveer la implementación del mensaje public String displayData() que devuelva los datos según lo configurado (dado que la app aun no cuenta con interface de usuario). 
+
+#### Tareas:
+- `1)` Modele una solución para el problema planteado. Si utiliza algún patrón, indique cuál
+- `2)` Implemente en Java
+- `3)` Implemente un test para validar la configuración del ejemplo 5, asumiendo que en el momento de la ejecución del mismo, los sensores arrojan los valores del ejemplo. 
+
+
 ---
 
 ### Ejercicio 17 - Productos Financieros
 
+El banco ofrece los siguientes productos financieros a sus clientes:
+- Compra de Dólares 
+- Compra de Pesos
+- Plazo Fijo (requiere indicar plazo e interés diario)
+- Compra de bonos de bajo riesgo (tienen una variación máxima del 10% y se debe indicar un plazo mínimo o parking)
+Compra de bonos de alto riesgo (tienen una variación máxima del 70% y se debe indicar un plazo mínimo o parking)
+
+A menudo, el banco también innova creando nuevos productos financieros que son combinaciones de estos productos existentes. 
+
+![image](https://github.com/user-attachments/assets/9e218ea9-d78a-47a5-8fea-62b05db9adaf)
+
+Cuando se invoca el mensaje retornoInversión(), se indica un monto inicial, para que calcule y retorne el capital que se obtiene al invertir ese monto inicial. 
+
+Algunos de los productos que ofrece, son combinaciones de otros, como por ejemplo: 
+
+![image](https://github.com/user-attachments/assets/e0f181fc-dd94-4c47-b967-d2fbebf41a85)
+![image](https://github.com/user-attachments/assets/f4c9b926-aee7-449a-8949-718452d04d71)
+
+En el banco, cada cliente posee un tipo de membresía que determina sus beneficios. Contamos con dos niveles de membresía: Silver y Gold. Los clientes con membresía Silver tienen acceso exclusivo a los productos 1 y 2. Además, al realizar plazos fijos, disfrutan de una tasa del 5% y un plazo mínimo de 35 días. Asimismo, al comprar bonos, el periodo mínimo de parking es de 72 horas. Por otro lado, los clientes con membresía Gold reciben una tasa de plazo fijo del 6%, con un plazo mínimo de 30 días, y un periodo de parking de 24 horas. 
+
+Se sabe que el banco se esfuerza constantemente por lanzar nuevos productos para satisfacer aún más las necesidades de inversión de sus clientes.
+
+#### Tareas
+- `a)` Proponga una solución para que los desarrolladores no tengan que instanciar el Composite de Productos financieros explícitamente cada vez que sea necesario crear uno nuevo.
+    - `i)` ¿Qué ventaja y que desventaja tiene su solución?
+
+> Nota: Para simular el comportamiento de los bonos se puede generar un número aleatorio dentro del rango de variación máxima, reflejando la típica volatilidad del mercado financiero
+
 ---
 
 ### Ejercicio 18 - Sistema de monitoreo
+
+Una empresa ha desarrollado un sistema de monitoreo de viveros que incluye: temperatura y humedad. Para realizar esta tarea se utilizan módulos que incluyen sensores para ambos temperatura y humedad. El sistema fue desarrollado utilizando una familia de módulos que tienen diferentes prestaciones y que tienen un protocolo en común.
+
+Instancias de ControlPanel cumplen el rol de cliente de las instancias de alguna de las clases de la Jerarquía SensingModule (variable module). Por la manera en la que una instancia de ControlPanel es inicializada con un "pollingPeriod" (ver pseudocódigo del constructor de ControlPanel), la instancia de ControlPanel recibirá periódicamente el mensaje updateView(), lo cual hace que se envíen los mensajes apropiados al “module” asociado.
+
+![image](https://github.com/user-attachments/assets/1fb276e6-487c-48af-b289-b8bf742a0da4)
+
+La empresa planea agregar un nuevo módulo que corresponda a uno de baja resolución (Low Resolution). Para implementar esto la empresa se propone adquirir un nuevo tipo de sensor cuya librería tiene el protocolo que muestra el diagrama de la clase CombinedMatrixSensor.
+
+![image](https://github.com/user-attachments/assets/f72b522e-353c-4577-b7ae-16d874408af7)
+
+Las operaciones que implementa la CombinedMatrixSensor son:
+- `acquireSensor(mode:Integer)`. El parámetro “mode” que indica que tipo de medición se realizará. El valor 1 es para temperatura y el valor 2 es para humedad.
+acquireAll(), no tiene parámetros y retorna un HashMap con valores para temperatura (clave “temp”) y humedad (clave “hum”).
+reset(), no tiene parámetros y resetea todos los sensores
+calibrate(timeout:Integer), el parámetro “timeout” indica cuál es el tiempo máximo que el sensor puede demorar en ejecutar una lectura.
 
 ---
 
