@@ -17,7 +17,106 @@
 
 ![1](https://github.com/user-attachments/assets/32e0c35e-31cc-4c9a-b4ed-4b1b7f776ac8)
 
-<details><summary>Respuesta</summary></details>
+<details><summary>Respuesta</summary>
+
+#### Identificación del "Mal Olor" en el Código
+
+1. **Code Smell: Condicionales** - El código presenta múltiples condicionales para determinar la variable `temp1` y el tipo de cliente basado en el monto acumulado en compras, lo cual puede volverse complejo y difícil de mantener a medida que se agregan más tipos de clientes o reglas de cálculo.
+
+2. **Code Smell: Large Method** - El método `comprar` tiene varias responsabilidades (cálculo del costo, creación de un nuevo objeto de compra, actualización del tipo de cliente) y podría dividirse en métodos más pequeños y manejables.
+
+#### Refactorización
+
+1. **Aplicación del Patrón Strategy para Reemplazar Condicionales:**
+   - Eliminar las condicionales dentro del método `comprar` y delegar la lógica a diferentes estrategias según el tipo de cliente. Esto ayuda a reducir la complejidad y hace el código más extensible.
+
+2. **Extracción de Métodos:**
+   - Dividir el método `comprar` en métodos más pequeños que manejen la lógica de cálculo de `temp1`, el subtotal, y la actualización del tipo de cliente.
+
+#### Código Refactorizado
+
+Solo se mostrará el código que cambió como resultado de la refactorización:
+
+```java
+// Refactor: Uso del patrón Strategy para manejar los diferentes tipos de cliente
+public interface TipoClienteStrategy {
+    double calcularCostoEnvio(double subtotal);
+    String actualizarTipoCliente(double montoAcumulado);
+}
+
+public class ClienteBasico implements TipoClienteStrategy {
+    public double calcularCostoEnvio(double subtotal) {
+        return subtotal * 0.1;
+    }
+    
+    public String actualizarTipoCliente(double montoAcumulado) {
+        if (montoAcumulado > 10000) {
+            return "advance";
+        } else if (montoAcumulado > 5000) {
+            return "premium";
+        }
+        return "basico";
+    }
+}
+
+public class ClientePremium implements TipoClienteStrategy {
+    public double calcularCostoEnvio(double subtotal) {
+        return subtotal * 0.05;
+    }
+    
+    public String actualizarTipoCliente(double montoAcumulado) {
+        if (montoAcumulado > 10000) {
+            return "advance";
+        }
+        return "premium";
+    }
+}
+
+public class ClienteAdvance implements TipoClienteStrategy {
+    public double calcularCostoEnvio(double subtotal) {
+        return 0;
+    }
+    
+    public String actualizarTipoCliente(double montoAcumulado) {
+        return "advance";
+    }
+}
+
+// Modificación en la clase Cliente
+public class Cliente {
+    private String nombre;
+    private String tipo;
+    private List<Compra> compras;
+    private TipoClienteStrategy strategy;
+
+    public Cliente(String unNombre) {
+        this.nombre = unNombre;
+        this.tipo = "basico";
+        this.strategy = new ClienteBasico();
+        this.compras = new ArrayList<Compra>();
+    }
+
+    public Compra comprar(List<Producto> productos) {
+        double subtotal = productos.stream().mapToDouble(p -> p.getPrecio()).sum();
+        double costoEnvio = strategy.calcularCostoEnvio(subtotal);
+        Compra n = new Compra(productos, subtotal, costoEnvio);
+        this.compras.add(n);
+
+        this.tipo = strategy.actualizarTipoCliente(this.montoAcumuladoEnCompras());
+
+        return n;
+    }
+    
+    public double montoAcumuladoEnCompras() {
+        // Implementación para calcular el monto acumulado
+    }
+}
+```
+
+#### Resumen del Refactor
+- **Condicionales eliminadas:** Se reemplazaron con el patrón Strategy, creando una interfaz y varias implementaciones específicas para cada tipo de cliente.
+- **Responsabilidades separadas:** El método `comprar` ahora es más claro y se enfoca en coordinar las diferentes estrategias, en lugar de manejar toda la lógica directamente.
+</details>
 
 ![2](https://github.com/user-attachments/assets/58a3a76c-2d1f-48e4-841c-32c99971cb30)
 
