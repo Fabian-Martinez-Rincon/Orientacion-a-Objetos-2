@@ -120,7 +120,79 @@ public class Cliente {
 
 ![2](https://github.com/user-attachments/assets/58a3a76c-2d1f-48e4-841c-32c99971cb30)
 
-<details><summary>Respuesta</summary></details>
+<details><summary>Respuesta</summary>
+
+#### Identificación del "Mal Olor" en el Código
+
+1. **Code Smell: Condicionales Basadas en Tipo** - El método `imprimirInfo` utiliza condicionales para determinar el tipo de ataque del personaje, lo que introduce un "code smell" conocido como "Type Checking" o "Type Conditional". Este tipo de código es difícil de mantener y extender, ya que cada vez que se agrega un nuevo tipo de ataque, se debe modificar este método.
+
+2. **Code Smell: Feature Envy** - El método `personajeConMasDaño` muestra una envidia de funciones (`Feature Envy`) al depender de la lógica de cálculo del daño en la clase `TipoAtaque` para determinar qué personaje tiene el mayor daño. Esto sugiere que esta lógica podría estar mejor encapsulada dentro de las clases relevantes.
+
+#### Refactorización
+
+1. **Aplicación del Patrón Polimorfismo:**
+   - En lugar de utilizar condicionales para diferenciar entre los tipos de ataque en `imprimirInfo`, se puede aprovechar el polimorfismo para que cada tipo de ataque implemente su propia lógica de impresión.
+
+2. **Mover Responsabilidad:**
+   - La lógica de comparación del daño podría trasladarse a un método en la clase `Personaje` o `TipoAtaque`, eliminando la necesidad de exponer y comparar directamente los tipos de ataque.
+
+#### Código Refactorizado
+
+Solo se mostrará el código que cambió como resultado de la refactorización:
+
+```java
+// Refactorización de la clase TipoAtaque para soportar polimorfismo
+public abstract class TipoAtaque {
+    public abstract double calcularDaño(int dañoBase);
+    public abstract void imprimirInfo();
+}
+
+public class AtaqueHechizo extends TipoAtaque {
+    @Override
+    public double calcularDaño(int dañoBase) {
+        return dañoBase * 2; // Ejemplo de cálculo de daño específico
+    }
+
+    @Override
+    public void imprimirInfo() {
+        System.out.println("Ataque tipo hechizo");
+        System.out.println("Este ataque dobla tu fuerza");
+    }
+}
+
+public class AtaqueBasico extends TipoAtaque {
+    @Override
+    public double calcularDaño(int dañoBase) {
+        return dañoBase; // Ejemplo de cálculo de daño básico
+    }
+
+    @Override
+    public void imprimirInfo() {
+        System.out.println("Ataque tipo Ataque Básico");
+        System.out.println("Este ataque mantiene tu fuerza");
+    }
+}
+
+// Modificación en la clase Videojuego
+public class Videojuego {
+    // ...
+    public Personaje personajeConMasDaño() {
+        return personajes.stream()
+                         .max(Comparator.comparingDouble(p -> p.getTipoAtaque().calcularDaño(p.getDaño())))
+                         .orElse(null);
+    }
+
+    public void imprimirInfo(Personaje p) {
+        System.out.println(p.getNombre() + " tiene como daño " + p.getDaño());
+        p.getTipoAtaque().imprimirInfo();
+    }
+}
+```
+
+#### Resumen del Refactor
+- **Condicionales eliminadas:** Se eliminó la lógica condicional basada en el tipo de ataque en `imprimirInfo` y se reemplazó por métodos polimórficos en las subclases de `TipoAtaque`.
+- **Delegación de Responsabilidades:** La lógica de cálculo del daño y la impresión de información se delega a las subclases de `TipoAtaque`, haciendo que el código sea más modular y extensible.
+</details>
 
 ![3](https://github.com/user-attachments/assets/21a02f6e-e952-4bd4-b8f4-f39de10dc03f)
 
