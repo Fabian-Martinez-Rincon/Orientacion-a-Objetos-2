@@ -11,6 +11,26 @@
 - [Parciales Frameworks](#parciales-frameworks)
 - [Cuadernillo](#cuadernillo)
 
+---
+
+## Parciales Refactoring
+
+![1](https://github.com/user-attachments/assets/32e0c35e-31cc-4c9a-b4ed-4b1b7f776ac8)
+
+<details><summary>Respuesta</summary></details>
+
+![2](https://github.com/user-attachments/assets/58a3a76c-2d1f-48e4-841c-32c99971cb30)
+
+<details><summary>Respuesta</summary></details>
+
+![3](https://github.com/user-attachments/assets/21a02f6e-e952-4bd4-b8f4-f39de10dc03f)
+
+<details><summary>Respuesta</summary></details>
+
+![4](https://github.com/user-attachments/assets/e2b9970d-e08b-49b5-9634-130bc439b923)
+
+<details><summary>Respuesta</summary></details>
+
 ## Parciales Frameworks
 
 ![alt text](/Finales/image.png)
