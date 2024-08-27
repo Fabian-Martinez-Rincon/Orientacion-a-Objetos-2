@@ -196,11 +196,185 @@ public class Videojuego {
 
 ![3](https://github.com/user-attachments/assets/21a02f6e-e952-4bd4-b8f4-f39de10dc03f)
 
-<details><summary>Respuesta</summary></details>
+<details><summary>Respuesta</summary>
+
+#### Identificación del "Mal Olor" en el Código
+
+1. **Code Smell: Duplicated Code** - Ambas clases (`SuperMarioBros` y `DonkeyKong`) tienen métodos que siguen una estructura similar (`initialize/init`, `startPlay`, `endPlay`) y contienen lógica duplicada en los métodos `play` y `jugar`. Esto indica un problema de duplicación de código.
+
+2. **Code Smell: Large Class** - La clase `SuperMarioBros` y `DonkeyKong` repiten código que podría estar centralizado en la clase base `Game`, lo que sugiere que la clase `Game` podría ser más robusta y contener la lógica común.
+
+#### Refactorización
+
+1. **Aplicación del Patrón Template Method:**
+   - Mover la estructura común de los métodos `play` y `jugar` a la clase base `Game`, donde se puede definir un método `playGame` que sirva como plantilla para las subclases. Las subclases pueden sobrescribir métodos específicos (`initialize`, `startPlay`, `endPlay`) sin duplicar la lógica de control.
+
+2. **Eliminar Código Duplicado:**
+   - Centralizar la lógica repetida en la clase base `Game` y reducir la duplicación de código en las subclases.
+
+#### Código Refactorizado
+
+```java
+abstract class Game {
+    public abstract void initialize();
+    public abstract void startPlay();
+    public abstract void endPlay();
+
+    // Template Method
+    public final void playGame() {
+        initialize();
+        startPlay();
+        endPlay();
+    }
+}
+
+class SuperMarioBros extends Game {
+    @Override
+    public void initialize() {
+        // Implementación específica para Super Mario Bros
+    }
+
+    @Override
+    public void startPlay() {
+        // Implementación específica para Super Mario Bros
+    }
+
+    @Override
+    public void endPlay() {
+        // Implementación específica para Super Mario Bros
+    }
+}
+
+class DonkeyKong extends Game {
+    @Override
+    public void initialize() {
+        // Implementación específica para Donkey Kong
+    }
+
+    @Override
+    public void startPlay() {
+        // Implementación específica para Donkey Kong
+    }
+
+    @Override
+    public void endPlay() {
+        // Implementación específica para Donkey Kong
+    }
+}
+```
+
+#### Resumen del Refactor
+
+- **Eliminación de Código Duplicado:** Se eliminó el código duplicado en `SuperMarioBros` y `DonkeyKong` centralizando la lógica común en la clase `Game`.
+- **Uso del Patrón Template Method:** La estructura de ejecución (`initialize`, `startPlay`, `endPlay`) se encapsuló en un método plantilla (`playGame`) en la clase base `Game`, permitiendo que las subclases se enfoquen solo en sus implementaciones específicas.
+</details>
 
 ![4](https://github.com/user-attachments/assets/e2b9970d-e08b-49b5-9634-130bc439b923)
 
-<details><summary>Respuesta</summary></details>
+<details><summary>Respuesta</summary>
+
+#### Identificación del "Mal Olor" en el Código
+
+1. **Code Smell: Large Method** - El método `imprimirDetalleConTotales` en la clase `Factura` es largo y realiza múltiples tareas, incluyendo la construcción de un mensaje de salida, el cálculo de totales y la aplicación de impuestos. Esto hace que el método sea difícil de leer, mantener y probar.
+
+2. **Code Smell: Feature Envy** - La clase `Factura` está accediendo directamente a los detalles de `Producto` y `LineaDeFactura` para formatear los mensajes. Esto indica una envidia de características, ya que la responsabilidad de formatear estos detalles debería residir en las respectivas clases.
+
+#### Refactorización
+
+1. **Aplicación del Patrón Extract Method:**
+   - Dividir el método `imprimirDetalleConTotales` en métodos más pequeños y manejables que se encarguen de las diferentes tareas, como la construcción del mensaje, el cálculo de totales, y la aplicación de impuestos.
+
+2. **Delegación de Responsabilidades:**
+   - Mover la responsabilidad de formatear la información del `Producto` y `LineaDeFactura` a sus respectivas clases, haciendo que cada clase sea responsable de su propia presentación.
+
+#### Código Refactorizado
+
+```java
+public class Factura {
+    private List<LineaDeFactura> items;
+
+    public void imprimirDetalleConTotales() {
+        String message = construirDetalleDeItems();
+        double totalSinImpuestos = calcularTotalSinImpuestos();
+        message += construirTotales(totalSinImpuestos);
+        
+        System.out.println(message);
+    }
+
+    private String construirDetalleDeItems() {
+        StringBuilder message = new StringBuilder("Detalle de los items facturados:\n");
+        for (LineaDeFactura linea : items) {
+            message.append(linea.formatearLinea())
+                   .append("\n");
+        }
+        return message.toString();
+    }
+
+    private double calcularTotalSinImpuestos() {
+        return items.stream()
+                    .mapToDouble(linea -> linea.calcularTotal())
+                    .sum();
+    }
+
+    private String construirTotales(double totalSinImpuestos) {
+        StringBuilder message = new StringBuilder();
+        message.append("Total sin impuestos: ")
+               .append(totalSinImpuestos)
+               .append("\n");
+
+        double totalConIVA = totalSinImpuestos * 1.21;
+        message.append("Total con IVA: ")
+               .append(totalConIVA)
+               .append("\n");
+
+        return message.toString();
+    }
+}
+
+public class LineaDeFactura {
+    private Producto producto;
+    private int cantidad;
+
+    public Producto getProducto() {
+        return this.producto;
+    }
+
+    public int getCantidad() {
+        return this.cantidad;
+    }
+
+    public double calcularTotal() {
+        return this.cantidad * this.producto.getPrecio();
+    }
+
+    public String formatearLinea() {
+        return String.format("Producto: %s, Cantidad: %d, Precio unitario: %.2f, Total: %.2f",
+                              producto.getNombre(),
+                              cantidad,
+                              producto.getPrecio(),
+                              calcularTotal());
+    }
+}
+
+public class Producto {
+    private String nombre;
+    private double precio;
+
+    public double getPrecio() {
+        return this.precio;
+    }
+
+    public String getNombre() {
+        return this.nombre;
+    }
+}
+```
+
+#### Resumen del Refactor
+
+- **Métodos más pequeños y enfocados:** El método original `imprimirDetalleConTotales` se dividió en métodos más pequeños en la clase `Factura`, lo que facilita su comprensión y mantenimiento.
+- **Delegación de Formateo:** La responsabilidad de formatear la información del `Producto` y `LineaDeFactura` se delegó a sus respectivas clases, siguiendo el principio de responsabilidad única. Esto hace que el código sea más cohesivo y que cada clase gestione sus propios datos.
+</details>
 
 ## Parciales Frameworks
 
