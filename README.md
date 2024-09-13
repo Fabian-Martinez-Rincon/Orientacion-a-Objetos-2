@@ -23,6 +23,9 @@ Que hacer ante cada bad smell:
 - **Long Method** (Casi siempre se corresponde al exceso de responsabilidades)
     - `Refactoring`: Extract Method
     - `Que hacer`: Movemos el codigo a un metodo de la misma clase con un nombre descriptivo
+- **Reinventado la rueda**: (Despues de hacer el extract method que contiene fors)
+    - `Refactoring`: Remplazar el codigo por funcion de la libreria
+    - `Que hacer`: Si tenemos algun for, buscar en los streams con cual se puede remplazar.
 
 > [!TIP]
 > En la consulta me dijeron que no hace falta copiar y pegar el codigo, con explicar el paso a paso de los refactorings basta. Podes usar las reglas que se encuentran arriba.
@@ -126,5 +129,64 @@ public void imprimirValores() {
 El mal olor es `Long Method` ya que el metodo esta teniendo muchas responsabilidades como "Calcular el promedio de edades" y "Calcular el total de salarios".
 
 Para mejorar el codigo aplicamos `extract method` y creamos dos metodos `calcularPromedioEdades` y `calcularTotalSalarios`.
+
+
+```java
+public double calcularPromedioEdades() {
+    int totalEdades = 0;
+    for (Empleado empleado : personal) {
+        totalEdades = totalEdades + empleado.getEdad();
+    }
+    return totalEdades / personal.size();
+}
+
+public double calcularTotalSalarios() {
+    double totalSalarios = 0;
+    for (Empleado empleado : personal) {
+        totalSalarios = totalSalarios + empleado.getSalario();
+    }
+    return totalSalarios;
+}
+
+public void imprimirValores() {
+    System.out.println(String.format(
+        "El promedio de las edades es %s y el total de salarios es %s", 
+        this.calcularPromedioEdades(), this.calcularTotalSalarios())
+    );
+}
+```
+
+Otro bads mell `Reinventando la rueda` es que se puede reemplazar el for por un stream. 
+
+> [!WARNING]  
+> Tiene que cumplir con el mismo comportamiento que antes.
+
+En este caso al dividir por cero, el codigo lanza una excepcion que debe seguir teniendo despues del refactoring.
+
+<table>
+
+<tr><td>Esto god</td><td>Esto es morir</td></tr>
+
+<tr><td>
+
+```java
+public int calcularPromedioEdades(){ 
+    return personal.stream()
+        .mapToDouble(empleado -> empleado.getEdad())
+        .sum()/personal.size(); 
+}
+```
+</td><td>
+
+```java
+public int calcularPromedioEdades(){ 
+    return personal.stream()
+        .mapToDouble(empleado -> empleado.getEdad())
+        .average()
+        .orElse(0); 
+}
+```
+</td></tr>
+</table>
 
 
