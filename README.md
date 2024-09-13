@@ -740,6 +740,13 @@ f(x) {
 
 ![image](https://github.com/user-attachments/assets/a96184fe-c13f-4ad4-a08f-3ea858492f00)
 
+
+#### Pseudocodigo
+
+El Bad Smell encontrado es `condicional redundante` y el pseudocodigo para detectarlo es el siguiente:
+
+Recorro el arbol hasta encontrar un nodo EXPR con la siguiente estructura `EXPR ? EXPR : EXPR` y si los dos ultimos hijos tienen el mismo valor, significa que el condicional no es necerario que se encuentre.
+
 ---
 
 #### 6.6
@@ -751,6 +758,13 @@ f(y) {
 ```
 
 ![image](https://github.com/user-attachments/assets/5afabd73-1540-421f-85fd-c97797b74465)
+
+#### Pseudocodigo
+
+Tenemos dos Bad Smell un `parametro sin utilizar`
+
+- Recorro el arbol hasta encontrar el nodo con expresión `def` y me guardo en una lista, los valores de  los `ID` que se encuentran entre parentesis.
+- Volvemos a recorrer el arbol buscando que los elementos de la lista no sean hijos de ningun nodo `EXPR`. En caso de que no sea hijo de ningun nodo `EXPR`, significa que el parametro no se utiliza.
 
 ---
 
@@ -764,6 +778,12 @@ f(y) {
 
 ![image](https://github.com/user-attachments/assets/cec6da85-c68f-4c9a-9d34-f3b276220f3a)
 
+#### Pseudocodigo
+
+El Bad Smell es `Logica Reduntante` y el pseudocodigo para detectarlo es el siguiente:
+
+- Recorro el arbol hasta encontrar un nodo `EXPR` que tenga como hijo un `not` y si su nodo hermano `EXPR` tiene como hijo otro `not`, significa que es logica redundante.
+
 ---
 
 #### 6.8
@@ -775,6 +795,13 @@ f(y, z) {
 ```
 
 ![image](https://github.com/user-attachments/assets/c373848a-c847-4045-9cc2-0de330bd22c6)
+
+#### Pseudocodigo
+
+Tenemos dos Bad Smell un `parametro sin utilizar`
+
+- Recorro el arbol hasta encontrar el nodo con expresión `def` y me guardo en una lista, los valores de  los `ID` que se encuentran entre parentesis.
+- Volvemos a recorrer el arbol buscando que los elementos de la lista no sean hijos de ningun nodo `EXPR`. En caso de que no sea hijo de ningun nodo `EXPR`, significa que el parametro no se utiliza.
 
 ---
 
