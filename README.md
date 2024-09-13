@@ -11,10 +11,15 @@
 - [Parciales Frameworks](#parciales-frameworks)
 - [Cuadernillo](#cuadernillo)
 
+
+
 Que hacer ante cada bad smell:
 - **Data Expose** (Atributos que son publicos)
     - Refactoring: Encapsulate Field
     - Que hacer: Pasamos los atributos a privados y en los lugares en donde se usaban los atributos, se cambia por los metodos get y set.
+
+> [!TIP]
+> En la consulta me dijeron que no hace falta copiar y pegar el codigo, con explicar el paso a paso de los refactorings basta. Podes usar las reglas que se encuentran arriba.
 
 ---
 
@@ -95,3 +100,18 @@ De esta forma, la gente que trabaja con la clase, no se ve afectada por el cambi
 #### 1.3 Cálculos
 
 Analice el código que se muestra a continuación. Indique qué defectos encuentra y cómo pueden corregirse.
+
+```java
+public void imprimirValores() {
+    int totalEdades = 0;
+    double promedioEdades = 0;
+    double totalSalarios = 0;
+    for (Empleado empleado : personal) {
+        totalEdades = totalEdades + empleado.getEdad();
+        totalSalarios = totalSalarios + empleado.getSalario();
+    }
+    promedioEdades = totalEdades / personal.size();
+    String message = String.format("El promedio de las edades es %s y el total de salarios es %s", promedioEdades, totalSalarios);
+    System.out.println(message);
+}
+```
