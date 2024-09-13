@@ -643,3 +643,107 @@ f(y) {
     a = not not y;
 }
 ```
+
+---
+
+#### 6.8
+
+```javascript
+f(y, z) {
+    z + 12;
+}
+```
+
+---
+
+#### 6.9
+
+```javascript
+elegirSueldo(empleado) {
+    clase = empleado.class;
+    clase.equals(pasante) ? empleado.setSueldo(20000);
+    clase.equals(planta) ? empleado.setSueldo(50000);
+}
+```
+
+---
+
+#### 6.10
+
+```javascript
+agregarOnceNumeros(lista) {
+    lista.agregar(1);
+    lista.agregar(2);
+    lista.agregar(3);
+    lista.agregar(4);
+    lista.agregar(5);
+    lista.agregar(6);
+    lista.agregar(7);
+    lista.agregar(8);
+    lista.agregar(9);
+    lista.agregar(10);
+    lista.agregar(11);
+}
+```
+
+---
+
+#### 6.11
+
+```javascript
+numeroTelefonoCompleto(telefono, numero) {
+    numero = telefono.codigoArea + telefono.prefijo + telefono.numero;
+}
+```
+
+---
+
+#### 6.11
+
+```javascript
+f(x,y) {
+    x or not x ? y + 1;
+    x and x ? y - 1;
+    x ? x ? y - 1;
+}
+```
+
+---
+
+#### 6.12
+
+```javascript
+f(x) {
+    x = x;
+}
+```
+
+---
+
+#### 6.13
+
+```javascript
+f(x,y) {
+    x ? y - 1;
+    not x ? y - 2;
+}
+```
+
+---
+
+#### 6.14
+
+```javascript
+f(a,b,c,d,e,f,g,h,i,j,k) {
+    a+b+c+d+e+f+g+h+i+j+k;
+}
+```
+
+---
+
+#### 6.15
+
+```javascript
+someOperation(x,y,z) {
+    other.someOperation(x,y,z);
+}
