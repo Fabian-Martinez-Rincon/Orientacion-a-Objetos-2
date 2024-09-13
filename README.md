@@ -560,3 +560,86 @@ public class Carrito {
     }
 }
 ```
+
+---
+
+### Ejercicio 6: Antlr lab
+Con cada uno de los siguientes ejemplos,
+- `1)` Considere que en el lenguaje dado por la cátedra el llamado a una función o método retorna el valor generado por la evaluacion de la última sentencia (stat, en la gramática)
+- `2)` Determine si hay un code smell y cual es.
+- `3)` Evalue el código en antlr lab usando las especificaciones del lexer y el parser
+- `4)` Estudie el árbol generado por antlr lab
+- `5)` Escriba un pseudocódigo que permita detectar el code smell en el árbol
+
+#### 6.1
+
+```javascript
+f(x,y) {
+    a = 4
+    a = 3 + y;
+    x * x + y * x; 
+}
+```
+
+---
+
+#### 6.2
+
+```javascript
+f(x, y, z) {
+    a = 3 + y;
+    x * x + y * x;  
+}
+```
+
+---
+
+#### 6.3
+
+```javascript
+f(x,y) {
+    a = 4;
+    x + a;
+}
+```
+
+---
+
+#### 6.4
+
+```javascript
+f(x) {
+    a = 4;
+    a = 5;
+}
+```
+
+---
+
+#### 6.5
+
+```javascript
+f(x) {
+    a = x ? 3 : 3;
+}
+```
+
+---
+
+#### 6.6
+
+```javascript
+f(y) {
+    a = g.x() + g.x() + g.x();
+}
+```
+
+---
+
+#### 6.7
+
+```javascript
+f(y) {
+    a = not not y;
+}
+```
