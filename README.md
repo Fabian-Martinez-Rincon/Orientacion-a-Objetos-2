@@ -355,3 +355,208 @@ public class EmpleadoPasante extends Empleado {
     }
 }
 ```
+
+---
+
+### 2.2 Juego
+
+```java
+public class Juego {
+    // ......
+    public void incrementar(Jugador j) {
+        j.puntuacion = j.puntuacion + 100;
+    }
+    public void decrementar(Jugador j) {
+        j.puntuacion = j.puntuacion - 50;
+    }
+}
+public class Jugador {
+    public String nombre;
+    public String apellido;
+    public int puntuacion = 0;
+}
+```
+
+De primeras tenemos el bad smell de `Data Expose` y lo tratamos como siempre, cambiamos la visibilidad de `public` por `private` y remplazamos todas las llamadas por los metodos `get` y `set`.
+
+```java
+public class Juego {
+    // ......
+    public void incrementar(Jugador j) {
+        j.setPuntuacion(j.getPuntuacion() + 100);
+    }
+    public void decrementar(Jugador j) {
+        j.setPuntuacion(j.getPuntuacion() - 50);
+    }
+}
+public class Jugador {
+    private String nombre;
+    private String apellido;
+    private int puntuacion = 0;
+
+    public int getPuntuacion() {
+        return puntuacion;
+    }
+
+    public void setPuntuacion(int puntuacion) {
+        this.puntuacion = puntuacion;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+}
+```
+
+El bad smell que tenemos ahora es `Envidia de atributos`, lo que hacemos en este caso es `move method to component` y delegamos la responsabilidad de incrementar y decrementar la puntuacion al objeto `Jugador`.
+
+```java
+public class Juego {
+    public void incrementar(Jugador j) {
+        j.incrementarPuntuacion(100);
+    }
+    public void decrementar(Jugador j) {
+        j.decrementarPuntuacion(50);
+    }
+}
+public class Jugador {
+    private String nombre;
+    private String apellido;
+    private int puntuacion = 0;
+
+    public void incrementarPuntuacion(int puntos) {
+        this.puntuacion += puntos;
+    }
+
+    public void decrementarPuntuacion(int puntos) {
+        this.puntuacion -= puntos;
+    }
+}
+```
+
+---
+
+![image](https://github.com/user-attachments/assets/cbec12f5-0477-4c7a-9023-0d64874fecb5)
+
+```java
+/*
+* Retorna los últimos N posts que no pertenecen al usuario user
+*/
+public List<Post> ultimosPosts(Usuario user, int cantidad) {
+    List<Post> postsOtrosUsuarios = new ArrayList<Post>();
+    for (Post post : this.posts) {
+        if (!post.getUsuario().equals(user)) {
+            postsOtrosUsuarios.add(post);
+        }
+    }
+    // ordena los posts por fecha
+    for (int i = 0; i < postsOtrosUsuarios.size(); i++) {
+        int masNuevo = i;
+        for(int j= i +1; j < postsOtrosUsuarios.size(); j++) {
+            if (postsOtrosUsuarios.get(j).getFecha().isAfter(
+                postsOtrosUsuarios.get(masNuevo).getFecha())) {
+                masNuevo = j;
+            }
+        }
+        Post unPost = postsOtrosUsuarios.set(i,postsOtrosUsuarios.get(masNuevo));
+        postsOtrosUsuarios.set(masNuevo, unPost);
+    }
+    
+    List<Post> ultimosPosts = new ArrayList<Post>();
+    int index = 0;
+    Iterator<Post> postIterator = postsOtrosUsuarios.iterator();
+    while (postIterator.hasNext() && index < cantidad) {
+        ultimosPosts.add(postIterator.next());
+    }
+    return ultimosPosts;
+}
+```
+
+En este caso tenemos el bad smell de `Long Method` y `Reinventando la rueda`. Hacemos el refactoring `Extract Method` y despues el de `Remplazar el codigo por funcion de la libreria`.
+
+```java
+public List<Examen> filtrarYOrdenar(){
+    return posts.stream()
+        .filter(alumno->alumno.getNombre().startsWith(x))
+        .sorted((p1, p2) -> 
+            p1.getFecha().compareTo(p2.getFecha()))
+        .collect(Collectors.toList());
+}
+
+```java
+/*
+* Retorna los últimos N posts que no pertenecen al usuario user
+*/
+public List<Post> ultimosPosts(Usuario user, int cantidad) {
+    List<Post> postsOtrosUsuarios = filtrarYOrdenar();
+    
+    List<Post> ultimosPosts = new ArrayList<Post>();
+    int index = 0;
+    Iterator<Post> postIterator = postsOtrosUsuarios.iterator();
+    while (postIterator.hasNext() && index < cantidad) {
+        ultimosPosts.add(postIterator.next());
+    }
+    return ultimosPosts;
+}
+```
+
+Aca tenemos el bad smell de `Codigo Reduntante` y el refactoring es `Remover codigo reduntante`. 
+
+```java
+public List<Post> ultimosPosts(Usuario user, int cantidad) {
+    return filtrarYOrdenar();
+}
+```
+
+Tenemos el mal olor de `marametro sin utilizar` y el refactoring es `Remover parametro no utilizado`. Esto no queda aca, sino que tambien en todos los lugar en donde se llama a este metodo, vamos a tener que remover ese parametro. Sigue cumpliendo con el principio de refactoring ya que no estamos modificando el comportamiento en asboluto.
+
+```java
+public List<Post> ultimosPosts(Usuario user, int cantidad) {
+    return filtrarYOrdenar();
+}
+```
+
+---
+
+#### 2.4 Carrito de compras
+
+![image](https://github.com/user-attachments/assets/2ddaf7ab-148f-456f-8921-0cbd8e33cfb5)
+
+```java
+public class Producto {
+    private String nombre;
+    private double precio;
+    public double getPrecio() {
+        return this.precio;
+    }
+}
+public class ItemCarrito {
+    private Producto producto;
+    private int cantidad;
+    public Producto getProducto() {
+        return this.producto;
+    }
+    public int getCantidad() {
+        return this.cantidad;
+    }
+}
+public class Carrito {
+    private List<ItemCarrito> items;
+    public double total() {
+        return this.items.stream().mapToDouble(item ->
+        item.getProducto().getPrecio() * item.getCantidad()).sum();
+    }
+}
+```
