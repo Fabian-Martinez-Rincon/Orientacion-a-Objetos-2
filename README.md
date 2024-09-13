@@ -277,7 +277,7 @@ public class EmpleadoPasante {
 }
 ```
 
-Continuamos con el bad smell de codigo duplicado. Para solucionarlo hacemos un refactoring `Extract Class` (aca tengo dudas del nombre) con los atributos y metodos en comun.
+Continuamos con el bad smell de `codigo duplicado`. Para solucionarlo hacemos un refactoring `Extract Class` (aca tengo dudas del nombre) con los atributos y metodos en comun.
 
 ```java
 public class Empleado {
@@ -311,6 +311,47 @@ public class EmpleadoPasante extends Empleado {
     // ......
     public double sueldo() {
         return this.sueldoBasico - (this.sueldoBasico * 0.13);
+    }
+}
+```
+
+Seguimos con el bad smell `Codigo Duplicado` en la logica del calculo del sueldo basico. Para solucionarlo hacemos el refactoring `Extract Method` y despues aplicamos el refactoring `Pull Up Method` para que el metodo `calcularBasico` se encuentre en la clase padre.
+
+```java
+public class Empleado {
+    private String nombre;
+    private String apellido;
+    private double sueldoBasico = 0;
+    // ......
+    public double calcularBasico() {
+        return this.sueldoBasico * 0.13;
+    }
+    public abstract double sueldo();
+}
+
+public class EmpleadoTemporario extends Empleado {
+    private double horasTrabajadas = 0;
+    private int cantidadHijos = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico + (this.horasTrabajadas * 500) +
+        (this.cantidadHijos * 1000) - this.calcularBasico();
+    }
+}
+
+public class EmpleadoPlanta extends Empleado {
+    private int cantidadHijos = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico + (this.cantidadHijos * 2000) -
+        this.calcularBasico();
+    }
+}
+
+public class EmpleadoPasante extends Empleado {
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico - this.calcularBasico();
     }
 }
 ```
