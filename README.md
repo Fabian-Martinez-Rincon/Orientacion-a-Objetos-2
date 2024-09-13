@@ -637,7 +637,14 @@ func : ID '(' expr (',' expr)* ')'
 ;
 ```
 
-#### 6.1
+### Tabla de Code Smell con su correspondiente psudocodigo
+
+
+> [!TIP]
+> **`Pseudo`** deriva del griego, de `seudo`, que puede traducirse como `falso`.
+> **`Código`**, por su parte, emana del latín. En concreto, de “codices, codex” que se empleaban para referirse a los documentos o libros donde los romanos tenían escritas todas y cada una de sus leyes.
+
+### 6.1
 
 ```javascript
 f(x,y) {
@@ -649,6 +656,17 @@ f(x,y) {
 
 ![image](https://github.com/user-attachments/assets/50ef3ba2-c1e5-46d1-af15-4cdd2838a3e6)
 
+#### Pseudocodigo
+
+El Bad Smell 1 encontrado es `variable pisada` y el pseudocodigo para detectarlo es el siguiente:
+
+- Recorro el arbol hasta encontrar el primer `stat` con ID1 que representa la asignación, me quedo con el primer hijo y lo guardo en una variable auxiliar.
+- Vuelvo a recorrer el arbol y si encuento otro `stat` con ID1 (asignación) y el hijo es igual a la variable auxiliar y en el medio no se encuentra como hija de ningun nodo `EXPR`, significa que es un valor pisado.
+
+El Bad Smell 2 encontrado es `variable no utilizada` y el pseudocodigo para detectarlo es el siguiente:
+
+- Recorro el arbol hasta encontrar el primer `stat` con ID1 que representa la asignación, me quedo con el primer hijo y lo guardo en una variable/lista auxiliar.
+- Vuelvon a recorrer el arbol y si no es hijo de algun nodo EXPR, significa que no se utiliza.
 
 ---
 
@@ -663,6 +681,13 @@ f(x, y, z) {
 
 ![image](https://github.com/user-attachments/assets/9786d787-72cd-4537-8ab9-f2f108dcc5ef)
 
+#### Pseudocodigo
+
+Tenemos dos Bad Smell un `parametro sin utilizar` y una `variable que no se utiliza`
+
+- Recorro el arbol hasta encontrar el nodo con expresión `def` y me guardo en una lista, los valores de  los `ID` que se encuentran entre parentesis.
+- Volvemos a recorrer el arbol buscando que los elementos de la lista no sean hijos de ningun nodo `EXPR`. En caso de que no sea hijo de ningun nodo `EXPR`, significa que el parametro no se utiliza.
+
 ---
 
 #### 6.3
@@ -675,6 +700,14 @@ f(x,y) {
 ```
 
 ![image](https://github.com/user-attachments/assets/00db97d0-84fc-45a2-9bd6-be369c7905e4)
+
+#### Pseudocodigo
+
+Tenemos dos Bad Smell un `parametro sin utilizar`
+
+- Recorro el arbol hasta encontrar el nodo con expresión `def` y me guardo en una lista, los valores de  los `ID` que se encuentran entre parentesis.
+- Volvemos a recorrer el arbol buscando que los elementos de la lista no sean hijos de ningun nodo `EXPR`. En caso de que no sea hijo de ningun nodo `EXPR`, significa que el parametro no se utiliza.
+
 
 
 ---
@@ -690,6 +723,10 @@ f(x) {
 
 ![image](https://github.com/user-attachments/assets/62de7514-56f8-41e2-85b8-647c6e3f285c)
 
+El Bad Smell encontrado es `variable pisada` y el pseudocodigo para detectarlo es el siguiente:
+
+- Recorro el arbol hasta encontrar el primer `stat` con ID1 que representa la asignación, me quedo con el primer hijo y lo guardo en una variable auxiliar.
+- Vuelvo a recorrer el arbol y si encuento otro `stat` con ID1 (asignación) y el hijo es igual a la variable auxiliar y en el medio no se encuentra como hija de ningun nodo `EXPR`, significa que es un valor pisado.
 
 ---
 
