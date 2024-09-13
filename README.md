@@ -38,7 +38,7 @@ Que hacer ante cada bad smell:
 
 ---
 
-#### 1.1 Protocolo de Cliente
+### 1.1 Protocolo de Cliente
 
 La clase Cliente tiene el siguiente protocolo. ¿Cómo puede mejorarlo?
 
@@ -66,7 +66,7 @@ Hacemos lo mismo con los parametros pero en este caso, solo hace falta modificar
 
 ---
 
-#### 1.2 Participación en proyectos
+### 1.2 Participación en proyectos
 
 Al revisar el siguiente diseño inicial (Figura 1), se decidió realizar un cambio para evitar lo que se consideraba un mal olor. El diseño modificado se muestra en la Figura 2. Indique qué tipo de cambio se realizó y si lo considera apropiado. Justifique su respuesta.
 
@@ -107,7 +107,7 @@ De esta forma, la gente que trabaja con la clase, no se ve afectada por el cambi
 
 ---
 
-#### 1.3 Cálculos
+### 1.3 Cálculos
 
 Analice el código que se muestra a continuación. Indique qué defectos encuentra y cómo pueden corregirse.
 
@@ -170,7 +170,7 @@ En este caso al dividir por cero, el codigo lanza una excepcion que debe seguir 
 <tr><td>
 
 ```java
-public int calcularPromedioEdades(){ 
+public double calcularPromedioEdades(){ 
     return personal.stream()
         .mapToDouble(empleado -> empleado.getEdad())
         .sum()/personal.size(); 
@@ -179,7 +179,7 @@ public int calcularPromedioEdades(){
 </td><td>
 
 ```java
-public int calcularPromedioEdades(){ 
+public double calcularPromedioEdades(){ 
     return personal.stream()
         .mapToDouble(empleado -> empleado.getEdad())
         .average()
@@ -189,4 +189,128 @@ public int calcularPromedioEdades(){
 </td></tr>
 </table>
 
+---
 
+
+### Ejercicio 2
+Para cada una de las siguientes situaciones, realice en forma iterativa los siguientes pasos:
+
+- (i) indique el mal olor,
+- (ii) indique el refactoring que lo corrige,
+- (iii) aplique el refactoring, mostrando el resultado final (código y/o diseño según corresponda).
+
+Si vuelve a encontrar un mal olor, retorne al paso (i).
+
+### 2.1 Empleados
+
+```java
+public class EmpleadoTemporario {
+    public String nombre;
+    public String apellido;
+    public double sueldoBasico = 0;
+    public double horasTrabajadas = 0;
+    public int cantidadHijos = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico + (this.horasTrabajadas * 500) +
+        (this.cantidadHijos * 1000) - (this.sueldoBasico * 0.13);
+    }
+}
+public class EmpleadoPlanta {
+    public String nombre;
+    public String apellido;
+    public double sueldoBasico = 0;
+    public int cantidadHijos = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico + (this.cantidadHijos * 2000) -
+        (this.sueldoBasico * 0.13);
+    }
+}
+public class EmpleadoPasante {
+    public String nombre;
+    public String apellido;
+    public double sueldoBasico = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico - (this.sueldoBasico * 0.13);
+    }
+}
+```
+
+Aca tenemos el bad smell de `Data Expose` y `Codigo Duplicado`.
+
+Para solucionar el bad smell de `Data Expose` aplicamos el refactoring `Encapsulate Field`, pasamos los atributos publicos a privados, y en donde se usaban los atributos, se cambia por los metodos get y set.
+
+```java
+public class EmpleadoTemporario {
+    private String nombre;
+    private String apellido;
+    private double sueldoBasico = 0;
+    private double horasTrabajadas = 0;
+    private int cantidadHijos = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico + (this.horasTrabajadas * 500) +
+        (this.cantidadHijos * 1000) - (this.sueldoBasico * 0.13);
+    }
+}
+public class EmpleadoPlanta {
+    private String nombre;
+    private String apellido;
+    private double sueldoBasico = 0;
+    private int cantidadHijos = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico + (this.cantidadHijos * 2000) -
+        (this.sueldoBasico * 0.13);
+    }
+}
+public class EmpleadoPasante {
+    private String nombre;
+    private String apellido;
+    private double sueldoBasico = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico - (this.sueldoBasico * 0.13);
+    }
+}
+```
+
+Continuamos con el bad smell de codigo duplicado. Para solucionarlo hacemos un refactoring `Extract Class` (aca tengo dudas del nombre) con los atributos y metodos en comun.
+
+```java
+public class Empleado {
+    private String nombre;
+    private String apellido;
+    private double sueldoBasico = 0;
+    // ......
+    public abstract double sueldo();
+}
+
+public class EmpleadoTemporario extends Empleado {
+    private double horasTrabajadas = 0;
+    private int cantidadHijos = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico + (this.horasTrabajadas * 500) +
+        (this.cantidadHijos * 1000) - (this.sueldoBasico * 0.13);
+    }
+}
+
+public class EmpleadoPlanta extends Empleado {
+    private int cantidadHijos = 0;
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico + (this.cantidadHijos * 2000) -
+        (this.sueldoBasico * 0.13);
+    }
+}
+
+public class EmpleadoPasante extends Empleado {
+    // ......
+    public double sueldo() {
+        return this.sueldoBasico - (this.sueldoBasico * 0.13);
+    }
+}
+```
