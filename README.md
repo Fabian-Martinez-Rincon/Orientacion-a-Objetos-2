@@ -494,6 +494,7 @@ public List<Examen> filtrarYOrdenar(){
             p1.getFecha().compareTo(p2.getFecha()))
         .collect(Collectors.toList());
 }
+```
 
 ```java
 /*
@@ -570,6 +571,71 @@ Con cada uno de los siguientes ejemplos,
 - `3)` Evalue el código en antlr lab usando las especificaciones del lexer y el parser
 - `4)` Estudie el árbol generado por antlr lab
 - `5)` Escriba un pseudocódigo que permita detectar el code smell en el árbol
+- [Pagina para ver los diagramas](http://lab.antlr.org/)
+
+
+### Configuración
+
+#### Lexer
+
+```
+// DELETE THIS CONTENT IF YOU PUT COMBINED GRAMMAR IN Parser TAB
+lexer grammar ExprLexer;
+AND : 'and' ;
+OR : 'or' ;
+NOT : 'not' ;
+EQ : '=' ;
+COMMA : ',' ;
+SEMI : ';' ;
+LPAREN : '(' ;
+RPAREN : ')' ;
+LCURLY : '{' ;
+RCURLY : '}' ;
+SUM : '+' ;
+SUB : '-' ;
+MUL : '*' ;
+DIV : '/' ;
+POW : '^' ;
+DOT : '.' ;
+COLON : ':' ;
+ASK : '?' ;
+INT : [0-9]+ ;
+ID: [a-zA-Z_][a-zA-Z_0-9]* ;
+WS: [ \t\n\r\f]+ -> skip ;
+```
+
+#### Parser
+
+```
+parser grammar ExprParser;
+options { tokenVocab=ExprLexer; }
+program
+: stat EOF
+| def EOF
+;
+stat: ID '=' expr ';'
+| ID DOT ID '=' expr ';'
+| expr ';'
+;
+def : ID '(' ID (',' ID)* ')' '{' stat* '}' ;
+expr: ID
+| INT
+| func
+| ID DOT ID
+| ID DOT func
+| 'not' expr
+| expr 'and' expr
+| expr 'or' expr
+| expr (MUL | DIV) expr
+| expr (SUM | SUB) expr
+| expr POW expr
+| expr '?' expr ':' expr
+| expr '?' expr
+;
+func : ID '(' expr (',' expr)* ')'
+| ID '(' ')'
+;
+```
 
 #### 6.1
 
@@ -580,6 +646,8 @@ f(x,y) {
     x * x + y * x; 
 }
 ```
+
+![image](https://github.com/user-attachments/assets/a912fd03-6bd3-479e-ae28-9da07c102735)
 
 ---
 
@@ -592,6 +660,8 @@ f(x, y, z) {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/369c84d4-048c-496b-84a2-89acb1aab783)
+
 ---
 
 #### 6.3
@@ -602,6 +672,8 @@ f(x,y) {
     x + a;
 }
 ```
+
+![image](https://github.com/user-attachments/assets/018e68ec-827c-41c5-b4f1-06d2171c9757)
 
 ---
 
@@ -614,6 +686,9 @@ f(x) {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/e27539c3-1a35-45db-bb99-34d85dbddad3)
+
+
 ---
 
 #### 6.5
@@ -623,6 +698,8 @@ f(x) {
     a = x ? 3 : 3;
 }
 ```
+
+![image](https://github.com/user-attachments/assets/95a72644-0643-4814-9dbb-13a8f0a5c3cb)
 
 ---
 
@@ -747,3 +824,4 @@ f(a,b,c,d,e,f,g,h,i,j,k) {
 someOperation(x,y,z) {
     other.someOperation(x,y,z);
 }
+```
