@@ -647,7 +647,8 @@ f(x,y) {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/a912fd03-6bd3-479e-ae28-9da07c102735)
+![image](https://github.com/user-attachments/assets/50ef3ba2-c1e5-46d1-af15-4cdd2838a3e6)
+
 
 ---
 
@@ -660,7 +661,7 @@ f(x, y, z) {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/369c84d4-048c-496b-84a2-89acb1aab783)
+![image](https://github.com/user-attachments/assets/9786d787-72cd-4537-8ab9-f2f108dcc5ef)
 
 ---
 
@@ -673,7 +674,8 @@ f(x,y) {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/018e68ec-827c-41c5-b4f1-06d2171c9757)
+![image](https://github.com/user-attachments/assets/00db97d0-84fc-45a2-9bd6-be369c7905e4)
+
 
 ---
 
@@ -686,7 +688,7 @@ f(x) {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/e27539c3-1a35-45db-bb99-34d85dbddad3)
+![image](https://github.com/user-attachments/assets/62de7514-56f8-41e2-85b8-647c6e3f285c)
 
 
 ---
@@ -699,7 +701,7 @@ f(x) {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/95a72644-0643-4814-9dbb-13a8f0a5c3cb)
+![image](https://github.com/user-attachments/assets/a96184fe-c13f-4ad4-a08f-3ea858492f00)
 
 ---
 
@@ -711,6 +713,8 @@ f(y) {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/5afabd73-1540-421f-85fd-c97797b74465)
+
 ---
 
 #### 6.7
@@ -721,6 +725,8 @@ f(y) {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/cec6da85-c68f-4c9a-9d34-f3b276220f3a)
+
 ---
 
 #### 6.8
@@ -730,6 +736,8 @@ f(y, z) {
     z + 12;
 }
 ```
+
+![image](https://github.com/user-attachments/assets/c373848a-c847-4045-9cc2-0de330bd22c6)
 
 ---
 
@@ -742,6 +750,8 @@ elegirSueldo(empleado) {
     clase.equals(planta) ? empleado.setSueldo(50000);
 }
 ```
+
+![image](https://github.com/user-attachments/assets/232dba17-8c2f-4feb-b81a-1051729a4341)
 
 ---
 
@@ -763,6 +773,8 @@ agregarOnceNumeros(lista) {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/0baf7077-bded-4745-ab14-b8856793eb36)
+
 ---
 
 #### 6.11
@@ -772,6 +784,8 @@ numeroTelefonoCompleto(telefono, numero) {
     numero = telefono.codigoArea + telefono.prefijo + telefono.numero;
 }
 ```
+
+![image](https://github.com/user-attachments/assets/455918b3-076e-4489-afbc-9dc61d851756)
 
 ---
 
@@ -785,6 +799,8 @@ f(x,y) {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/757dd775-b7a7-47d7-a52d-b588073eba42)
+
 ---
 
 #### 6.12
@@ -794,6 +810,8 @@ f(x) {
     x = x;
 }
 ```
+
+![image](https://github.com/user-attachments/assets/f345f5d3-2c81-43f6-894b-038557765cdf)
 
 ---
 
@@ -806,6 +824,8 @@ f(x,y) {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/39115451-38ff-4499-90bf-34956187738e)
+
 ---
 
 #### 6.14
@@ -816,6 +836,8 @@ f(a,b,c,d,e,f,g,h,i,j,k) {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/9b98124f-8bc7-4432-8474-dc0b760d20bd)
+
 ---
 
 #### 6.15
@@ -825,3 +847,5 @@ someOperation(x,y,z) {
     other.someOperation(x,y,z);
 }
 ```
+
+![image](https://github.com/user-attachments/assets/c4137e10-eaad-40d8-9dbe-869e110870e1)
