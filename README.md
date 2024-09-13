@@ -77,7 +77,8 @@ No se considera un refactoring ya que estas eliminando el metodo del objeto `Per
 
 Si queremos que de verdad sea un refactoring podemos tener a la clase `Persona` de la siguiente manera:
 
-#### Persona
+
+<table><td>
 
 ```java
 public class Persona {
@@ -87,8 +88,8 @@ public class Persona {
     }
 }
 ```
+</td><td>
 
-#### Proyecto
 ```java
 public clase  Proyecto {
     private List<Persona> participantes;
@@ -97,6 +98,7 @@ public clase  Proyecto {
     }
 }
 ```
+</td></table>
 
 De esta forma, la gente que trabaja con la clase, no se ve afectada por el cambio.
 
@@ -120,3 +122,9 @@ public void imprimirValores() {
     System.out.println(message);
 }
 ```
+
+El mal olor es `Long Method` ya que el metodo esta teniendo muchas responsabilidades como "Calcular el promedio de edades" y "Calcular el total de salarios".
+
+Para mejorar el codigo aplicamos `extract method` y creamos dos metodos `calcularPromedioEdades` y `calcularTotalSalarios`.
+
+
