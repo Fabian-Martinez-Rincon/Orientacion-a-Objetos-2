@@ -11,12 +11,18 @@
 - [Parciales Frameworks](#parciales-frameworks)
 - [Cuadernillo](#cuadernillo)
 
-
+---
 
 Que hacer ante cada bad smell:
 - **Data Expose** (Atributos que son publicos)
-    - Refactoring: Encapsulate Field
-    - Que hacer: Pasamos los atributos a privados y en los lugares en donde se usaban los atributos, se cambia por los metodos get y set.
+    - `Refactoring`: Encapsulate Field
+    - `Que hacer`: Pasamos los atributos a privados y en los lugares en donde se usaban los atributos, se cambia por los metodos get y set.
+- **Envidia de Atributos** (Nos tenemos que acordar de aplicar el refactor anterior antes de este)
+    - `Refactoring`: Move Method to Component
+    - `Que hacer`: Mover el metodo a la clase que tiene los atributos que necesita.
+- **Long Method** (Casi siempre se corresponde al exceso de responsabilidades)
+    - `Refactoring`: Extract Method
+    - `Que hacer`: Movemos el codigo a un metodo de la misma clase con un nombre descriptivo
 
 > [!TIP]
 > En la consulta me dijeron que no hace falta copiar y pegar el codigo, con explicar el paso a paso de los refactorings basta. Podes usar las reglas que se encuentran arriba.
@@ -76,7 +82,6 @@ Si queremos que de verdad sea un refactoring podemos tener a la clase `Persona` 
 ```java
 public class Persona {
     public String id;
-
     public boolean participaEnProyecto(Proyecto proyecto) {
         return proyecto.participa(this);
     }
