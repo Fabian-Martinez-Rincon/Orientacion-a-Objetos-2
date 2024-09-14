@@ -618,19 +618,19 @@ stat: ID '=' expr ';'
 | expr ';'
 ;
 def : ID '(' ID (',' ID)* ')' '{' stat* '}' ;
-expr: ID
-| INT
-| func
-| ID DOT ID
-| ID DOT func
-| 'not' expr
-| expr 'and' expr
-| expr 'or' expr
-| expr (MUL | DIV) expr
-| expr (SUM | SUB) expr
-| expr POW expr
-| expr '?' expr ':' expr
-| expr '?' expr
+expr: ID   //EXPR 1
+| INT      //EXPR 2
+| func     //EXPR 3
+| ID DOT ID //empleado.sueldo // EXPR 4
+| ID DOT func //empleado.calcularSueldo() // EXPR 5
+| 'not' expr // EXPR 6
+| expr 'and' expr // EXPR 7
+| expr 'or' expr // EXPR 8
+| expr (MUL | DIV) expr // EXPR 9
+| expr (SUM | SUB) expr // EXPR 10
+| expr POW expr // EXPR 11
+| expr '?' expr ':' expr // EXPR 12
+| expr '?' expr // EXPR 13
 ;
 func : ID '(' expr (',' expr)* ')'
 | ID '(' ')'
@@ -792,7 +792,7 @@ El Bad Smell es `Logica Reduntante` y el pseudocodigo para detectarlo es el sigu
 f(y, z) {
     z + 12;
 }
-```
+``` 
 
 ![image](https://github.com/user-attachments/assets/c373848a-c847-4045-9cc2-0de330bd22c6)
 
@@ -817,6 +817,17 @@ elegirSueldo(empleado) {
 
 ![image](https://github.com/user-attachments/assets/232dba17-8c2f-4feb-b81a-1051729a4341)
 
+El Bad smell es `Switch statement` ya que estoy utilizando clase de empleado para determinar el sueldo a setear. Esto no es escalable ya que si en un futuro quiero seguir agregando tipos de empleados, tengo que modificar el metodo.
+
+El pseudocodigo para detectar este bad smell es el siguiente:
+
+- Busco el nodo `def` y me guardo en una variable auxiliar los valores pasados por parametro, en este caso es `empleado`
+- Vuelvo a recorrer el arbol y busco un nodo con `STAT:1` que representa la asignación y si tiene como hijo un nodo `EXPR` que contiene el valor de mi variable auxiliar y la siguiente estructura `aux.class`. Me quedo con el primer hijo que en este caso es `clase`
+- Una vez que tengo guardado `clase` en una variable `auxiliar`, vuelvo a recorrer el arbol hasta encontrar un nodo `EXPR` con la siguiente estructura `auxiliar . equals ( EXPR )`.
+- Si encuentro un nodo con esta estructura, significa que tengo un `Switch statement`. 
+
+
+
 ---
 
 #### 6.10
@@ -839,25 +850,56 @@ agregarOnceNumeros(lista) {
 
 ![image](https://github.com/user-attachments/assets/0baf7077-bded-4745-ab14-b8856793eb36)
 
+El Bad Smell es `Reinventado la rueda` ya que tengo operaciones que repiten un patron en secuencia, por lo que se podrian remplazar por un for. Como por ejemplo
+
+```javascript
+agregarOnceNumeros(lista) {
+    for (int i = 1; i <= 11; i++) {
+        lista.agregar(i);
+    }
+}
+```
+
+#### Pseudocodigo
+
+Para encontrar el Bad Smell hacemos lo siguiente:
+
+- Recorro el arbol quedandome con la estructura completa de los nodos `stat:3`
+- Sobre la lista que guarde, elimino todas las estructuras duplicadas
+- Si el resultado me queda una secuencia de numeros, significa que puedo remplazarlo por un for.
+
+El resultado quedaria algo asi
+
+[1,2,3,4,5,6,7,8,9,10,11]
+
+
 ---
 
 #### 6.11
 
 ```javascript
-numeroTelefonoCompleto(telefono, numero) {
+numeroTelefonoCompleto(telefono, numero) { 
     numero = telefono.codigoArea + telefono.prefijo + telefono.numero;
 }
 ```
 
 ![image](https://github.com/user-attachments/assets/455918b3-076e-4489-afbc-9dc61d851756)
 
+#### Pseudocodigo
+
+El Bad Smell es `Envidia de Atributos`
+
+- Recorro el arbol hasta encontrar el nodo con expresión `def` y me guardo en una lista, los valores de  los `ID` que se encuentran entre parentesis.
+- Volvemos a recorrer el arbol buscando que los elementos de la lista no sean hijos de un nodo `EXPR:4` con la siguiente estructura `telefono . atributoX`
+- En caso de encontrar estos nodos, estamos en presencia de un `Envidia de Atributos`.
+
 ---
 
 #### 6.11
 
 ```javascript
-f(x,y) {
-    x or not x ? y + 1;
+f(x,y) { x = true , y = 2
+    x or not x ? y + 1;  
     x and x ? y - 1;
     x ? x ? y - 1;
 }
@@ -865,30 +907,98 @@ f(x,y) {
 
 ![image](https://github.com/user-attachments/assets/757dd775-b7a7-47d7-a52d-b588073eba42)
 
+Resultado con if
+
+<details><summary>ejemplo</summary>
+
+```javascript
+f(x, y) {//x = true, y = 2;
+    
+    // Primera Condición
+    if (x || !x) {
+        y = y + 1;
+    }
+    
+    // Segunda Condición
+    if (x && x) {
+        y = y - 1;
+    }
+    
+    // Tercera Condición
+    if (x) {
+        if (x) {
+            y = y - 1;
+        }
+    }
+}
+```
+
+El bad smell es codigo reduntante, el codigo sin redundacia quedaria asi
+
+```javascript
+f(x, y) {//x = true, y = 2;
+    if (x) {
+        y = y - 1;
+    }
+}
+```
+
+</details>
+
+#### Pseudocodigo
+
+
+Primer `Stat` 3
+- Recorro el arbol hasta encontrar un nodo `EXPR:8` y me guardo el hijo izquierdo en una variable auxiliar.
+- Si el hijo mas derecho de mi nodo `EXPR:8`, tiene el hijo izquierdo un `not` y el hijo derecho es igual a la variable auxiliar, significa que es logica redundante.
+
+Segundo `Stat` 3
+- Recorro el arbol hasta encontrar un nodo `EXPR:7` y me guardo la estructura del hijo izquierdo en una variable auxiliar.
+- Si el hijo mas derecho de mi nodo `EXPR:7`, tiene la misma estructura que la variable auxiliar, significa que es logica redundante.
+
+Tercer `Stat` 3
+- Recorro el arbol hasta encontrar un nodo `EXPR:13` y me guardo la estructura del hijo izquierdo en una variable auxiliar.
+- Si el hijo mas derecho de mi nodo `EXPR:13`, tiene la misma estructura que la variable auxiliar, significa que es logica redundante.
+
 ---
 
 #### 6.12
 
+# "¡REZÁ MALENA... REZÁ!"
+
+> LA ULTIMA LINEA SE RETORNA
+> SI EN LA ULTIMA TENES UNA ASIGNACION, SE RETORNA EL VALOR DE LA COMPARACION
+
 ```javascript
-f(x) {
+// La funcionalidad es que siempre retorna TRUE
+f(x) {//x = 4  -> True
     x = x;
 }
 ```
 
 ![image](https://github.com/user-attachments/assets/f345f5d3-2c81-43f6-894b-038557765cdf)
 
+- `Paso 1)` Recorro el arbol el arbol hasta encontrar el nodo con `stat:1`, me guardo el valor en una variable auxiliar
+- `Paso 2)` 
+
 ---
 
 #### 6.13
 
 ```javascript
-f(x,y) {
-    x ? y - 1;
-    not x ? y - 2;
+f(x,y) { // x = TRUE -> f  // y = 5
+    x ? y - 1; // y = 4
+    not x ? y - 2;  // if (not x) return y-2
 }
 ```
 
+ESTO TIENE QUE RETORNAR LA ULTIMA | Si el valor de X es falso, no retorno NADA
+
 ![image](https://github.com/user-attachments/assets/39115451-38ff-4499-90bf-34956187738e)
+
+El bad smell es que si x es falso, no estaria retornando ningun valor. Ya que el return se encuentra dentro del if
+
+Busco el nodo `expr:13` de mi ultimo `stat:3`, y busco sobre sus nodos hijos, en caso de que no tenga el valor `:` que me indica que es un else, significa que no estoy retornando nada para una situación en especifico. 
 
 ---
 
@@ -902,6 +1012,10 @@ f(a,b,c,d,e,f,g,h,i,j,k) {
 
 ![image](https://github.com/user-attachments/assets/9b98124f-8bc7-4432-8474-dc0b760d20bd)
 
+El bad smell es `Long Parameter List` y el pseudocodigo para detectarlo es el siguiente:
+
+Recorremos el arbol buscando el nodo `def:1` y nos quedamos con todos los elementos de la lista, y a esa lista le hacemos un .size() y si es mayor a 3/4 es un indicador `Long Parameter List`.
+
 ---
 
 #### 6.15
@@ -911,5 +1025,21 @@ someOperation(x,y,z) {
     other.someOperation(x,y,z);
 }
 ```
+```javascript
+Persona {
+    Contador contador;
+
+    calcularSueldo(sueldoBruto, obraSocial, jubilacion) {
+        contador.calcularSueldoNeto(sueldoBruto, obraSocial, jubilacion);
+    }
+}
+```
 
 ![image](https://github.com/user-attachments/assets/c4137e10-eaad-40d8-9dbe-869e110870e1)
+
+El bad smell es `Middle Man` y el pseudocodigo para detectarlo es el siguiente:
+
+- Recorremos el arbol hasta encontrar el nodo `def:1`, nos guardamos los valores que estan entre parentesis en una lista auxiliar y el valor del hijo izquierdo en otro variable llamada `nombreFuncion`
+- Volvemos a recorrer el arbol buscando que tenga solo un nodo `STAT:3`
+- El Hijo izquierdo tiene que ser un nodo `EXPR:5` y me quedo con su hijo derecho `func:1`
+-  Si el hijo izquierdo de `func:1` es igual a `nombreFuncion` y el resto de los hijos que estan entre parentesis es igual a la `lista auxiliar` que me guarde significa que es un `Middle Man`.
