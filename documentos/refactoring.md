@@ -9,7 +9,7 @@
 - [Reinventando la Rueda](#reinventando-la-rueda)
 - [Nombre Misterioso/Poco Explicativo](#nombre-misteriosopoco-explicativo)
 - [Envidia de Atributos](#envidia-de-atributos)
-- [Diferencias entre Mala asignación de Responsabilidades y Envidia de Atributos](#diferencias-entre-mala-asignación-de-responsabilidades-y-envidia-de-atributos)
+- [Metodo Largo](#metodo-largo)
 
 ---
 
@@ -72,10 +72,6 @@ var.setSis(this);
 </td></tr>
 
 </table>
-
-
-
-
 
 ## Mala asignación de responsabilidades
 
@@ -142,7 +138,6 @@ public class GuiaTelefonica {
 ```
 </td></tr>
 </table>
-
 
 ---
 
@@ -329,7 +324,6 @@ protected double mtFcE(LocalDate f1, LocalDate f2) {...
 protected double mtCbE(LocalDate f1, LocalDate f2) {...
 ```
 
-
 </td><td>
 
 ```java
@@ -343,3 +337,116 @@ protected double calcularMontoCobradoEntreFechas(LocalDate fechaInicio, LocalDat
 ---
 
 ## Envidia de Atributos
+
+La envidia de atributos es cuando una clase usa mas atributos de otra clase que la propia.
+
+- Hacemos un `Move Method` del metodo `registrarLlamada` y en `Llamada` hacemos uso del constructor.
+
+### Ejemplo 1
+
+<table>
+<tr><td>Antes del refactoring</td><td>Despues del Refactoring</td></tr>
+<tr><td>
+
+```java
+public class Persoona{
+    public Llamada registrarLlamada(Persoona q, Persoona q2, String t, int d) {
+        Llamada x = new Llamada();
+        x.tipoDeLlamada = t;
+        x.setEmisor(q.getTel());
+        x.setRemitente(q2.getTel());
+        x.dur = d;
+        q.getLista1().add(x);
+        return x;
+    }
+}
+```
+</td><td>
+
+```java
+public class Llamada{
+    public Llamada registrarLlamada(Persoona q, Persoona q2, String t, int d) {
+        Llamada x = new Llamada(t, q.getTel(), q2.getTel(), q, d);
+        q.getLista1().add(x);
+        return x;
+    }
+}
+```
+</td></tr>
+</table>
+
+### Ejemplo 2
+
+- Hacemos un `Extract Method` y despues hacemos un `Move Method` a la clase `Llamada`
+
+<table>
+<tr><td>Antes del refactoring</td><td>Despues del Refactoring</td></tr>
+<tr><td>
+
+```java
+public class Persoona{
+    public double calcularMontoTotalLlamadas(Persoona p) {
+        double c = 0;
+        Persoona aux = null;
+        for (Persoona pp : lista1) {
+            if (pp.getTel() == p.getTel()) {
+                aux = pp;
+                break;
+            }
+        }
+        if (aux == null) return c;
+        if (aux != null) {
+            for (Llamada l : aux.getLista1()) {
+                double auxc = 0;
+                if (l.tipoDeLlamada == "nacional") {
+                    auxc += l.dur * 3 + (l.dur * 3 * 0.21);
+                } else if (l.tipoDeLlamada == "internacional") {
+                    auxc += l.dur * 200 + (l.dur * 200 * 0.21);
+                }
+                c += auxc;
+            }
+        }
+        return c;
+    }
+}
+```
+</td><td>
+
+```java
+public class Llamada{
+    public double calcularMontoLlamada() {
+        if (this.tipoDeLlamada == "nacional") {
+            return this.dur * 3 + (this.dur * 3 * 0.21);
+        } else if (this.tipoDeLlamada == "internacional") {
+            return this.dur * 200 + (this.dur * 200 * 0.21);
+        }
+        return 0;
+    }
+}
+public class Persoona{
+    public double calcularMontoTotalLlamadas(Persoona p) {
+        double c = 0;
+        Persoona aux = null;
+        for (Persoona pp : lista1) {
+            if (pp.getTel() == p.getTel()) {
+                aux = pp;
+                break;
+            }
+        }
+        if (aux == null) return c;
+        if (aux != null) {
+            for (Llamada l : aux.getLista1()) {
+                double auxc = l.calcularMontoLlamada();
+                c += auxc;
+            }
+        }
+        return c;
+    }
+}
+```
+</td></tr>
+</table>
+
+---
+
+## Metodo Largo
