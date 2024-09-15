@@ -10,6 +10,7 @@
 - [Nombre Misterioso/Poco Explicativo](#nombre-misteriosopoco-explicativo)
 - [Envidia de Atributos](#envidia-de-atributos)
 - [Metodo Largo](#metodo-largo)
+- [Switch Statements](#switch-statements)
 
 ---
 
@@ -503,3 +504,89 @@ public class Persoona {
 </table>
 
 En el anterior codigo seguis teniendo malos olores pero eso es para otro refactoring.
+
+---
+
+
+## Switch Statements
+
+Ejemplo de la practica
+
+<table>
+<tr><td>Antes del Refactoring</td><td>Despues del refactoring</td></tr>
+
+<tr><td>
+
+```java
+public class Partido{
+    public String puntosJugadorToString(Jugador unJugador) {
+        int totalGames = 0;
+        String result = "Puntaje del jugador: " + unJugador.nombre() + ": ";
+        for (int gamesGanados: puntosPorSetDe(unJugador)) {
+            result += Integer.toString(gamesGanados) + ";";
+            totalGames += gamesGanados; 
+        }
+        result += "Puntos del partido: ";
+        if (unJugador.zona() == "A")
+            result += Integer.toString(totalGames * 2);
+        if (unJugador.zona() == "B")
+            result += Integer.toString(totalGames);
+        if (unJugador.zona() == "C") 
+            if (this.ganador() == unJugador)
+                result += Integer.toString(totalGames);
+            else
+                result += Integer.toString(0);
+            return result;
+    }
+}
+```
+</td><td>
+
+```java
+public class Jugador {
+    public String puntosEnPartidoToString(Partido partido) {
+        int totalGames = 0;
+        String result = "Puntaje del jugador: " + nombre() + ": ";
+        for (int gamesGanados: partido.puntosPorSetDe(this)) {
+            result += Integer.toString(gamesGanados) + ";";
+            totalGames += gamesGanados;
+        }
+        result += "Puntos del partido: ";
+        result += Integer.toString(this.puntosGanadosEnPartido(partido, totalGames));
+        return result;
+    }
+}
+public class JugadorZonaA {
+    public int puntosGanadosEnPartido(Partido partido, int totalGames) {
+        return totalGames * 2;
+    }
+}
+```
+</td></tr>
+</table>
+
+
+
+![image](https://github.com/user-attachments/assets/eee3b9ae-3063-4df1-8370-ebd9d872f16e)
+
+- Aplico Move Method
+    - Partido>>puntosJugadorToString(Jugador j) a Jugador>>puntosEnPartidoToString(Partido p)
+- Aplico Replace Conditional with Polymorphism 
+    - E n Jugador>>puntosEnPartidoToString(Partido p)
+
+Proceso para realizar el refactoring
+
+1. Crear la jerarquía de clases necesaria
+2. Si el condicional es parte de un método largo: Extract 
+Method
+3. Por cada subclase:
+    1. Crear un método que sobreescribe al método que contiene el
+    condicional
+    2. Copiar el código de la condición correspondiente en el método
+    de la subclase y ajustar
+    3. Compilar y testear
+    4. Borrar la condición y código del branch del método en la 
+    superclase
+    5. Compilar y testear
+4. Hacer que el método en la superclase sea abstract
+
