@@ -450,3 +450,56 @@ public class Persoona{
 ---
 
 ## Metodo Largo
+
+En la clase `Persoona` observamos que el método `calcularMontoTotalLlamada()` posee varias responsabilidades que podrían delegarse en métodos diferentes para mejorar la legibilidad del código y respetar el principio de Single responsibility.
+
+<table>
+<tr><td>Antes del refactoring</td><td>Despues del Refactoring</td></tr>
+<tr><td>
+
+```java
+public class Persoona {
+    public double calcularMontoTotalLlamadas() {
+        return this.lista1
+            .stream()
+            .mapToDouble(llamada -> {
+                double auxc = llamada.calcularMontoLlamada();
+                
+                if (this.getT() == "fisica") {
+                    auxc -= auxc * descuentoFis;
+                } else if (this.getT() == "juridica") {
+                    auxc -= auxc * descuentoJur;
+                }
+                
+                return auxc;
+            })
+            .sum();
+    }
+}
+```
+</td><td>
+
+```java
+public class Persoona {
+    private double computarMontoLlamada(Llamada llamada) {
+        double auxc = llamada.calcularMontoLlamada()
+        if (this.getT() == "fisica") {
+            auxc -= auxc * descuentoFis;
+        } 
+        else if (this.getT() == "juridica") {
+            auxc -= auxc * descuentoJur;
+        }       
+        return auxc;
+    }
+    public double calcularMontoTotalLlamadas() {
+        return this.lista1
+            .stream()
+            .mapToDouble(llamada -> this.computarMontoLlamada(llamada))
+            .sum();
+    }
+}
+```
+</td></tr>
+</table>
+
+En el anterior codigo seguis teniendo malos olores pero eso es para otro refactoring.
