@@ -1043,3 +1043,69 @@ El bad smell es `Middle Man` y el pseudocodigo para detectarlo es el siguiente:
 - Volvemos a recorrer el arbol buscando que tenga solo un nodo `STAT:3`
 - El Hijo izquierdo tiene que ser un nodo `EXPR:5` y me quedo con su hijo derecho `func:1`
 -  Si el hijo izquierdo de `func:1` es igual a `nombreFuncion` y el resto de los hijos que estan entre parentesis es igual a la `lista auxiliar` que me guarde significa que es un `Middle Man`.
+
+
+---
+
+### Como actuar ante los malos olores
+
+<details><summary>Declaración de atributos pública</summary>
+La declaración pública de atributos de una clase, genera una ruptura del encapsulamiento. Como por ejemplo:
+
+```java
+public class Persoona {
+    public List<Llamada> lista1 = new ArrayList<Llamada>();
+    public String t;
+    public String nya;
+    public String tel;
+    public String cuit;
+    public String doc;
+    public Persoona1 sis;
+}
+```
+
+```java
+else if (t.equals("juridica")) {
+    String tel = lista3.guia.last();
+    lista3.guia.remove(tel);
+    var.nya = nombre;
+    var.t = t;
+    var.tel = tel;
+    var.cuit = data;
+
+    var.sis = this;
+}
+```
+</details>
+
+El unico refactoring a aplicar es:
+
+<details><summary>Encapsulate Field</summary>
+
+Declaramos los atributos como privados y hacemos que se acceda a ellos sólo a través de los getters y setters.
+
+```java
+public class Persoona {
+    private List<Llamada> lista1 = new ArrayList<Llamada>();
+    private String t;
+    private String nya;
+    private String tel;
+    private String cuit;
+    private String doc;
+    private Persoona1 sis;
+}
+```
+
+```java
+else if (t.equals("juridica")) {
+    String tel = lista3.guia.last();
+    lista3.guia.remove(tel);
+    var.setNya(nombre);
+    var.setT(t);
+    var.setTel(tel);
+    var.setCuit(data);
+}
+var.setSis(this);
+```
+
+</details>
