@@ -1047,10 +1047,14 @@ El bad smell es `Middle Man` y el pseudocodigo para detectarlo es el siguiente:
 
 ---
 
-### Como actuar ante los malos olores
+## Como actuar ante los malos olores
 
 <details><summary>Declaración de atributos pública</summary>
-La declaración pública de atributos de una clase, genera una ruptura del encapsulamiento. Como por ejemplo:
+La declaración pública de atributos de una clase, genera una ruptura del encapsulamiento. Declaramos los atributos como privados y hacemos que se acceda a ellos sólo a través de los getters y setters.
+
+<table>
+<tr><td>Antes del Refactoring</td><td>Encapsulate Field</td></tr>
+<tr><td>
 
 ```java
 public class Persoona {
@@ -1072,17 +1076,10 @@ else if (t.equals("juridica")) {
     var.t = t;
     var.tel = tel;
     var.cuit = data;
-
     var.sis = this;
 }
 ```
-</details>
-
-El unico refactoring a aplicar es:
-
-<details><summary>Encapsulate Field</summary>
-
-Declaramos los atributos como privados y hacemos que se acceda a ellos sólo a través de los getters y setters.
+</td><td>
 
 ```java
 public class Persoona {
@@ -1107,5 +1104,70 @@ else if (t.equals("juridica")) {
 }
 var.setSis(this);
 ```
+</td></tr>
 
+</table>
+
+
+</details>
+
+---
+
+<details><summary>Mala asignación de responsabilidades</summary>
+
+Se observa una mala asignación de responsabilidades en la clase X que en la mayoria de las veces esta asociada a una evidente envidia de atributos. 
+
+En este ejemplo, la clase `Persoona` no deberia tener esta responsabilidad, y la delegamos a la clase `GuiaTelefonica`
+
+### Objeto Persoona:
+
+```java
+public boolean agregarTelefono(String str) {
+    boolean encontre = lista3.guia.contains(str);
+    if (!encontre) {
+        lista3.guia.add(str);
+        encontre = true;
+        return encontre;
+    } else {
+        encontre = false;
+        return encontre;
+    }
+}
+
+public boolean eliminarUsuario(Persoona p) {
+    List<Persoona> l = p.getSis().lista1
+        .stream()
+        .filter(persona -> persona != p)
+        .collect(Collectors.toList());
+    boolean borre = false;
+    if (l.size() < lista1.size()) {
+        this.lista1 = l;
+        this.lista3.guia.add(p.getTel());
+        borre = true;
+    }
+    return borre;
+}
+
+public Persoona registrarUsuario(String data, String nombre, String t) {
+    Persoona var = new Persoona();
+    if (t.equals("fisica")) {
+        var.setNya(nombre);
+        String tel = lista3.guia.last();
+        lista3.guia.remove(tel);
+        var.setT(t);
+        var.setTel(tel);
+        var.setDoc(data);
+    } else if (t.equals("juridica")) {
+        String tel = lista3.guia.last();
+        lista3.guia.remove(tel);
+        var.setNya(nombre);
+        var.setT(t);
+        var.setTel(tel);
+        var.setCuit(data);
+    }
+    var.setSis(this);
+    lista1.add(var);
+    return var;
+}
+```
 </details>
