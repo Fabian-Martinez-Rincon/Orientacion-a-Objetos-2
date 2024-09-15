@@ -1,9 +1,15 @@
-## Como actuar ante los malos olores
+# 🧢 Refactoring
 
 ---
 
+### Malos Olores y como Actuar
+
 - [Declaración de atributos pública](#declaración-de-atributos-pública)
 - [Mala asignación de responsabilidades](#mala-asignación-de-responsabilidades)
+- [Reinventando la Rueda](#reinventando-la-rueda)
+- [Nombre Misterioso/Poco Explicativo](#nombre-misteriosopoco-explicativo)
+- [Envidia de Atributos](#envidia-de-atributos)
+- [Diferencias entre Mala asignación de Responsabilidades y Envidia de Atributos](#diferencias-entre-mala-asignación-de-responsabilidades-y-envidia-de-atributos)
 
 ---
 
@@ -242,3 +248,98 @@ public class Persoona{
 
 
 ---
+
+## Reinventando la Rueda
+
+Basicamente es usar logica que ya se encuentra en una libreria, el refactoring es `sustituir algoritmo`. 
+
+Aca dejo ejemplos
+
+<table>
+<tr><td>Antes del refactoring</td><td>Despues del Refactoring</td></tr>
+<tr><td>
+
+```java
+public boolean agregarTelefono(String str) {
+    boolean encontre = guia.contains(str);
+    if (!encontre) {
+        guia.add(str);
+        encontre = true;
+        return encontre;
+    } else {
+        encontre = false;
+        return encontre;
+    }
+}
+```
+</td><td>
+
+```java
+public boolean agregarTelefono(String str) {
+    return this.guia.add(str);
+}
+```
+</td></tr>
+</table>
+
+Tambien se puede aplicar de `for` a un `stream`
+
+<table>
+<tr><td>Antes del refactoring</td><td>Despues del Refactoring</td></tr>
+<tr><td>
+
+```java
+public double calcularPromedioEdades() {
+    int totalEdades = 0;
+    for (Empleado empleado : personal) {
+        totalEdades = totalEdades + empleado.getEdad();
+    }
+    return totalEdades / personal.size();
+}
+```
+</td><td>
+
+```java
+public double calcularPromedioEdades(){ 
+    return personal.stream()
+        .mapToDouble(empleado -> empleado.getEdad())
+        .sum()/personal.size(); 
+}
+```
+</td></tr>
+</table>
+
+---
+
+## Nombre Misterioso/Poco Explicativo
+
+En caso de que se tengan que modificar los metodos, hacemos el `Rename Method` para que el nombre sea mas explicativo y modificamos actualizamos todas las llamas que haga referencia a este metodo.
+
+Para los parametros lo mismo `Rename Parameter` pero solo modificamos los parametros que se encuentran en la firma del metodo.
+
+Siempre es el rename que corresponda.
+
+<table>
+<tr><td>Antes del refactoring</td><td>Despues del Refactoring</td></tr>
+<tr><td>
+
+```java
+protected double lmtCrdt() {...
+protected double mtFcE(LocalDate f1, LocalDate f2) {...
+protected double mtCbE(LocalDate f1, LocalDate f2) {...
+```
+
+
+</td><td>
+
+```java
+protected double obtenerLimiteCredito() { ... }
+protected double calcularMontoFacturadoEntreFechas(LocalDate fechaInicio, LocalDate fechaFin) { ... }
+protected double calcularMontoCobradoEntreFechas(LocalDate fechaInicio, LocalDate fechaFin) { ... }
+```
+</td></tr>
+</table>
+
+---
+
+## Envidia de Atributos

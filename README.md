@@ -8,8 +8,7 @@
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=34&duration=1700&pause=800&color=28CDF7&center=true&width=863&lines=☕ Orientación a Objetos 2"/>
  </div>
 
-- [Parciales Frameworks](#parciales-frameworks)
-- [Cuadernillo](#cuadernillo)
+- [Resumen Refactoring](/documentos/refactoring.md)
 
 ---
 
