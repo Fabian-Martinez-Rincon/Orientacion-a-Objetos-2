@@ -662,6 +662,8 @@ Method
 
 ### Paso 1: Crear la jerarquía de clases necesaria
 
+`Refactoring`: Extract Subclass
+
 ```java
 public class UsuarioBasico extends Usuario { }
 
@@ -679,6 +681,10 @@ En este caso, el método `calcularCostoPelicula` es corto, por lo que no es nece
 ### Paso 3: Por cada subclase:
 
 #### 3.1: Crear un método que sobrescriba al método que contiene el condicional
+
+`Refactoring`: Push Down Method
+
+El método calcularCostoPelicula es movido a cada una de las subclases.
 
 ```java
 public class UsuarioBasico extends Usuario {
@@ -713,6 +719,11 @@ public class UsuarioPremium extends Usuario {
 #### 3.2: Copiar el código de la condición correspondiente en el método de la subclase y ajustar
 
 Para cada subclase, copiamos la lógica del cálculo de costo que corresponde a cada tipo de suscripción y ajustamos el método.
+
+`Refactoring`: Move Method
+
+La lógica correspondiente a cada caso en el condicional se copia en las subclases, ajustándose a las necesidades de cada una.
+Esto elimina la necesidad de un condicional en la clase base.
 
 ```java
 public class UsuarioBasico extends Usuario {
@@ -752,6 +763,10 @@ Compilamos el código y ejecutamos los tests de la clase refactoringTest. Todos 
 
 Una vez que la lógica de cada condición ha sido movida a la subclase correspondiente, eliminamos las condiciones del método de la superclase.
 
+`Refactoring`: Replace Conditional with Polymorphism
+
+Una vez que el condicional fue movido a las subclases y la lógica ha sido eliminada de la clase base, se borra el método que contenía el condicional.
+
 ```java
 public class Usuario {
     public double calcularCostoPelicula(Pelicula pelicula){
@@ -766,6 +781,10 @@ Compilamos el código nuevamente y ejecutamos los tests para asegurarnos de que 
 
 ### Paso 4: Hacer que el método en la superclase sea abstract
 
+`Refactoring`: Pull Up Method to Abstract Class
+
+Se convierte el método calcularCostoPelicula en un método abstracto en la clase Usuario. Esto asegura que todas las subclases deben implementar este método.
+
 ```java
 public abstract class Usuario {
     public abstract double calcularCostoPelicula(Pelicula pelicula);
@@ -774,7 +793,11 @@ public abstract class Usuario {
 
 ### Refactoring
 
-En todos los lugares en donde antes seteariamos el tipo de subscripcion, ahora vamos a instanciar la clase correspondiente.
+En la clase de test, antes se usaba el método setTipoSubscripcion para cambiar el tipo de usuario. Después del refactoring, instancias de las subclases reemplazan ese comportamiento.
+
+`Refactoring`: Replace Type Code with Subclasses
+
+En lugar de utilizar un campo de tipo de suscripción en la clase Usuario, se crea una instancia de la subclase correspondiente.
 
 <table>
 <tr><td>Antes del Refactoring</td><td>Despues del Refactoring</td></tr><tr><td>
@@ -851,5 +874,13 @@ public class refactoringTest {
 </td></tr>
 </table>
 
+
+Resumen de refactorings usados:
+- `Extract Subclass`: Creación de subclases para cada tipo de usuario.
+- `Push Down Method`: Movemos la lógica específica de cada tipo de suscripción a sus respectivas subclases.
+- `Move Method`: El método que contenía el condicional es movido a las subclases.
+- `Replace Conditional with Polymorphism`: Eliminamos el condicional y usamos polimorfismo.
+- `Pull Up Method to Abstract Class`: Convertimos el método en la clase base en abstracto.
+- `Replace Type Code with Subclasses`: En los tests, en lugar de asignar un tipo de suscripción, se crean instancias de subclases correspondientes.
 
 ---
