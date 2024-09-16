@@ -602,7 +602,6 @@ Method
 
 Vamos a seguir el ejemplo de la practica con las instrucciones de arriba
 
-### Crear una jerarquía de clases necesaria
 
 ```java
 public class Usuario {
@@ -644,30 +643,6 @@ public class Pelicula {
 }
 ```
 
-En este caso, hacemos mucho incapie en las subscripciones, entonces vamos a crear una clase abstracta `Subscripcion` y vamos a crear las subclases `Basico`, `Familia`, `Plus` y `Premium`
-
-- Creamos la clase `Subscripcion` y despues Hacemos un `Move Method`
-
-```java
-public class Subscripcion {
-    public double calcularCostoPelicula(Pelicula pelicula) {
-        double costo = 0;
-        if (tipoSubscripcion=="Basico") {
-            costo = pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno();
-        }
-        else if (tipoSubscripcion== "Familia") {
-            costo = (pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno()) * 0.90;
-        }
-        else if (tipoSubscripcion=="Plus") {
-            costo = pelicula.getCosto();
-        }
-        else if (tipoSubscripcion=="Premium") {
-            costo = pelicula.getCosto() * 0.75;
-        }
-        return costo;
-    }
-}
-```
 
 El Paso a Paso Seria
 
@@ -697,13 +672,13 @@ public class UsuarioPlus extends Usuario { }
 public class UsuarioPremium extends Usuario { }
 ```
 
-#### Paso 2: Extraer Método (Extract Method) si el condicional es parte de un método largo
+### Paso 2: Extraer Método (Extract Method) si el condicional es parte de un método largo
 
 En este caso, el método `calcularCostoPelicula` es corto, por lo que no es necesario extraer un método.
 
-#### Paso 3: Por cada subclase:
+### Paso 3: Por cada subclase:
 
-3.1: Crear un método que sobrescriba al método que contiene el condicional
+#### 3.1: Crear un método que sobrescriba al método que contiene el condicional
 
 ```java
 public class UsuarioBasico extends Usuario {
@@ -735,7 +710,7 @@ public class UsuarioPremium extends Usuario {
 }
 ```
 
-3.2: Copiar el código de la condición correspondiente en el método de la subclase y ajustar
+#### 3.2: Copiar el código de la condición correspondiente en el método de la subclase y ajustar
 
 Para cada subclase, copiamos la lógica del cálculo de costo que corresponde a cada tipo de suscripción y ajustamos el método.
 
@@ -769,5 +744,112 @@ public class UsuarioPremium extends Usuario {
 }
 ```
 
-3.3: Compilar y testear
+#### 3.3: Compilar y testear
+
 Compilamos el código y ejecutamos los tests de la clase refactoringTest. Todos los tests deben pasar.
+
+#### 3.4: Borrar la condición y código del branch del método en la superclase
+
+Una vez que la lógica de cada condición ha sido movida a la subclase correspondiente, eliminamos las condiciones del método de la superclase.
+
+```java
+public class Usuario {
+    public double calcularCostoPelicula(Pelicula pelicula){
+
+    }
+}
+```
+
+#### 3.5: Compilar y testear
+
+Compilamos el código nuevamente y ejecutamos los tests para asegurarnos de que todo sigue funcionando correctamente.
+
+### Paso 4: Hacer que el método en la superclase sea abstract
+
+```java
+public abstract class Usuario {
+    public abstract double calcularCostoPelicula(Pelicula pelicula);
+}
+```
+
+### Refactoring
+
+En todos los lugares en donde antes seteariamos el tipo de subscripcion, ahora vamos a instanciar la clase correspondiente.
+
+<table>
+<tr><td>Antes del Refactoring</td><td>Despues del Refactoring</td></tr><tr><td>
+
+```java
+public class refactoringTest {
+
+    Pelicula pelicula;
+    Usuario usuario;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        usuario = new Usuario();
+        pelicula = new Pelicula(10);
+    }
+
+    @Test
+    public void testBasico() {
+        usuario.setTipoSubscripcion("Basico");
+        assertEquals(10.0, usuario.calcularCostoPelicula(pelicula));
+    }
+
+    @Test
+    public void testFamilia() {
+        usuario.setTipoSubscripcion("Familia");
+        assertEquals(9, usuario.calcularCostoPelicula(pelicula));
+    }
+
+    @Test
+    public void testPremium() {
+        usuario.setTipoSubscripcion("Premium");
+        assertEquals(7.5, usuario.calcularCostoPelicula(pelicula));
+    }
+}
+```
+</td><td>
+
+```java
+public class refactoringTest {
+
+    Pelicula pelicula;
+    Usuario usuario;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        pelicula = new Pelicula(10);
+    }
+
+    @Test
+    public void testBasico() {
+        usuario = new UsuarioBasico();
+        assertEquals(10.0, usuario.calcularCostoPelicula(pelicula));
+    }
+
+    @Test
+    public void testFamilia() {
+        usuario = new UsuarioFamilia();
+        assertEquals(9, usuario.calcularCostoPelicula(pelicula));
+    }
+
+    @Test
+    public void testPlus() {
+        usuario = new UsuarioPlus();
+        assertEquals(10, usuario.calcularCostoPelicula(pelicula));
+    }
+
+    @Test
+    public void testPremium() {
+        usuario = new UsuarioPremium();
+        assertEquals(7.5, usuario.calcularCostoPelicula(pelicula));
+    }
+}
+```
+</td></tr>
+</table>
+
+
+---
