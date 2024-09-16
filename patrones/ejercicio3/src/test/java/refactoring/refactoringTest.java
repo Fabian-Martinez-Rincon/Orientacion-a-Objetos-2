@@ -14,19 +14,26 @@ public class refactoringTest {
 
 	Pelicula pelicula;
 	Usuario usuario;
+	Subscripcion subs;
 	@BeforeEach
 	void setUp() throws Exception{
+		subs = new Subscripcion();
 		usuario = new Usuario();
 		pelicula = new Pelicula(10);
 	}
 	@Test
 	public void testBasico() {
-		usuario.setTipoSubscripcion("Basico");
-		assertEquals(110, usuario.calcularCostoPelicula(pelicula));
+		usuario.setTipoSubscripcion(subs, "Basico");
+		assertEquals(10.0, usuario.calcularCostoPelicula(pelicula));
+	}
+	@Test
+	public void testFamilia() {
+		usuario.setTipoSubscripcion(subs, "Familia");
+		assertEquals(9, usuario.calcularCostoPelicula(pelicula));
 	}
 	@Test
 	public void testPremium() {
-		usuario.setTipoSubscripcion("Premium");
-		assertEquals(-90, usuario.calcularCostoPelicula(pelicula));
+		usuario.setTipoSubscripcion(subs, "Premium");
+		assertEquals(7.5, usuario.calcularCostoPelicula(pelicula));
 	}
 }

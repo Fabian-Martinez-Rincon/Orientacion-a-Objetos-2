@@ -543,7 +543,14 @@ public class Partido{
 </td><td>
 
 ```java
-public class Jugador {
+public clase Partido{
+    public String puntosJugadorToString(Jugador unJugador) {
+        return unJugador.puntosEnPartidoToString(this);
+    }
+}
+public abstract class Jugador {
+    public abstract String puntosGanadosEnPartido(Partido partido);
+
     public String puntosEnPartidoToString(Partido partido) {
         int totalGames = 0;
         String result = "Puntaje del jugador: " + nombre() + ": ";
@@ -589,4 +596,116 @@ Method
     superclase
     5. Compilar y testear
 4. Hacer que el método en la superclase sea abstract
+
+
+## STOP 🛑
+
+Vamos a seguir el ejemplo de la practica con las instrucciones de arriba
+
+### Crear una jerarquía de clases necesaria
+
+```java
+public class Usuario {
+    String tipoSubscripcion;
+    // ...
+    public void setTipoSubscripcion(String unTipo) {
+        this.tipoSubscripcion = unTipo;
+    }
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        double costo = 0;
+        if (tipoSubscripcion=="Basico") {
+            costo = pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno();
+        }
+        else if (tipoSubscripcion== "Familia") {
+            costo = (pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno()) * 0.90;
+        }
+        else if (tipoSubscripcion=="Plus") {
+            costo = pelicula.getCosto();
+        }
+        else if (tipoSubscripcion=="Premium") {
+            costo = pelicula.getCosto() * 0.75;
+        }
+        return costo;
+    }
+}
+
+public class Pelicula {
+    LocalDate fechaEstreno;
+    // ...
+    public double getCosto() {
+        return this.costo;
+    }
+    public double calcularCargoExtraPorEstreno(){
+        // Si la Película se estrenó 30 días antes de la fecha actual, retorna
+        un cargo de 0$, caso contrario, retorna un cargo extra de 300$
+        return (ChronoUnit.DAYS.between(this.fechaEstreno, LocalDate.now()) )
+        > 30 ? 0 : 300;
+    }
+}
+```
+
+En este caso, hacemos mucho incapie en las subscripciones, entonces vamos a crear una clase abstracta `Subscripcion` y vamos a crear las subclases `Basico`, `Familia`, `Plus` y `Premium`
+
+- Creamos la clase `Subscripcion` y despues Hacemos un `Move Method`
+
+```java
+public class Subscripcion {
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        double costo = 0;
+        if (tipoSubscripcion=="Basico") {
+            costo = pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno();
+        }
+        else if (tipoSubscripcion== "Familia") {
+            costo = (pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno()) * 0.90;
+        }
+        else if (tipoSubscripcion=="Plus") {
+            costo = pelicula.getCosto();
+        }
+        else if (tipoSubscripcion=="Premium") {
+            costo = pelicula.getCosto() * 0.75;
+        }
+        return costo;
+    }
+}
+```
+
+3. Por cada subclase:
+    1. Crear un método que sobreescribe al método que contiene el
+    condicional
+    2. Copiar el código de la condición correspondiente en el método
+    de la subclase y ajustar
+    3. Compilar y testear
+    4. Borrar la condición y código del branch del método en la superclase
+    5. Compilar y testear
+- Creamos las subclases `Basico`, `Familia`, `Plus` y `Premium`
+
+```java
+public class Basico extends Subscripcion {
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        return pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno();
+    }
+}
+public class Familia extends Subscripcion {
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        return (pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno()) * 0.90;
+    }
+}
+public class Plus extends Subscripcion {
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        return pelicula.getCosto();
+    }
+}
+public class Premium extends Subscripcion {
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        return pelicula.getCosto() * 0.75;
+    }
+}
+```
+
+Refactoring Completo
+
+![image](https://github.com/user-attachments/assets/2d050678-6292-4dba-bdff-1eb2fbd326fc)
+![image](https://github.com/user-attachments/assets/a24e60f5-7549-403e-accf-37ef7c26eee1)
+
+Ahora creamos una clase `Subscripcion`, hacemos un `Move Method` y volvemos a testear
 
