@@ -669,43 +669,105 @@ public class Subscripcion {
 }
 ```
 
+El Paso a Paso Seria
+
+1. Crear la jerarquía de clases necesaria
+2. Si el condicional es parte de un método largo: Extract 
+Method
 3. Por cada subclase:
     1. Crear un método que sobreescribe al método que contiene el
     condicional
     2. Copiar el código de la condición correspondiente en el método
     de la subclase y ajustar
     3. Compilar y testear
-    4. Borrar la condición y código del branch del método en la superclase
+    4. Borrar la condición y código del branch del método en la 
+    superclase
     5. Compilar y testear
-- Creamos las subclases `Basico`, `Familia`, `Plus` y `Premium`
+4. Hacer que el método en la superclase sea abstract
+
+### Paso 1: Crear la jerarquía de clases necesaria
 
 ```java
-public class Basico extends Subscripcion {
+public class UsuarioBasico extends Usuario { }
+
+public class UsuarioFamilia extends Usuario { }
+
+public class UsuarioPlus extends Usuario { }
+
+public class UsuarioPremium extends Usuario { }
+```
+
+#### Paso 2: Extraer Método (Extract Method) si el condicional es parte de un método largo
+
+En este caso, el método `calcularCostoPelicula` es corto, por lo que no es necesario extraer un método.
+
+#### Paso 3: Por cada subclase:
+
+3.1: Crear un método que sobrescriba al método que contiene el condicional
+
+```java
+public class UsuarioBasico extends Usuario {
+    @Override
     public double calcularCostoPelicula(Pelicula pelicula) {
-        return pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno();
+        return 0;  // Método sobrescrito, aún sin lógica
     }
 }
-public class Familia extends Subscripcion {
+
+public class UsuarioFamilia extends Usuario {
+    @Override
     public double calcularCostoPelicula(Pelicula pelicula) {
-        return (pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno()) * 0.90;
+        return 0;  // Método sobrescrito, aún sin lógica
     }
 }
-public class Plus extends Subscripcion {
+
+public class UsuarioPlus extends Usuario {
+    @Override
     public double calcularCostoPelicula(Pelicula pelicula) {
-        return pelicula.getCosto();
+        return 0;  // Método sobrescrito, aún sin lógica
     }
 }
-public class Premium extends Subscripcion {
+
+public class UsuarioPremium extends Usuario {
+    @Override
     public double calcularCostoPelicula(Pelicula pelicula) {
-        return pelicula.getCosto() * 0.75;
+        return 0;  // Método sobrescrito, aún sin lógica
     }
 }
 ```
 
-Refactoring Completo
+3.2: Copiar el código de la condición correspondiente en el método de la subclase y ajustar
 
-![image](https://github.com/user-attachments/assets/2d050678-6292-4dba-bdff-1eb2fbd326fc)
-![image](https://github.com/user-attachments/assets/a24e60f5-7549-403e-accf-37ef7c26eee1)
+Para cada subclase, copiamos la lógica del cálculo de costo que corresponde a cada tipo de suscripción y ajustamos el método.
 
-Ahora creamos una clase `Subscripcion`, hacemos un `Move Method` y volvemos a testear
+```java
+public class UsuarioBasico extends Usuario {
+    @Override
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        return pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno();  // Lógica para "Basico"
+    }
+}
 
+public class UsuarioFamilia extends Usuario {
+    @Override
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        return (pelicula.getCosto() + pelicula.calcularCargoExtraPorEstreno()) * 0.90;  // Lógica para "Familia"
+    }
+}
+
+public class UsuarioPlus extends Usuario {
+    @Override
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        return pelicula.getCosto();  // Lógica para "Plus"
+    }
+}
+
+public class UsuarioPremium extends Usuario {
+    @Override
+    public double calcularCostoPelicula(Pelicula pelicula) {
+        return pelicula.getCosto() * 0.75;  // Lógica para "Premium"
+    }
+}
+```
+
+3.3: Compilar y testear
+Compilamos el código y ejecutamos los tests de la clase refactoringTest. Todos los tests deben pasar.
