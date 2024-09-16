@@ -11,6 +11,7 @@
 - [Envidia de Atributos](#envidia-de-atributos)
 - [Metodo Largo](#metodo-largo)
 - [Switch Statements](#switch-statements)
+    - [Ejemplo de la practica 🛑](#stop-)
 
 ---
 
