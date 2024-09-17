@@ -782,8 +782,6 @@ Compilamos el código nuevamente y ejecutamos los tests para asegurarnos de que 
 
 ### Paso 4: Hacer que el método en la superclase sea abstract
 
-`Refactoring`: Pull Up Method to Abstract Class
-
 Se convierte el método calcularCostoPelicula en un método abstracto en la clase Usuario. Esto asegura que todas las subclases deben implementar este método.
 
 ```java
